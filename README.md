@@ -1,3 +1,5 @@
+**To install this project's dependancies, run** `npm install` **inside the root directory.**
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
