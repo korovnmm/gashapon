@@ -1,10 +1,17 @@
 # Setup Instructions
-Run the following commands to get the source code set up on your local machine:
+
+1. Run the following commands to get the source code set up on your local machine:
 ```
 git clone https://github.com/plu-gachateam/gashapon.git
 cd gashapon
 npm install
 ```
+
+2. Make a duplicate copy of `config.js.template` and rename it to `config.js` (DO NOT DELETE `config.js.template`).
+
+3. Paste in the project's Firebase credentials to the `config.js` file (can be found on the Firebase console -> Project Settings -> General -> scroll down to the bottom of the page to the "Your apps" section).
+
+4. Test whether the website runs on your localhost by typing `npm start` into the command line while your working directory is set to the project folder.
 
 # Getting Started with Create React App
 
