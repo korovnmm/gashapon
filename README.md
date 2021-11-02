@@ -1,4 +1,10 @@
-**To install this project's dependancies, run** `npm install` **inside the root directory.**
+# Setup Instructions
+Run the following commands to get the source code set up on your local machine:
+```
+git clone https://github.com/plu-gachateam/gashapon.git
+cd gashapon
+npm install
+```
 
 # Getting Started with Create React App
 
