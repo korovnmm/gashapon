@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
-import { 
-    getAuth, 
-    signInWithEmailAndPassword, 
-    GoogleAuthProvider, 
-    signInWithRedirect 
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup
 } from 'firebase/auth'
-import { 
+import {
     Box,
     Button,
     Container,
@@ -17,16 +17,16 @@ import { GoogleIcon } from '../components'
 //import { useLocation } from 'react-router-dom'
 
 
-export const Login = () => {
+export const SignUp = () => {
     //const location = useLocation(); // grabs the current page we're on (the login page), see location.push below
-    // Login Form Submission Handler
+    // Submit Handler for Email & Password
     const handleSubmit = useCallback(async e => {
-        e.preventDefault() // prevents refresh on clicking the submit button
+        e.preventDefault(); // prevents the page from refreshing
 
         const { email, password } = e.target.elements;
         const auth = getAuth();
         try {
-            await signInWithEmailAndPassword(auth, email.value, password.value);
+            await createUserWithEmailAndPassword(auth, email.value, password.value);
         } catch (e) {
             alert(e.message);
         }
@@ -40,7 +40,7 @@ export const Login = () => {
         const provider = new GoogleAuthProvider();
         const auth = getAuth();
         try {
-            signInWithRedirect(auth, provider);
+            signInWithPopup(auth, provider);
         } catch (e) {
             alert(e.message);
         }
@@ -51,14 +51,14 @@ export const Login = () => {
         <>
             <Container>
                 <Box component="form" onSubmit={handleSubmit}>
-                    <Typography variant="h3" component="h3" align="center">Sign in</Typography>
-                    <TextField fullWidth required autoFocus id="email" type="email" label="Email Address" autoComplete="email"/>  
+                    <Typography variant="h3" component="h3" align="center">Account Creation</Typography>
+                    <TextField fullWidth required autoFocus id="email" type="email" label="Email Address" autoComplete="email" />
                     <TextField fullWidth required id="password" type="password" label="Password" autoComplete="current-password" />
-                    <Button fullWidth variant="contained" type="submit">Sign in</Button>
+                    <Button fullWidth variant="contained" type="submit">Create Account</Button>
                 </Box>
                 <center>or</center>
                 <Button fullWidth variant="outlined" startIcon={<GoogleIcon />} onClick={signInWithGoogle}>Continue with Google</Button>
-                <div>Don't have an account? <Link to="/signup">Create one here!</Link></div>
+                <div>Already have an account? <Link to="/login">Log in here!</Link></div>
             </Container>
         </>
     )
