@@ -10,6 +10,16 @@ import {
 } from '@mui/material'
 import { Link } from 'react-router-dom'
 
+import { RedeemScreen } from './RedeemScreen'
+
+const home = [
+    {
+        name: "RedeemScreen",
+        id: "redeemScreen",
+        component: RedeemScreen
+    }
+]
+
 export const Home = () => {
     
     return (
