@@ -11,8 +11,9 @@ import {
     useRouteMatch
 } from 'react-router-dom'
 import { useState } from 'react'
-import { useAuthState } from '../../firebase'
-import { AuthenticatedRoute } from '../../components'
+
+import { useAuthState } from 'auth'
+import { AuthenticatedRoute } from 'components'
 
 import { Overview } from './Overview'
 import { Tickets } from './Tickets'

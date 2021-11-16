@@ -1,6 +1,6 @@
     import React from "react";
-    import pinklogo from "../../assets/gashapon_pink.png"
-    import greenlogo from "../../assets/gashapon_green.png"
+    import pinklogo from "assets/gashapon_pink.png"
+    import greenlogo from "assets/gashapon_green.png"
 
 
     import { 

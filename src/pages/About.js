@@ -1,4 +1,4 @@
-import logo from "../assets/gashapon_pink.png"
+import logo from "assets/gashapon_pink.png"
 
 export const About = () => {
     

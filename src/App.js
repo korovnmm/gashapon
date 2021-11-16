@@ -3,9 +3,11 @@ import {
   Route,
   Link,
 } from 'react-router-dom'
-import { getAuth, signOut } from 'firebase/auth'
-
-import { AuthContextProvider } from './firebase'
+import { 
+  getAuth, 
+  signOut, 
+  AuthContextProvider 
+} from './auth'
 import { AuthenticatedRoute, UnauthenticatedRoute } from './components'
 import { Home } from './pages/home/Home'
 import { About } from './pages/About'

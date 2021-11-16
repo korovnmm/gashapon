@@ -4,7 +4,7 @@ import {
     signInWithEmailAndPassword, 
     GoogleAuthProvider, 
     signInWithRedirect 
-} from 'firebase/auth'
+} from 'auth'
 import { 
     Box,
     Button,
@@ -13,7 +13,7 @@ import {
     Typography,
 } from '@mui/material'
 import { Link } from 'react-router-dom'
-import { GoogleIcon } from '../components'
+import { GoogleIcon } from 'components'
 //import { useLocation } from 'react-router-dom'
 
 

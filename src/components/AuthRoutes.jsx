@@ -1,5 +1,5 @@
 import { Route, Redirect } from 'react-router-dom'
-import { useAuthState } from '../firebase';
+import { useAuthState } from 'auth';
 
 /**
  * A route that only displays the given component if the user is authenticated, otherwise it'll redirect

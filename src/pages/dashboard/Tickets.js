@@ -7,10 +7,8 @@ import {
     TextField,
 } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
-import { httpsCallable } from 'firebase/functions'
-import { functions, db } from '../../firebase'
 
-const generateTickets = httpsCallable(functions, 'generateTickets');
+import { generateTickets } from 'api'
 
 const columns = [
     { field: 'orderID', headerName: 'Order #', width: 100 },
@@ -34,11 +32,7 @@ export const Tickets = () => {
         e.preventDefault();
         
         const { email, memo, amount } = e.target.elements;
-        generateTickets({
-            email: email.value,
-            memo: memo.value,
-            amount: amount.value
-        })
+        generateTickets(email.value, memo.value, amount.value)
             .then((result) => {
                 const data = result.data;
                 console.log(data);
