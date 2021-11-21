@@ -1,5 +1,6 @@
 import {
   BrowserRouter as Router,
+  Redirect,
   Route,
   Link,
 } from 'react-router-dom'
@@ -14,6 +15,7 @@ import { About } from './pages/About'
 import { Login } from './pages/Login'
 import { SignUp } from './pages/SignUp'
 import { Dashboard } from './pages/dashboard/Dashboard'
+import { RedeemScreen } from './pages/home/RedeemScreen'
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
         </header>
         <Route exact path="/" component={Home} />
         <Route exact path="/about" component={About} />
+        <Route exact path="/redeem"><Redirect to={'/'} /></Route>
+        <Route path="/redeem/:shopTag/:code" component={RedeemScreen} />
         <AuthenticatedRoute path="/dashboard" component={Dashboard} />
         <UnauthenticatedRoute exact path="/login" component={Login} />
         <UnauthenticatedRoute exact path="/signup" component={SignUp} />

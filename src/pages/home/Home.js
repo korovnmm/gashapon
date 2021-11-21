@@ -54,7 +54,7 @@
                         <TextField required id="digitKey" type="digitKey" label="Digit Key" autoComplete="off" />                
                         <Stack spacing={10} direction="column">
                     
-                            <Link to ="/RedeemScreen">
+                            <Link to ="/redeem">
                                 <Button variant="outlined" color ="secondary" type="submit" >Enter</Button>
                             </Link>
                             <Typography variant="overline" component="overline" align="center"> (No account needed to play)</Typography>
