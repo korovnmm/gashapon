@@ -3,7 +3,7 @@ import {
     getAuth, 
     signInWithEmailAndPassword, 
     GoogleAuthProvider, 
-    signInWithRedirect 
+    signInWithPopup
 } from 'auth'
 import { 
     Box,
@@ -40,7 +40,7 @@ export const Login = () => {
         const provider = new GoogleAuthProvider();
         const auth = getAuth();
         try {
-            signInWithRedirect(auth, provider);
+            signInWithPopup(auth, provider);
         } catch (e) {
             alert(e.message);
         }
