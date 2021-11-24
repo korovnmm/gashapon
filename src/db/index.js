@@ -7,9 +7,31 @@ import {
     query,
     where 
 } from 'firebase/firestore'
-import { useCollectionData } from 'react-firebase-hooks/firestore'
+//import { useCollectionData } from 'react-firebase-hooks/firestore'
 
-var cache = {}
+var cache = {
+    shopTag: null,
+    ticketData: [],
+    uid: null
+}
+
+export function clearCachedData() {
+    cache = {};
+}
+
+export function saveTicketsToMemory(data) {
+    if (cache.ticketData) {
+        for (let i = 0; i < data.length; i++) {
+            data[i].id = cache.ticketData.length+1;
+            cache.ticketData = Array.prototype.concat(cache.ticketData,data[i]);
+        }
+    } else {
+        cache.ticketData = [data];
+    }
+    return cache.ticketData;
+}
+
+
 
 /**
  * Retrieves JSON object info of a single ticket from the database
@@ -32,37 +54,41 @@ export const getTicketsByPrefix = async (prefix) => {
     const q = query(ticketsRef,
             where("__name__", '>=', start),
             where("__name__", '<', stop));
-    const snap = await getDocs(q);
-
+    
+    // Retrieve data snapshot, first from cache, then from server
     var data = [];
-    snap.forEach( (doc) => {
-        var d = doc.data();
-        d.id = data.length+1;
-        d.code = doc.id;
-        data.push(d);
-    });
-    console.log("update");
+    if (cache.ticketData && cache.ticketData.length > 0) {
+        data = cache.ticketData;
+    } else {
+        const snap = await getDocs(q);
+
+        snap.forEach( (doc) => {
+            var d = doc.data();
+            d.id = data.length+1;
+            d.code = doc.id;
+            data.push(d);
+        });
+
+        cache.ticketData = data;
+    }
     return data;
 }
 
 export const getUserShopTag = async (uid) => {
     var tag;
-    if (cache["shopTag"]) {
-        tag = cache["shopTag"]
-        console.log("retrieved from cache");
+    if (cache.shopTag) {
+        tag = cache.shopTag
     } else {
         var ref = doc(db, "users", uid);
         var snapshot = await getDoc(ref);
 
         if (snapshot.exists()) {
             tag = snapshot.data().shopTag;
-            cache["shopTag"] = tag;
+            cache.shopTag = tag;
         } else {
             alert("No shop tag set!");
             tag = null;
         }
-            
-        console.log("retrieved from querying");
     }    
 
     return tag;
