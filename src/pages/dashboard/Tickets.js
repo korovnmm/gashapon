@@ -4,45 +4,50 @@ import {
     Autocomplete,
     Box,
     Button,
+    Snackbar,
     TextField,
 } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 
 import { generateTickets } from 'api'
 import { useAuthState } from 'auth'
-import { getTicketsGeneratedByUser } from 'db';
+import { getTicketsGeneratedByUser, saveTicketsToMemory } from 'db';
 import { useState } from 'react'
 
 const columns = [
     //{ field: 'orderID', headerName: 'Order #', width: 100 },
     { field: 'email', headerName: 'Email Address', width: 170 },
     { field: 'code', headerName: 'Play Code', width: 170 },
-    //{ field: 'prizeID', headerName: 'Prize', width: 150 },
-    //{ field: 'memo', headerName: 'Memo', width: 170 },
-    //{ field: 'shipped', headerName: 'Shipped?', width: 150, type: "boolean" },
-    //{ field: 'redeemed', headerName: 'Redeemed?', width: 150, type: "boolean" },
-    //{ field: 'createdAt', headerName: 'Time Generated', width: 150, type: "dateTime", valueGetter: ({value}) => value && new Date(value.seconds) }
+    { field: 'prizeID', headerName: 'Prize', width: 150 },
+    { field: 'memo', headerName: 'Memo', width: 170 },
+    { field: 'redeemed', headerName: 'Redeemed?', width: 110, type: "boolean" },
+    { field: 'createdAt', headerName: 'Time Generated', width: 220, type: "dateTime",
+        valueGetter: ({value}) => value && (new Date(value.seconds*1000)) },
+    { field: 'shipped', headerName: 'Shipped?', width: 90, type: "boolean" }
 ];
 
-/*
-[
-    {id: 1, email: "123@abc.com", orderID:"QWER-1357", code:"shopname-0A0A0A", prizeName: "Prize A", memo: "", shipped: true},
-    { id: 2, email: "321@abc.com", orderID: "ASDF-2468", code: "shopname-1B1B1B", prizeName: "Prize B", memo: "ship after thanksgiving", shipped: false }
-];
-*/
 const amountOptions = Array.from({length:10}, (v,k)=>k+1); // a list from 1 to 10
 
 
 export const Tickets = () => {
     const { user } = useAuthState();
     const [rows, setRows] = useState([]);
-    /*
+    const [open, setOpen] = useState(false); // snackbar state 
+    
     useEffect(() => {
-        var tickets = getTicketsGeneratedByUser(user);
-        setRows(tickets);
-    }, [rows]);
-    useEffect(() => { console.log(rows)}, [rows]);
-    */
+        getTicketsGeneratedByUser(user)
+            .then((ticketData) => {
+                setRows(ticketData)
+            });
+    }, [rows, user]);
+
+    const handleClose = (event, reason) => { // snackbar close
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
+
     const sendGenerateTicketsRequest = useCallback(async e => {
         e.preventDefault();
         
@@ -50,7 +55,13 @@ export const Tickets = () => {
         generateTickets(email.value, memo.value, amount.value)
             .then((result) => {
                 const data = result.data;
-                console.log(data);
+                const tickets = []
+                for(const [key, value] of Object.entries(data)){
+                    value.code = key;
+                    tickets.push(value);
+                }
+                setRows(saveTicketsToMemory(tickets));
+                setOpen(true);
             })
             .catch((error) => {
                 const code = error.code;
@@ -87,7 +98,7 @@ export const Tickets = () => {
                 />
                 <Button variant="contained" type="submit">Generate New Code</Button>
             </Box>
-            <div>{JSON.stringify(rows)}</div>
+            <Snackbar message="Ticket successfully generated" open={open} autoHideDuration={6000} onClose={handleClose}/>
         </>
     );
 }

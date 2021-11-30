@@ -1,6 +1,11 @@
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { 
+    getAuth, 
+    onAuthStateChanged,
+    signOut as fireBaseSignOut
+} from 'firebase/auth'
 import { useState, useEffect, useContext } from 'react'
 import { AuthContext } from '../firebase'
+import { clearCachedData } from 'db'
 
 export {
     createUserWithEmailAndPassword,
@@ -8,9 +13,20 @@ export {
     signInWithEmailAndPassword,
     GoogleAuthProvider,
     signInWithRedirect,
-    signInWithPopup,
-    signOut
+    signInWithPopup
 } from 'firebase/auth';
+
+
+/**
+ * Signs out the current user.
+ * @see {@link fireBaseSignOut firebase/auth.signOut}
+ * @param auth - The Auth instance.
+ */
+export async function signOut(auth) {
+    clearCachedData();
+    return fireBaseSignOut(auth);
+}
+
 
 /**
  * @returns an AuthContextProvider containing with the current user state already filled in.
