@@ -76,27 +76,24 @@ export const Home = () => {
                     justifyContent: 'flex-start',
                     height: 500,
                     width: 300,
-                    maxHeight: { xs: 500, md: 250
-                    },
+                    maxHeight: { xs: 500, md: 250 },
                     maxWidth: { xs: 300, md: 150 },
-                    }}
-                src= {greenlogo}
+                }}
+                src={greenlogo}
             />
         
             <Box 
-            component="img"
-            sx={{
-                height: 500,
-                width: 300,
-                maxHeight: { xs: 500, md: 250
-                },
-                maxWidth: { xs: 300, md: 150 },
+                component="img"
+                sx={{
+                    height: 500,
+                    width: 300,
+                    maxHeight: { xs: 500, md: 250 },
+                    maxWidth: { xs: 300, md: 150 },
                 }}
-            src= {pinklogo}
+                src={pinklogo}
             />
             </Grid>
             </Container>
         </>
     )
 }
-
