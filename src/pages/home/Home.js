@@ -1,21 +1,21 @@
-    import React from "react";
-    import pinklogo from "assets/gashapon_pink.png"
-    import greenlogo from "assets/gashapon_green.png"
-    import { useHistory } from 'react-router-dom'
-    import { getTicketByCode } from 'db'
+import React from "react";
+import pinklogo from "assets/gashapon_pink.png"
+import greenlogo from "assets/gashapon_green.png"
+import { useHistory } from 'react-router-dom'
+import { getTicketByCode } from 'db'
 
-    import { 
-        Box,
-        Button,
-        Container,
-        TextField,
-        Typography,
-        Stack,
-        Grid,
-    } from '@mui/material'  
-    
-    import { Link } from 'react-router-dom'
-    import { useCallback } from "react";
+import { 
+    Box,
+    Button,
+    Container,
+    TextField,
+    Typography,
+    Stack,
+    Grid,
+} from '@mui/material'  
+
+import { Link } from 'react-router-dom'
+import { useCallback } from "react";
   
     
       
