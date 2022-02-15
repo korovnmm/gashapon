@@ -17,6 +17,7 @@ import { AuthenticatedRoute } from 'components'
 
 import { Overview } from './Overview'
 import { Tickets } from './Tickets'
+import { Inventory } from './Inventory'
 
 const pages = [
     {
@@ -27,7 +28,7 @@ const pages = [
     {
         name: "Inventory",
         id: "inventory",
-        component: Overview
+        component: Inventory
     },
     {
         name: "Orders",

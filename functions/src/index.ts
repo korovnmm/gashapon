@@ -38,6 +38,65 @@ export const getExample = functions.https.onRequest(async (req, res) => {
 });
 
 
+export const generatePrizes = functions.https.onCall(async (data, context) => {
+  // Data
+  const name = data.name;
+  const description = data.description;
+  const quantity = data.quantity;
+
+  // Check if user is authenticated
+  if (!context.auth) {
+    // Throw an error if not
+    throw new functions.https.HttpsError("unauthenticated",
+        "The function must be called " +
+      "while authenticated.");
+  }
+  // Check the amount variable is within range
+  if (quantity < 1) {
+    throw new functions.https.HttpsError("out-of-range",
+        "A minimum of 1 prize can be added " +
+    "at a time.");
+  }
+
+  // Generate prize data
+  const prizes : any = {};
+  const timestamp = await admin.firestore.FieldValue.serverTimestamp();
+
+  for (let i = 0; i < quantity; i++) {
+  // Generate a unique code
+    let suffix = crypto.randomBytes(3).toString("hex").toUpperCase();
+    let code = `${suffix}`;
+    let prizePath = `/prize-info/${code}`;
+    while ((await db.doc(prizePath).get()).exists) { // avoids duplicates
+      suffix = crypto.randomBytes(3).toString("hex").toUpperCase();
+      code = `${suffix}`;
+      prizePath = `/prize-info/${code}`;
+    }
+
+    // Create the JSON object
+    const prizeData = {
+      createdAt: timestamp,
+      description,
+      prizeID: code,
+      image: null,
+      name,
+      lastModified: timestamp,
+    };
+
+    // Write to firestore
+    db.collection("prize-info").doc(code).set(prizeData)
+        .catch((error) => {
+          console.log(error);
+          throw new functions.https.HttpsError("unknown", error);
+        });
+
+    // Append to list
+    prizes[code] = prizeData;
+  }
+
+  return prizes;
+});
+
 export const generateTickets = functions.https.onCall(async (data, context) => {
   // Data
   const email = data.email;

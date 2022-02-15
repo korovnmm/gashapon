@@ -12,6 +12,7 @@ import {
 var cache = {
     shopTag: null,
     ticketData: [],
+    prizeData: [],
     uid: null
 }
 
@@ -31,7 +32,17 @@ export function saveTicketsToMemory(data) {
     return cache.ticketData;
 }
 
-
+export function savePrizesToMemory(data) {
+    if (cache.prizeData) {
+        for (let i = 0; i < data.length; i++) {
+            data[i].id = cache.prizeData.length+1;
+            cache.prizeData = Array.prototype.concat(cache.prizeData,data[i]);
+        }
+    } else {
+        cache.prizeData = [data];
+    }
+    return cache.prizeData;
+}
 
 /**
  * Retrieves JSON object info of a single ticket from the database
@@ -39,6 +50,15 @@ export function saveTicketsToMemory(data) {
  * @returns {Promise<any>} JSON data for the ticket
  */
 export const getTicketByCode = async (code) => {
+    throw { name: "NotImplementedError", message: "function not implemented yet!" };
+}
+
+/**
+ * Retrieves JSON object info of a single ticket from the database
+ * @param {string} code a ticket's play code (must exist on the database first)
+ * @returns {Promise<any>} JSON data for the ticket
+ */
+ export const getPrizeByCode = async (code2) => {
     throw { name: "NotImplementedError", message: "function not implemented yet!" };
 }
 
@@ -97,4 +117,41 @@ export const getUserShopTag = async (uid) => {
 export const getTicketsGeneratedByUser = async (user) => {
     var prefix = await getUserShopTag(user.uid);
     return getTicketsByPrefix(prefix);
+}
+
+export const getPrizesByID = async (prizeCode) => {
+    var len = prizeCode.length;
+    var head = prizeCode.slice(0, len-1);
+    var tail = prizeCode.slice(len-1, len);
+
+    var start = prizeCode;
+    var stop = head + String.fromCharCode(tail.charCodeAt(0) + 1);
+
+    const prizesRef = collection(db, "prize-info");
+    const q = query(prizesRef,
+            where("__name__", '>=', start),
+            where("__name__", '<', stop));
+    
+    // Retrieve data snapshot, first from cache, then from server
+    var data = [];
+    if (cache.prizeData && cache.prizeData.length > 0) {
+        data = cache.prizeData;
+    } else {
+        const snap = await getDocs(q);
+
+        snap.forEach( (doc) => {
+            var d = doc.data();
+            d.id = data.length+1;
+            d.code2 = doc.id;
+            data.push(d);
+        });
+
+        cache.prizeData = data;
+    }
+    return data;
+}
+
+export const getPrizesGeneratedByUser = async (user) => {
+    var prizeCode = await getUserShopTag(user.uid);
+    return getPrizesByID(prizeCode);
 }
