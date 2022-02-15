@@ -23,6 +23,8 @@ jobs:
         node-version: 12.x
         cache: 'npm'
     - run: npm ci
+    - name: Install Firebase Functions Dependancies
+      run: cd functions && npm ci && cd ../
     #- run: npm test
     - run: npm run func-lint
 
