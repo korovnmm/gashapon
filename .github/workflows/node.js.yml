@@ -11,20 +11,25 @@ on:
   workflow_dispatch:
 
 jobs:
-  run_node_tests:
+  test:
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
-    - name: Install Node.js
+    - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
         node-version: 12.x
         cache: 'npm'
-    - run: npm ci
-    - name: Install Firebase Functions Dependancies
-      run: cd functions && npm ci && cd ../
-    #- run: npm test
-    - run: npm run func-lint
-
+    - name: Install dependencies
+        run: |
+          npm install -g firebase-tools
+          npm ci
+          cd functions && npm ci && cd ../
+    - name: Lint files
+        run: npm run func-lint
+    - name: Start development server
+        run: npm start & npx wait-on http://localhost:3000
+    - name: Run tests
+        run: npm test
