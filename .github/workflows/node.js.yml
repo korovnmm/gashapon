@@ -32,9 +32,11 @@ jobs:
     - name: Build the node project
       run: npm run build --if-present
     - name: Start the functions emulator
+      env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       run: |
         npm run func-compile
-        firebase serve --only functions --token "$FIREBASE_TOKEN" & npx wait-on http://localhost:5000
+        firebase serve --only functions & npx wait-on http://localhost:5000
     - name: Start development server
       run: npm start & npx wait-on http://localhost:3000
     - name: Run tests
