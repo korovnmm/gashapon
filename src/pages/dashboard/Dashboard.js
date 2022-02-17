@@ -71,7 +71,7 @@ function DashboardPage () {
 }
 
 export const Dashboard = () => {
-    const { user } = useAuthState();
+    //const { user } = useAuthState();
     const [value, setValue] = useState(0);
     const { url, path } = useRouteMatch();
 
