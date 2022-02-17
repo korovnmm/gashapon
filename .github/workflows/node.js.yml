@@ -11,13 +11,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  build_and_test:
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Node.js
+    - name: Set up Node.js (v12.x)
       uses: actions/setup-node@v2
       with:
         node-version: 12.x
@@ -29,6 +29,12 @@ jobs:
         cd functions && npm ci && cd ../
     - name: Lint files
       run: npm run func-lint
+    - name: Build the node project
+      run: npm run build --if-present
+    - name: Start the functions emulator
+      run: |
+        npm run func-compile
+        firebase serve --only functions & npx wait-on http://localhost:5000
     - name: Start development server
       run: npm start & npx wait-on http://localhost:3000
     - name: Run tests
