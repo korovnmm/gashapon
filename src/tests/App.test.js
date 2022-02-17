@@ -2,7 +2,7 @@
 //import App from '../App';
 
 test('dummy test', () => {
-  expect(true);
+  expect(true).toEqual(false);
 });
 
 /*
