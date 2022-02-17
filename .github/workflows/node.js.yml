@@ -36,7 +36,7 @@ jobs:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       run: |
         npm run func-compile
-        firebase serve --only functions & npx wait-on http://localhost:5000
+        firebase emulators:exec --only functions
     - name: Start development server
       run: npm start & npx wait-on http://localhost:3000
     - name: Run tests
