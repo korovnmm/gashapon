@@ -39,7 +39,7 @@ jobs:
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       run: |
-        firebase emulators:exec --only functions \"npm test --exit\"
+        firebase emulators:exec --only functions "npm test"
     #- name: Logout of Firebase
     #  if: always()
     #  run: firebase logout --token "$FIREBASE_TOKEN"
