@@ -33,13 +33,11 @@ jobs:
         npm run func-compile
     - name: Build the node project
       run: npm run build --if-present
-    - name: Start development server
-      run: npm start & npx wait-on http://localhost:3000
     - name: Run tests
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       run: |
-        firebase emulators:exec --only functions "npm test"
+        npm test
     #- name: Logout of Firebase
     #  if: always()
     #  run: firebase logout --token "$FIREBASE_TOKEN"
