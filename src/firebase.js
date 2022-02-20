@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app'
-import { getFunctions, connectFunctionsEmulator } from 'firebase/functions'
-import { getFirestore } from 'firebase/firestore'
+import { connectFunctionsEmulator, getFunctions } from 'firebase/functions'
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
+import { connectAuthEmulator, getAuth } from 'firebase/auth'
 import { createContext } from 'react'
 
 import { firebaseConfig } from './config'
@@ -13,5 +14,7 @@ export const AuthContext = createContext();
 
 // Connect to emulators if running on localhost
 if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
-    connectFunctionsEmulator(functions, "localhost", 5000);
+    connectFunctionsEmulator(functions, "localhost", 5001);
+    connectFirestoreEmulator(db, "localhost", 8080);
+    connectAuthEmulator(getAuth(), "http://localhost:9099");
 }
