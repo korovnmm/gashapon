@@ -18,7 +18,7 @@ afterAll(() => {
 
 describe('Server', () => {
     
-    it("is running (hello world)", async () => {
+    it("is running (hello world)", () => {
         return call("helloWorld").then((json) => {
             expect(json).toEqual({ "data": "World!" });
             expect(json.data).toMatch("World!");
@@ -32,7 +32,7 @@ describe('Server', () => {
 // Main Tests
 describe('Shopkeeper', () => {
 
-    it("can create a new user account", async () => {
+    it("can create a new user account", () => {
         return createUserWithEmailAndPassword(auth, exampleUserEmail, examplePassword)
             .then(() => {
                 return call("userLoggedIn")
@@ -43,7 +43,7 @@ describe('Shopkeeper', () => {
             });
     });
 
-    it("can sign in", async () => {
+    it("can sign in", () => {
         return signInWithEmailAndPassword(auth, exampleUserEmail, examplePassword)
             .then(() => {
                 expect(auth.currentUser.email).toMatch(exampleUserEmail);
@@ -54,7 +54,7 @@ describe('Shopkeeper', () => {
             });
     });
     
-    it("can generate a play ticket without errors", async () => {
+    it("can generate a play ticket without errors", () => {
         return generateTickets("customer@example.com", "blank memo", 1)
             .then((result) => {
                 let keys = Object.keys(result.data); 
@@ -67,7 +67,7 @@ describe('Shopkeeper', () => {
             });
     });
 
-    it("can generate multiple play tickets without errors", async () => {
+    it("can generate multiple play tickets without errors", () => {
         return generateTickets("customer2@example.com", "", 10)
             .then((result) => {
                 let keys = Object.keys(result.data);
