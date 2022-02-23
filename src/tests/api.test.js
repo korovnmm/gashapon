@@ -32,8 +32,9 @@ describe('Shopkeeper', () => {
     it("can create a new user account", () => {
         return createUserWithEmailAndPassword(auth, exampleUserEmail, examplePassword)
             .then(() => {
-                return call("initUserAccount")
-                    .then(() => {
+                return call("userLoggedIn")
+                    .then((json) => {
+                        expect(json.data.result).toMatch("created");
                         return signOut(auth);
                     });
             });
@@ -43,6 +44,10 @@ describe('Shopkeeper', () => {
         return signInWithEmailAndPassword(auth, exampleUserEmail, examplePassword)
             .then(() => {
                 expect(auth.currentUser.email).toMatch(exampleUserEmail);
+                return call("userLoggedIn")
+                    .then((json) => {
+                        expect(json.data.result).toMatch("success");
+                    });
             });
     });
     
