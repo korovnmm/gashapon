@@ -5,6 +5,7 @@ import {
     GoogleAuthProvider, 
     signInWithPopup
 } from 'auth'
+import { call } from 'api'
 import { 
     Box,
     Button,
@@ -27,6 +28,7 @@ export const Login = () => {
         const auth = getAuth();
         try {
             await signInWithEmailAndPassword(auth, email.value, password.value);
+            await call("userLoggedIn");
         } catch (e) {
             alert(e.message);
         }
@@ -40,7 +42,8 @@ export const Login = () => {
         const provider = new GoogleAuthProvider();
         const auth = getAuth();
         try {
-            signInWithPopup(auth, provider);
+            await signInWithPopup(auth, provider);
+            await call("userLoggedIn");
         } catch (e) {
             alert(e.message);
         }
