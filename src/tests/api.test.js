@@ -9,9 +9,6 @@ import {
 let auth = getAuth();
 let exampleUserEmail = "itsjoe@example.com";
 let examplePassword = "superSecretPassword123";
-beforeEach(async () => {
-    await call("helloWorld");
-});
 afterAll(() => {
     return auth.currentUser.delete();
 });
