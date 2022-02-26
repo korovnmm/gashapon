@@ -10,7 +10,13 @@ let browser
 let page
 
 beforeAll(async () => {
-    browser = await puppeteer.launch({ headless: isHeadless });
+    if (process.env.CI)
+        browser = await puppeteer.launch({
+            headless: true,
+            args: [`--no-sandbox`, `--disable-setuid-sandbox`]
+        });
+    else
+        browser = await puppeteer.launch({ headless: isHeadless });
     page = await browser.newPage();
 
     // Make sure the auth emulator is running
