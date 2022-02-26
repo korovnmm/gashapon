@@ -19,10 +19,6 @@ beforeAll(async () => {
     else
         browser = await puppeteer.launch({ headless: isHeadless });
     page = await browser.newPage();
-
-    // See if we can connect to example.com
-    await page.goto("https://example.com");
-    await page.screenshot({ path: "./screenshot.png" });
     
     // Make sure the auth emulator is running
     await page.goto(BASE_URL, { waitUntil: 'networkidle2' });
@@ -41,6 +37,14 @@ const getText = async (selector) => {
     return text;
 }
 
+
+test('Puppeteer is functional', async () => {
+    // See if we can connect to example.com
+    await page.goto("https://example.com");
+    await page.waitForSelector("body > div:nth-child(1) > h1:nth-child(1)");
+    const text = await getText("body > div:nth-child(1) > h1:nth-child(1)");
+    expect(text).toContain("Example Domain");
+});
 
 
 describe('Home Page', () => {
