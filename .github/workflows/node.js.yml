@@ -45,6 +45,12 @@ jobs:
         REACT_APP_MEASUREMENT_ID: ${{ secrets.REACT_APP_MEASUREMENT_ID }}
       run: |
         npm test
+    - name: Upload screenshot
+      if: always()
+      uses: actions/upload-artifact@v2
+      with:
+        name: screenshot
+        path: ./screenshot.png
     #- name: Logout of Firebase
     #  if: always()
     #  run: firebase logout --token "$FIREBASE_TOKEN"
