@@ -15,6 +15,7 @@ beforeAll(async () => {
 
     // Make sure the auth emulator is running
     await page.goto(BASE_URL, { waitUntil: 'networkidle2' });
+    await page.waitForSelector(".firebase-emulator-warning");
     if (process.env.CI)
         await page.screenshot({path: "./screenshot.png"});
     const warningText = await getText(".firebase-emulator-warning");
