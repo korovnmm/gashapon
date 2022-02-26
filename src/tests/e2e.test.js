@@ -19,9 +19,10 @@ beforeAll(async () => {
     else
         browser = await puppeteer.launch({ headless: isHeadless });
     page = await browser.newPage();
+    await page.setUserAgent('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36');
     
     // Make sure the auth emulator is running
-    await page.goto(BASE_URL, { waitUntil: 'networkidle2' });
+    await page.goto(BASE_URL);
     await page.waitForSelector(".firebase-emulator-warning");
     if (process.env.CI)
         await page.screenshot({path: "./screenshot.png"});
