@@ -14,8 +14,6 @@ beforeAll(async () => {
     page = await browser.newPage();
 
     // Make sure the auth emulator is running
-    if (process.env.CI) // skip if on a CI system, though
-        return;
     await page.goto(BASE_URL);
     const warningText = await getText(".firebase-emulator-warning");
     expect(warningText).toMatch("Running in emulator mode. Do not use with production credentials.");
