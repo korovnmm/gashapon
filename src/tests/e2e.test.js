@@ -9,7 +9,7 @@ const password = "somebody'sPassword123";
 let browser
 let page
 
-jest.setTimeout(12000);
+jest.setTimeout(60000);
 beforeAll(async () => {
     if (process.env.CI)
         browser = await puppeteer.launch({
