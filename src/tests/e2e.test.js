@@ -20,6 +20,10 @@ beforeAll(async () => {
         browser = await puppeteer.launch({ headless: isHeadless });
     page = await browser.newPage();
 
+    // See if we can connect to example.com
+    await page.goto("https://example.com");
+    await page.screenshot({ path: "./screenshot.png" });
+    
     // Make sure the auth emulator is running
     await page.goto(BASE_URL, { waitUntil: 'networkidle2' });
     await page.waitForSelector(".firebase-emulator-warning");
