@@ -9,14 +9,14 @@ const password = "somebody'sPassword123";
 let browser
 let page
 
+jest.setTimeout(30000);
 beforeAll(async () => {
-    jest.setTimeout(30000);
     if (process.env.CI)
         browser = await puppeteer.launch({ headless: true,
             args: [`--no-sandbox`, `--disable-setuid-sandbox`]
         });
     else
-        browser = await puppeteer.launch({ headless: isHeadless });
+        browser = await puppeteer.launch({ headless: isHeadless, slowMo: 20 });
     page = await browser.newPage();
 
     // Make sure the auth emulator is running
@@ -32,10 +32,20 @@ afterAll(async () => {
     jest.setTimeout(5000);
 });
 
+// ---  HELPER FUNCTIONS ---
+
 const getText = async (selector) => {
     const text = await page.$eval(selector, (e) => e.textContent);
     return text;
 };
+
+function wait(time) {
+    return new Promise(function (resolve) {
+        setTimeout(resolve, time);
+    });
+};
+
+const signOut = async () => { await page.click("#root > header:nth-child(2) > button:nth-child(2)"); };
 
 // --- TESTS BELOW THIS POINT ---
 
@@ -63,7 +73,7 @@ describe('Home Page', () => {
 });
 
 
-describe('Account Creation Page', () => {
+describe('Account Creation', () => {
     beforeAll(async () => {
         await page.goto(BASE_URL);
         await page.waitForSelector("#root > header:nth-child(2) > div:nth-child(1) > a:nth-child(4)");
@@ -101,7 +111,7 @@ describe('Account Creation Page', () => {
     });
 
     it("can sign out", async () => {
-        await page.click("#root > header:nth-child(2) > button:nth-child(2)");
+        await signOut();
         await page.waitForSelector(".MuiTypography-root");
         const text = await getText(".MuiTypography-root");
         expect(text).toContain("Sign in");
@@ -113,6 +123,7 @@ describe('Account Creation Page', () => {
 
 describe('Login / Dashboard', () => {
     beforeAll(async () => {
+        await signOut();
         await page.click("#root > header:nth-child(2) > div:nth-child(1) > a:nth-child(3)");
     });
 
@@ -144,6 +155,120 @@ describe('Login / Dashboard', () => {
         await page.waitForSelector(".dashboard-header");
         const text = await getText(".dashboard-header");
         expect(text.toLowerCase()).toMatch("dashboard");
+    });
+
+    it("can generate a play ticket", async () => {
+        let emailInput = "customer@example.com";
+        let memoInput = "e2e test";
+        
+        await page.waitForSelector("a.MuiButtonBase-root:nth-child(4)");
+        const text = await getText("a.MuiButtonBase-root:nth-child(4)");
+        expect(text).toMatch("Tickets");
+
+        // Open the tickets tab
+        await wait(3000);
+        await page.click("a.MuiButtonBase-root:nth-child(4)");
+
+        // Enter an email
+        await page.click("#email");
+        await page.type("#email", emailInput);
+
+        // Enter a memo
+        await page.click("#memo");
+        await page.type("#memo", memoInput);
+
+        // Click the submit button
+        await page.click(".MuiButton-root");
+
+        // Wait for the snackbar pop-up to verify ticket creation
+        await page.waitForSelector(".MuiSnackbarContent-message");
+
+        // Verify the email on the table entry
+        await page.waitForSelector("div.MuiDataGrid-row:nth-child(1) > div:nth-child(2)");
+        const emailCell = await getText("div.MuiDataGrid-row:nth-child(1) > div:nth-child(2)");
+
+        // Verify the memo on the table entry
+        await page.waitForSelector("div.MuiDataGrid-row:nth-child(1) > div:nth-child(5)");
+        const memoCell = await getText("div.MuiDataGrid-row:nth-child(1) > div:nth-child(5)");
+
+        expect(emailCell).toMatch(emailInput);
+        expect(memoCell).toMatch(memoInput);
+    });
+
+});
+
+
+describe("Google Auth", () => {
+    beforeAll(async () => {
+        await signOut();
+        await page.click("#root > header:nth-child(2) > div:nth-child(1) > a:nth-child(3)");
+
+        // Login checks from above
+        expect(page.url()).toMatch(BASE_URL + "/login"); // should have '/login' in the url
+        await page.waitForSelector(".MuiTypography-root");
+        const text = await getText(".MuiTypography-root");
+        expect(text).toContain("Sign in"); // sign in header is displayed
+    });
+
+    it("can log in through google", async () => {
+        const newPagePromise = new Promise(x => page.once('popup', x));
+
+        // click the google sign-in button
+        await page.click("button.MuiButton-root:nth-child(3)");
+
+        // grab and verify the popup window
+        const popup = await newPagePromise;
+        await popup.waitForSelector("#title > span:nth-child(1)");
+        let text = await popup.$eval("#title > span:nth-child(1)", (e) => e.textContent);
+        expect(text).toContain("Sign-in with");
+
+        // add a dummy account
+        await popup.click("button.mdc-button--outlined:nth-child(1) > div:nth-child(1)"); // "add account"
+        await popup.click("#autogen-button > div:nth-child(1)"); // "auto generate user info"
+        await popup.click("#sign-in"); // "sign-in with google.com"
+
+        // dashboard (header should be visible)
+        await page.waitForSelector(".dashboard-header");
+        text = await getText(".dashboard-header");
+        expect(text.toLowerCase()).toMatch("dashboard");
+    });
+
+    it("can generate a play ticket", async () => {
+        let emailInput = "customergoogle@example.com";
+        let memoInput = "e2e test";
+
+        await page.waitForSelector("a.MuiButtonBase-root:nth-child(4)");
+        let text = await getText("a.MuiButtonBase-root:nth-child(4)");
+        expect(text).toMatch("Tickets");
+
+        // Open the tickets tab
+        await wait(3000);
+        await page.click("a.MuiButtonBase-root:nth-child(4)");
+
+        // Enter an email
+        await page.click("#email");
+        await page.type("#email", emailInput);
+
+        // Enter a memo
+        await page.click("#memo");
+        await page.type("#memo", memoInput);
+
+        // Click the submit button
+        await page.click(".MuiButton-root");
+
+        // Wait for the snackbar pop-up to verify ticket creation
+        await page.waitForSelector(".MuiSnackbarContent-message");
+
+        // Verify the email on the table entry
+        await page.waitForSelector("div.MuiDataGrid-row:nth-child(1) > div:nth-child(2)");
+        const emailCell = await getText("div.MuiDataGrid-row:nth-child(1) > div:nth-child(2)");
+
+        // Verify the memo on the table entry
+        await page.waitForSelector("div.MuiDataGrid-row:nth-child(1) > div:nth-child(5)");
+        const memoCell = await getText("div.MuiDataGrid-row:nth-child(1) > div:nth-child(5)");
+
+        expect(emailCell).toMatch(emailInput);
+        expect(memoCell).toMatch(memoInput);
     });
 
 });
