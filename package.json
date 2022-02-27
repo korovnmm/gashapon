@@ -21,13 +21,14 @@
   "scripts": {
     "start": "run-p --race start:react start:firebase",
     "start:react": "react-scripts start",
-    "start:firebase": "firebase emulators:start --only functions,auth,firestore",
+    "start:firebase": "npm run func-compile && firebase emulators:start --only functions,auth,firestore",
     "build": "react-scripts build",
-    "test": "firebase emulators:exec \"react-scripts test\"",
+    "test": "npm run build && firebase emulators:exec \"react-scripts test --runInBand\"",
+    "test:ci": "firebase emulators:exec \"react-scripts test --testPathIgnorePatterns='/node_modules/' '/e2e'\"",
     "eject": "react-scripts eject",
     "func-lint": "npm --prefix \"./functions\" run lint-fix",
-    "func-compile": "npm --prefix \"./functions\" run build",
-    "func": "npm run func-lint && npm run func-compile && firebase serve --only functions -p 5001"
+    "func-compile": "npm run func-lint && npm --prefix \"./functions\" run build",
+    "func": "npm run func-compile && firebase serve --only functions -p 5001"
   },
   "eslintConfig": {
     "extends": [

@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer'
 
-const isHeadless = true;
-const BASE_URL = "http://127.0.0.1:5000" //"http://localhost:5000"
+const isHeadless = false;
+const BASE_URL = "http://localhost:5000"
 
 const email = "somebody@example.com";
 const password = "somebody'sPassword123";
@@ -9,35 +9,35 @@ const password = "somebody'sPassword123";
 let browser
 let page
 
-//jest.setTimeout(60000);
 beforeAll(async () => {
+    jest.setTimeout(30000);
     if (process.env.CI)
-        browser = await puppeteer.launch({
-            headless: true,
+        browser = await puppeteer.launch({ headless: true,
             args: [`--no-sandbox`, `--disable-setuid-sandbox`]
         });
     else
         browser = await puppeteer.launch({ headless: isHeadless });
     page = await browser.newPage();
-    await page.setUserAgent('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36');
 
     // Make sure the auth emulator is running
     await page.goto(BASE_URL);
-    //await page.waitForSelector(".firebase-emulator-warning");
-    if (process.env.CI)
+    await page.waitForSelector(".firebase-emulator-warning");
+    if (process.env.CI) // screenshot if on CI server
         await page.screenshot({path: "./screenshot.png"});
-    //const warningText = await getText(".firebase-emulator-warning");
-    //expect(warningText).toMatch("Running in emulator mode. Do not use with production credentials.");
+    const warningText = await getText(".firebase-emulator-warning");
+    expect(warningText).toMatch("Running in emulator mode. Do not use with production credentials.");
 });
 afterAll(async () => {
     browser.close();
+    jest.setTimeout(5000);
 });
 
 const getText = async (selector) => {
     const text = await page.$eval(selector, (e) => e.textContent);
     return text;
-}
+};
 
+// --- TESTS BELOW THIS POINT ---
 
 test('Puppeteer is functional', async () => {
     // See if we can connect to example.com
