@@ -24,7 +24,7 @@
     "start:firebase": "npm run func-compile && firebase emulators:start --only functions,auth,firestore",
     "build": "react-scripts build",
     "test": "npm run build && firebase emulators:exec \"react-scripts test --runInBand --watchAll=false\"",
-    "test:ci": "firebase emulators:exec \"react-scripts test --testPathIgnorePatterns='/node_modules/' '/e2e'\"",
+    "test:ci": "firebase emulators:exec \"react-scripts test --verbose --testPathIgnorePatterns='/node_modules/' '/e2e'\"",
     "eject": "react-scripts eject",
     "func-lint": "npm --prefix \"./functions\" run lint-fix",
     "func-compile": "npm run func-lint && npm --prefix \"./functions\" run build",
