@@ -66,7 +66,7 @@ export const Tickets = () => {
             .catch((error) => {
                 const code = error.code;
                 const message = error.message;
-                const details = error.details;
+                //const details = error.details;
                 alert(`${code}: ${message}`);
             });
     }, []);

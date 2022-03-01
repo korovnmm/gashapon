@@ -57,7 +57,7 @@ export function savePrizesToMemory(data) {
  * @returns {Promise<any>} JSON data for the ticket
  */
 export const getTicketByCode = async (code) => {
-    throw { name: "NotImplementedError", message: "function not implemented yet!" };
+    return { name: "NotImplementedError", message: "function not implemented yet!" };
 }
 
 /**
