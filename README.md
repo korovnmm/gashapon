@@ -7,9 +7,9 @@ cd gashapon
 npm install
 ```
 
-2. Make a duplicate copy of `config.js.template` and rename it to `config.js` (DO NOT DELETE `config.js.template`).
+2. Make a duplicate copy of `.env.template` and rename it to `.env` (DO NOT DELETE `.env.template`).
 
-3. Paste in the project's Firebase credentials to the `config.js` file (can be found on the Firebase console -> Project Settings -> General -> scroll down to the bottom of the page to the "Your apps" section).
+3. Fill in the environment variables in `.env` with the ones from the project's Firebase credentials (can be found on the Firebase console -> Project Settings -> General -> scroll down to the bottom of the page to the "Your apps" section). Don't change the variable names inside `.env`, just copy the corresponding values over.
 
 4. Test whether the website runs on your localhost by typing `npm start` into the command line while your working directory is set to the project folder.
 

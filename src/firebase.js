@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app'
-import { getFunctions, connectFunctionsEmulator } from 'firebase/functions'
-import { getFirestore } from 'firebase/firestore'
+import { connectFunctionsEmulator, getFunctions } from 'firebase/functions'
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
+import { connectAuthEmulator, getAuth } from 'firebase/auth'
 import { createContext } from 'react'
 
 import { firebaseConfig } from './config'
@@ -11,7 +12,21 @@ export const functions = getFunctions(firebaseApp);
 export const db = getFirestore(firebaseApp);
 export const AuthContext = createContext();
 
+// A toggle for auth emulator warnings (they tend to bloat the unit test logs)
+const consoleInfo = console.info
+function setShowAuthEmulatorWarning(show) {
+    console.info = show ? consoleInfo : () => { }
+}
+
 // Connect to emulators if running on localhost
+export function connectFirebaseEmulators() {
+    connectFunctionsEmulator(functions, "localhost", 5001);
+    connectFirestoreEmulator(db, "localhost", 8080);
+
+    setShowAuthEmulatorWarning(false);
+    connectAuthEmulator(getAuth(), "http://localhost:9099");
+    setShowAuthEmulatorWarning(true);
+}
 if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
-    connectFunctionsEmulator(functions, "localhost", 5000);
+    connectFirebaseEmulators();
 }

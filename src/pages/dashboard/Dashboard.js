@@ -12,7 +12,7 @@ import {
 } from 'react-router-dom'
 import { useState } from 'react'
 
-import { useAuthState } from 'auth'
+//import { useAuthState } from 'auth'
 import { AuthenticatedRoute } from 'components'
 
 import { Overview } from './Overview'
@@ -71,7 +71,7 @@ function DashboardPage () {
 }
 
 export const Dashboard = () => {
-    const { user } = useAuthState();
+    //const { user } = useAuthState();
     const [value, setValue] = useState(0);
     const { url, path } = useRouteMatch();
 

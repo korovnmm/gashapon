@@ -10,7 +10,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
-    "firebase": "^9.2.0",
+    "firebase": "^9.6.7",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-firebase-hooks": "^4.0.1",
@@ -19,13 +19,16 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "run-p --race start:react start:firebase",
+    "start:react": "react-scripts start",
+    "start:firebase": "npm run func-compile && firebase emulators:start --only functions,auth,firestore",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "npm run build && firebase emulators:exec \"react-scripts test --runInBand --watchAll=false\"",
+    "test:ci": "firebase emulators:exec \"react-scripts test --verbose --testPathIgnorePatterns='/node_modules/' '/e2e'\"",
     "eject": "react-scripts eject",
     "func-lint": "npm --prefix \"./functions\" run lint-fix",
-    "func-compile": "npm --prefix \"./functions\" run build",
-    "func": "npm run func-lint && npm run func-compile && firebase serve --only functions"
+    "func-compile": "npm run func-lint && npm --prefix \"./functions\" run build",
+    "func": "npm run func-compile && firebase serve --only functions -p 5001"
   },
   "eslintConfig": {
     "extends": [
@@ -44,5 +47,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/jest": "^27.4.0",
+    "@types/puppeteer": "^5.4.5",
+    "npm-run-all": "^4.1.5",
+    "puppeteer": "^13.4.0"
   }
 }
