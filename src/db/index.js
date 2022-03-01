@@ -61,7 +61,6 @@ export const getTicketByCode = async (code) => {
 }
 
 /**
-<<<<<<< HEAD
  * Retrieves JSON object info of a single ticket from the database
  * @param {string} code a ticket's play code (must exist on the database first)
  * @returns {Promise<any>} JSON data for the ticket
@@ -70,12 +69,11 @@ export const getTicketByCode = async (code) => {
     throw { name: "NotImplementedError", message: "function not implemented yet!" };
 }
 
-=======
+/**
  * Queries the database for all tickets containing a specific prefix.
  * @param {*} prefix the prefix to query for
  * @returns an array list of tickets with the matching prefix, array is empty if no results were found
  */
->>>>>>> origin/main
 export const getTicketsByPrefix = async (prefix) => {
     var len = prefix.length;
     var head = prefix.slice(0, len-1);
