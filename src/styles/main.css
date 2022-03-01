@@ -1,11 +1,185 @@
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  background-color: #8AF1C0;
+  font-family: -apple-system, BlinkMacSystemFont, "Roboto Condensed", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.1em, white), color-stop(0.1em, transparent)), -webkit-gradient(linear, left top, right top, color-stop(0.1em, white), color-stop(0.1em, transparent));
+  background-image: linear-gradient(white 0.1em, transparent 0.1em), linear-gradient(90deg, white 0.1em, transparent 0.1em);
+  background-size: 3em 3em;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
-/*# sourceMappingURL=main.css.map */
+
+button {
+  color: white;
+  padding: 10px;
+  border-radius: 5%;
+  background-color: #8447D1;
+  left: 0px;
+  right: 80px;
+  width: 100px;
+  height: 40px;
+  border: none;
+}
+
+#sign-out-btn {
+font-family: 'Roboto';
+font-weight: 700;
+font-size:large;
+bottom: 0%;
+}
+
+.navbar-main {
+  background-color: #E478DA;
+  padding: 1%;
+  margin-top: 0;
+  font-family: 'Roboto';
+  z-index: 1;
+  box-shadow: 1px 1px 5px rgba(0,0,0,.5);
+}
+
+#nav-item {
+  padding:1%;
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+a:link #nav-item{
+  color: white;
+}
+
+a:visited #nav-item {
+  color: white;
+}
+
+a:hover #nav-item {
+  color: red;
+}
+
+a:active #nav-item {
+  font-weight: 900;
+}
+
+image {
+  max-height: 10%;
+}
+
+.banner {
+  font-family: 'Roboto';
+  text-align: center;
+  font-size: 500%;
+  color: white;
+  padding: 2%;
+  height: 60px;
+  position: absolute;
+  width: 100%;
+  background-color: #E478DA;
+  z-index: 1;
+}
+
+.kattapon {
+  position: relative;
+  line-height: 0;
+  font-family: Roboto;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 72px;
+}
+
+.move-right {
+  position: absolute;
+  margin-right: 0px;
+}
+
+.circle1 {
+  position: relative;
+  height: 420px;
+  width: 420px;
+  border-radius: 50%;
+  z-index: -5;
+}
+
+.circle1:before {
+  position: absolute;
+  content: '';
+  height: calc(100% + 10px);
+  width: calc(100% + 10px);
+  border: 8px dashed white;
+  top: -50%;
+  right: -599%;
+  border-radius: inherit;
+  -webkit-animation: spin 80s linear infinite;
+          animation: spin 80s linear infinite;
+}
+
+.circle2 {
+  position: relative;
+  height: 480px;
+  width: 480px;
+  border-radius: 50%;
+}
+
+.circle2:before {
+  position: absolute;
+  content: '';
+  height: calc(100% + 10px);
+  width: calc(100% + 10px);
+  border: 4px dashed #FFAFF7;
+  top: -163%;
+  right: -690%;
+  border-radius: inherit;
+  -webkit-animation: spin2 40s linear infinite;
+          animation: spin2 40s linear infinite;
+}
+
+.circle3 {
+  position: relative;
+  height: 250px;
+  width: 250px;
+  border-radius: 50%;
+}
+
+.circle3:before {
+  position: absolute;
+  content: '';
+  height: calc(100% + 10px);
+  width: calc(100% + 10px);
+  border: 4px dashed #FCFF5C;
+  top: -290%;
+  right: -780%;
+  border-radius: inherit;
+  -webkit-animation: spin 30s linear infinite;
+          animation: spin 30s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotateZ(360deg);
+            transform: rotateZ(360deg);
+  }
+}
+
+@keyframes spin {
+  100% {
+    -webkit-transform: rotateZ(360deg);
+            transform: rotateZ(360deg);
+  }
+}
+
+@-webkit-keyframes spin2 {
+  100% {
+    -webkit-transform: rotateZ(-360deg);
+            transform: rotateZ(-360deg);
+  }
+}
+
+@keyframes spin2 {
+  100% {
+    -webkit-transform: rotateZ(-360deg);
+            transform: rotateZ(-360deg);
+  }
+}
+/*# sourceMappingURL=main.css.map*/
