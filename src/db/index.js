@@ -120,24 +120,16 @@ export const getTicketsGeneratedByUser = async (user) => {
 }
 
 export const getPrizesByID = async (prizeCode) => {
-    var len = prizeCode.length;
-    var head = prizeCode.slice(0, len-1);
-    var tail = prizeCode.slice(len-1, len);
 
-    var start = prizeCode;
-    var stop = head + String.fromCharCode(tail.charCodeAt(0) + 1);
-
-    const prizesRef = collection(db, "prize-info");
-    const q = query(prizesRef,
-            where("__name__", '>=', start),
-            where("__name__", '<', stop));
     
+    const prizesRef = collection(db, "prize-info");
+ 
     // Retrieve data snapshot, first from cache, then from server
     var data = [];
     if (cache.prizeData && cache.prizeData.length > 0) {
         data = cache.prizeData;
     } else {
-        const snap = await getDocs(q);
+        const snap = await getDocs(prizesRef);
 
         snap.forEach( (doc) => {
             var d = doc.data();
@@ -151,7 +143,7 @@ export const getPrizesByID = async (prizeCode) => {
     return data;
 }
 
-export const getPrizesGeneratedByUser = async (user) => {
-    var prizeCode = await getUserShopTag(user.uid);
+export const getPrizesGeneratedByUser = async (prizes) => {
+    var prizeCode = await getPrizesByID(prizes.code);
     return getPrizesByID(prizeCode);
 }

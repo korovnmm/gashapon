@@ -38,6 +38,7 @@ export const getExample = functions.https.onRequest(async (req, res) => {
 });
 
 
+// add imageURL to prize-info fields
 export const generatePrizes = functions.https.onCall(async (data, context) => {
   // Data
   const name = data.name;
@@ -81,6 +82,7 @@ export const generatePrizes = functions.https.onCall(async (data, context) => {
       image: null,
       name,
       lastModified: timestamp,
+      quantity,
     };
 
     // Write to firestore
