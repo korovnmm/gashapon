@@ -2,7 +2,7 @@ import React from "react";
 import pinklogo from "assets/gashapon_pink.png"
 import greenlogo from "assets/gashapon_green.png"
 import { useHistory } from 'react-router-dom'
-import { getTicketByCode } from 'db'
+//import { getTicketByCode } from 'db'
 
 import { 
     Box,
@@ -22,7 +22,7 @@ import {
     Avatar
 } from '@mui/material'  
 
-import { Link } from 'react-router-dom'
+//import { Link } from 'react-router-dom'
 import { useCallback } from "react";
 
 

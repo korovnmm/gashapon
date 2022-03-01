@@ -6,6 +6,40 @@ admin.initializeApp();
 
 const db = admin.firestore();
 
+// Helper Functions
+/**
+ * Simple guard function that asserts user authentication.
+ * @param {functions.https.CallableContext} context
+ * @throws HttpsError if the user is not authenticated
+ */
+function checkAuthentication(context : functions.https.CallableContext) {
+  if (!context.auth) {
+    // Throw an error if not
+    throw new functions.https.HttpsError("unauthenticated",
+        "The function must be called " +
+        "while authenticated.");
+  }
+}
+
+/**
+ * Checks whether user account data exists in Firestore for the given uid.
+ * @param {string} uid user id
+ * @return {Promise<boolean>} true if user account data exists
+ */
+async function accountExists(uid : string) : Promise<boolean> {
+  const docRef = db.collection("users").doc(uid);
+
+  return docRef.get().then((doc) => {
+    return doc.exists;
+  })
+      .catch((error) => {
+        console.log(error);
+        throw new functions.https.HttpsError("unknown", error);
+      });
+}
+
+
+// Endpoint Functions
 /**
  * Example function for development reference.
  * res.json() to send back JSON data.
@@ -21,10 +55,15 @@ const db = admin.firestore();
  * Alternatively: `npm run func` in the gashapon directory.
  */
 export const helloWorld = functions.https.onRequest(async (req, res) => {
-  res.json({hello: "World!"});
+  res.json({data: "World!"});
 });
 
 
+/**
+ * Example function for GET requests using onRequest.
+ * Note that onRequest can send explicit status codes,
+ * while onCall must return a dictionary in JSON format.
+ */
 export const getExample = functions.https.onRequest(async (req, res) => {
   db.doc("/ticket-info/shopname").get()
       .then((snapshot) => {
@@ -38,6 +77,69 @@ export const getExample = functions.https.onRequest(async (req, res) => {
 });
 
 
+/**
+ * Called when a user logs in or creates a new account and \
+ * performs any required operations.
+ * @returns "created" result status if a new account was created,
+ * "success" otherwise (i.e. if no new account created).
+ */
+export const userLoggedIn = functions.https.onCall(async (data, context) => {
+  // Check if the user is authenticated
+  checkAuthentication(context);
+
+  // Get the user's id and email
+  const uid = context.auth?.uid as string;
+  const email = await admin.auth().getUser(uid)
+      .then((userRecord) => {
+        return userRecord.email as string;
+      });
+
+  // Initialize the account if it's new
+  const newAccountCreated = await initUserAccount(uid, email);
+  if (newAccountCreated) {
+    return {result: "created"};
+  } else {
+    return {result: "success"};
+  }
+});
+
+
+/**
+ * Initializes user data in the Firestore database with default information.
+ * Helper function for {@link userLoggedIn}.
+ * @param {string} uid
+ * @param {string} email
+ * @return {Promise<boolean>} true if a new account had to be initialized
+ */
+async function initUserAccount(uid : string, email : string): Promise<boolean> {
+  // Check if account data exists already
+  if (await accountExists(uid)) {
+    return false;
+  }
+
+  // Create a default shop tag from the user's email
+  const emailPrefix = email.split("@")[0];
+  const numChars = emailPrefix.length >= 5 ? 5 : emailPrefix.length;
+  const defaultTag = emailPrefix.substring(0, numChars).toLowerCase();
+
+  // Put the data entry together
+  const timestamp = await admin.firestore.FieldValue.serverTimestamp();
+  const userData = {
+    createdAt: timestamp,
+    shopTag: defaultTag,
+  };
+
+  // Write to firestore
+  await db.collection("users").doc(uid).set(userData)
+      .catch((error) => {
+        console.log(error);
+        throw new functions.https.HttpsError("unknown", error);
+      });
+
+  return true;
+}
+
+
 export const generateTickets = functions.https.onCall(async (data, context) => {
   // Data
   const email = data.email;
@@ -45,12 +147,7 @@ export const generateTickets = functions.https.onCall(async (data, context) => {
   const amount = data.amount;
 
   // Check if user is authenticated
-  if (!context.auth) {
-    // Throw an error if not
-    throw new functions.https.HttpsError("unauthenticated",
-        "The function must be called " +
-      "while authenticated.");
-  }
+  checkAuthentication(context);
 
   // Check the amount variable is within range
   if (amount > 10 || amount < 1) {
@@ -60,11 +157,11 @@ export const generateTickets = functions.https.onCall(async (data, context) => {
   }
 
   // Grab user info (id and shop tag)
-  const uid = context.auth.uid;
+  const uid = context.auth?.uid;
   const shopTag = await db.doc(`/users/${uid}`).get()
       .then((snapshot) => {
-        const data = snapshot.data();
-        return data!.shopTag as string;
+        const data = snapshot.data() as FirebaseFirestore.DocumentData;
+        return data.shopTag as string;
       })
       .catch((error) => {
         console.log(error);
