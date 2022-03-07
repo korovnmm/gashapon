@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app'
 import { connectFunctionsEmulator, getFunctions } from 'firebase/functions'
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
 import { connectAuthEmulator, getAuth } from 'firebase/auth'
+import { getStorage, connectStorageEmulator } from "firebase/storage"
 import { createContext } from 'react'
 
 import { firebaseConfig } from './config'
@@ -10,6 +11,7 @@ import { firebaseConfig } from './config'
 export const firebaseApp = initializeApp(firebaseConfig);
 export const functions = getFunctions(firebaseApp);
 export const db = getFirestore(firebaseApp);
+const storage = getStorage();
 export const AuthContext = createContext();
 
 // A toggle for auth emulator warnings (they tend to bloat the unit test logs)
@@ -22,6 +24,7 @@ function setShowAuthEmulatorWarning(show) {
 export function connectFirebaseEmulators() {
     connectFunctionsEmulator(functions, "localhost", 5001);
     connectFirestoreEmulator(db, "localhost", 8080);
+    connectStorageEmulator(storage, "localhost", 9199);
 
     setShowAuthEmulatorWarning(false);
     connectAuthEmulator(getAuth(), "http://localhost:9099");
