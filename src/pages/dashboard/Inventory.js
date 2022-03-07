@@ -9,7 +9,7 @@ import {firebaseApp} from 'firebase'
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 import { DataGrid } from '@mui/x-data-grid'
-import { generatePrizes } from 'api'
+import { addNewPrize } from 'api'
 import { useAuthState } from 'auth'
 import { getPrizesGeneratedByUser, savePrizesToMemory } from 'db';
 import { useState } from 'react'
@@ -47,11 +47,11 @@ export const Inventory = () => {
         setOpen(false);
     };
 
-    const sendGeneratePrizesRequest = useCallback(async e => {
+    const sendNewPrizeRequest = useCallback(async e => {
         e.preventDefault();
         
         const { name, description, quantity } = e.target.elements;
-        generatePrizes(name.value, description.value, quantity.value)
+        addNewPrize(name.value, description.value, quantity.value)
             .then((result) => {
                 const data = result.data;
                 const prizes = []
@@ -126,7 +126,7 @@ export const Inventory = () => {
 
             </div>
             
-            <Box component="form" class="prizes-footer" onSubmit={sendGeneratePrizesRequest}>
+            <Box component="form" class="prizes-footer" onSubmit={sendNewPrizeRequest}>
                 <form>
                 <input type="file" onChange ={fileselectorHandler}/>
                             

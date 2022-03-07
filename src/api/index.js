@@ -2,7 +2,6 @@ import { functions } from '../firebase'
 import { httpsCallable } from '@firebase/functions';
 
 const generateTicketsRef = httpsCallable(functions, 'generateTickets');
-const generatePrizesRef = httpsCallable(functions, 'generatePrizes');
 
 /**
  * Makes a direct api call, use ***only*** if there isn't a middle-man function for this already.
@@ -36,8 +35,8 @@ export const generateTickets = async (email, memo, amount) => {
  * @param {number} amount
  * @returns {Promise<import('@firebase/functions').HttpsCallableResult>} generated item(s) info if successful.
  */
-export const generatePrizes = async (name, description, quantity) => {
-    return generatePrizesRef({
+export const addNewPrize = async (name, description, quantity) => {
+    return call("addNewPrize", {
         name,
         description,
         quantity

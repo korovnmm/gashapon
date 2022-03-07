@@ -209,7 +209,7 @@ export const generateTickets = functions.https.onCall(async (data, context) => {
 
 
 // add imageURL to prize-info fields
-export const generatePrizes = functions.https.onCall(async (data, context) => {
+export const addNewPrize = functions.https.onCall(async (data, context) => {
   // Data
   const name = data.name;
   const description = data.description;
@@ -219,13 +219,13 @@ export const generatePrizes = functions.https.onCall(async (data, context) => {
   if (!context.auth) {
     // Throw an error if not
     throw new functions.https.HttpsError("unauthenticated",
-      "The function must be called " +
+        "The function must be called " +
       "while authenticated.");
   }
   // Check the amount variable is within range
   if (quantity < 1) {
     throw new functions.https.HttpsError("out-of-range",
-      "A minimum of 1 prize can be added " +
+        "A minimum of 1 prize can be added " +
       "at a time.");
   }
 
@@ -257,10 +257,10 @@ export const generatePrizes = functions.https.onCall(async (data, context) => {
 
     // Write to firestore
     db.collection("prize-info").doc(code).set(prizeData)
-      .catch((error) => {
-        console.log(error);
-        throw new functions.https.HttpsError("unknown", error);
-      });
+        .catch((error) => {
+          console.log(error);
+          throw new functions.https.HttpsError("unknown", error);
+        });
 
     // Append to list
     prizes[code] = prizeData;
