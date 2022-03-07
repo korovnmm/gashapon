@@ -169,3 +169,22 @@ export const getPrizesGeneratedByUser = async (prizes) => {
     var prizeCode = await getPrizesByID(prizes.code);
     return getPrizesByID(prizeCode);
 }
+
+
+/**
+ * Returns info data for a prize from the 'prize-info' collection.
+ * @param {*} id 
+ * @returns a dictionary containing prize info data
+ */
+export const getPrizeInfo = async (id) => {
+    return;
+}
+
+/**
+ * Returns info data for a prize from the 'prize' collection.
+ * @param {*} id 
+ * @returns a dictionary containing prize data
+ */
+export const getPrizeMetaData = async (id) => {
+    return;
+}
