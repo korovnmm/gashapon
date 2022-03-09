@@ -26,9 +26,9 @@ function App() {
             <Link to="/" id="nav-item"> Home </Link> |
             <Link to="/about" id="nav-item"> About </Link> |
             <Link to="/login" id="nav-item"> Login </Link> |{' '}
-            <Link to="/signup" id="nav-item"> SignUp </Link> 
+            <Link to="/signup" id="nav-item"> SignUp </Link> |{' '}
+            <Link to="/signup" id="nav-item" id="sign-out-btnnom " onClick={() => signOut(getAuth())}> SignOut </Link>
           </div>
-          <button onClick={() => signOut(getAuth())}> Sign Out </button>
 
         </header>
         
