@@ -20,7 +20,7 @@ function setShowAuthEmulatorWarning(show) {
 
 // Connect to emulators if running on localhost
 export function connectFirebaseEmulators() {
-    connectFunctionsEmulator(functions, "localhost", 5001);
+    connectFunctionsEmulator(functions, "localhost", 5051);
     connectFirestoreEmulator(db, "localhost", 8080);
 
     setShowAuthEmulatorWarning(false);

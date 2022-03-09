@@ -28,7 +28,7 @@
     "eject": "react-scripts eject",
     "func-lint": "npm --prefix \"./functions\" run lint-fix",
     "func-compile": "npm run func-lint && npm --prefix \"./functions\" run build",
-    "func": "npm run func-compile && firebase serve --only functions -p 5001"
+    "func": "npm run func-compile && firebase serve --only functions -p 5051"
   },
   "eslintConfig": {
     "extends": [

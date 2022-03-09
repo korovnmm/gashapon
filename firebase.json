@@ -21,7 +21,7 @@
       "port": 8080
     },
     "functions": {
-      "port": 5001
+      "port": 5051
     },
     "ui": {
       "enabled": true
