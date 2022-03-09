@@ -28,6 +28,7 @@ function App() {
             <Link to="/login" id="nav-item"> Login </Link> |{' '}
             <Link to="/signup" id="nav-item"> SignUp </Link> 
           </div>
+          <button onClick={() => signOut(getAuth())}> Sign Out </button>
 
         </header>
         
