@@ -110,7 +110,7 @@ describe('Shopkeeper', () => {
                 
                 // Verify that the corresponding prize-info document has been created
                 // Should have these keys: description, image, name, lastModified
-                let infoData = await getPrizeInfo(prizeID);
+                let infoData = getPrizeInfo(prizeID);
                 expect(infoData).toMatchObject({
                     name: prizeData.name,
                     description: prizeData.description,
