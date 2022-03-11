@@ -19,11 +19,14 @@ function setShowAuthEmulatorWarning(show) {
 }
 
 // Connect to emulators if running on localhost
-if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+export function connectFirebaseEmulators() {
     connectFunctionsEmulator(functions, "localhost", 5001);
     connectFirestoreEmulator(db, "localhost", 8080);
 
     setShowAuthEmulatorWarning(false);
     connectAuthEmulator(getAuth(), "http://localhost:9099");
     setShowAuthEmulatorWarning(true);
+}
+if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+    connectFirebaseEmulators();
 }
