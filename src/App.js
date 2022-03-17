@@ -4,12 +4,14 @@ import {
   Route,
   Link,
 } from 'react-router-dom'
+import { StyledEngineProvider } from '@mui/material'
 import { 
   getAuth, 
   signOut, 
   AuthContextProvider 
 } from './auth'
 import { AuthenticatedRoute, UnauthenticatedRoute } from './components'
+
 import { Home } from './pages/home/Home'
 import { About } from './pages/About'
 import { Login } from './pages/Login'
@@ -19,6 +21,7 @@ import { RedeemScreen } from './pages/home/RedeemScreen'
 
 function App() {
   return (
+    <StyledEngineProvider injectFirst>
     <AuthContextProvider>
       <Router>
         <header>
@@ -41,6 +44,7 @@ function App() {
         <UnauthenticatedRoute exact path="/signup" component={SignUp} />
       </Router>
     </AuthContextProvider>
+    </StyledEngineProvider>
   );
 }
 
