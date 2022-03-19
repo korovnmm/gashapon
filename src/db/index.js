@@ -86,6 +86,24 @@ export const getTicketsByPrefix = async (prefix) => {
     return data;
 }
 
+
+/**
+ * Grabs the given user's configured shop / organization display name.
+ * @param {*} uid user id
+ * @returns {string} the user's shop display name
+ */
+export const getShopName = async (uid) => {
+    let name;
+    const ref = doc(db, "users", uid);
+    const snapshot = await getDoc(ref);
+
+    if (snapshot.exists()) {
+        name = snapshot.data().shopDisplayName;
+    }
+
+    return name;
+}
+
 /**
  * Grabs a user's current shop tag from the database.
  * @param {*} uid user id
