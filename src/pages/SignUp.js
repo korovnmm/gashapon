@@ -11,7 +11,7 @@ import {
     Button,
     Container,
     TextField,
-    Typography,
+    Typography
 } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { GoogleIcon } from 'components'
