@@ -1,3 +1,10 @@
+.submit-button {
+  border-radius: 40px;
+}
+.submit-button:hover {
+  background-color: rgba(255, 213, 237, 0.5);
+}
+
 .dashboard-container {
   height: 80%;
 }
@@ -33,6 +40,41 @@
 .dash-tab.Mui-selected {
   color: hotpink;
   background: none;
+}
+
+.home-wrapper {
+  height: 90%;
+  padding: 1px;
+}
+
+.form-container {
+  height: 90%;
+  margin-top: 5%;
+  margin-left: 10vw;
+  margin-right: 10vw;
+  background-color: white;
+  border-radius: 40px;
+}
+
+.form-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 70%;
+  padding: 10%;
+  box-shadow: 3;
+  color: black;
+}
+.form-content h2 {
+  color: red;
+}
+.form-content div {
+  color: red;
+}
+
+.textfield-default fieldset {
+  margin: 10px 0 10px 0;
+  border-radius: 40px;
 }
 
 html, body, #root, .App {
