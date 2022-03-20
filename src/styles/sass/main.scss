@@ -1,4 +1,10 @@
+@import "dashboard";
 @import "fonts";
+
+html, body, #root, .App {
+  height: 100%;
+  margin: 0;
+}
 
 body {
   background-color: #8AF1C0;
@@ -26,9 +32,10 @@ button {
   border: none;
 }
 
+/*
 #sign-out-btn {
-/**/
 }
+*/
 
 .navbar-main {
   background-color: #E478DA;

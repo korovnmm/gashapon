@@ -1,0 +1,39 @@
+// A wrapper container for the dashboard for size and position adjustments
+.dashboard-container {
+    height: 80%;
+}
+
+// The whole box containing the dashboard
+.dashboard { 
+    background: white;
+    min-height: 100%;
+}
+
+// The header containing the "Dashboard" text
+.dashboard-header { background: none;}
+
+/**
+ * The space under the tab navbar that
+ * contains each tab's content.
+ */
+.dash-body-wrapper { background: none;}
+
+// A wrapper that contains all the dashboard tabs
+.dash-navbar { 
+    background: none;
+
+    .MuiTabs-indicator {
+        background-color: hotpink;
+    }
+}
+
+// A single dashboard tab
+.dash-tab { 
+    color: red;
+    background: none; 
+    
+    &.Mui-selected {
+        color: hotpink;
+        background: none;
+    }
+}

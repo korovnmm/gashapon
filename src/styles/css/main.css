@@ -1,3 +1,45 @@
+.dashboard-container {
+  height: 80%;
+}
+
+.dashboard {
+  background: white;
+  min-height: 100%;
+}
+
+.dashboard-header {
+  background: none;
+}
+
+/**
+ * The space under the tab navbar that
+ * contains each tab's content.
+ */
+.dash-body-wrapper {
+  background: none;
+}
+
+.dash-navbar {
+  background: none;
+}
+.dash-navbar .MuiTabs-indicator {
+  background-color: hotpink;
+}
+
+.dash-tab {
+  color: red;
+  background: none;
+}
+.dash-tab.Mui-selected {
+  color: hotpink;
+  background: none;
+}
+
+html, body, #root, .App {
+  height: 100%;
+  margin: 0;
+}
+
 body {
   background-color: #8AF1C0;
   font-family: -apple-system, BlinkMacSystemFont, "Roboto Condensed", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
@@ -24,10 +66,10 @@ button {
   border: none;
 }
 
+/*
 #sign-out-btn {
-  /**/
 }
-
+*/
 .navbar-main {
   background-color: #E478DA;
   padding: 1%;
