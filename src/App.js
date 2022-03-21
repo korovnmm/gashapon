@@ -1,13 +1,11 @@
 import {
-  BrowserRouter as Router,
   Redirect,
   Route,
   Link,
 } from 'react-router-dom'
 import { 
   getAuth, 
-  signOut, 
-  AuthContextProvider 
+  signOut
 } from './auth'
 import { AuthenticatedRoute, UnauthenticatedRoute } from './components'
 import { Home } from './pages/home/Home'
@@ -19,26 +17,24 @@ import { RedeemScreen } from './pages/home/RedeemScreen'
 
 function App() {
   return (
-    <AuthContextProvider>
-      <Router>
-        <header>
-          <div>
-            <Link to="/" > Home </Link> |
-            <Link to="/about" > About </Link> |
-            <Link to="/login"> Login </Link> |{' '}
-            <Link to="/signup"> SignUp </Link> 
-          </div>
-          <button onClick={() => signOut(getAuth())}> Sign Out </button>
-        </header>
-        <Route exact path="/" component={Home} />
-        <Route exact path="/about" component={About} />
-        <Route exact path="/redeem"><Redirect to={'/'} /></Route>
-        <Route path="/redeem/:shopTag/:code" component={RedeemScreen} />
-        <AuthenticatedRoute path="/dashboard" component={Dashboard} />
-        <UnauthenticatedRoute exact path="/login" component={Login} />
-        <UnauthenticatedRoute exact path="/signup" component={SignUp} />
-      </Router>
-    </AuthContextProvider>
+    <>
+      <header>
+        <div>
+          <Link to="/" > Home </Link> |
+          <Link to="/about" > About </Link> |
+          <Link to="/login"> Login </Link> |{' '}
+          <Link to="/signup"> SignUp </Link> 
+        </div>
+        <button onClick={() => signOut(getAuth())}> Sign Out </button>
+      </header>
+      <Route exact path="/" component={Home} />
+      <Route exact path="/about" component={About} />
+      <Route exact path="/redeem"><Redirect to={'/'} /></Route>
+      <Route path="/redeem/:shopTag/:code" component={RedeemScreen} />
+      <AuthenticatedRoute path="/dashboard" component={Dashboard} />
+      <UnauthenticatedRoute exact path="/login" component={Login} />
+      <UnauthenticatedRoute exact path="/signup" component={SignUp} />
+    </>
   );
 }
 

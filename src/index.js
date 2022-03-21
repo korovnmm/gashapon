@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router } from 'react-router-dom'
 import './styles/main.css';
 import App from './App';
+import { AuthContextProvider  } from './auth';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
@@ -12,7 +14,11 @@ ReactDOM.render(
         href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
       />
     </head>
-    <App />
+    <Router>
+      <AuthContextProvider>
+        <App />
+      </AuthContextProvider>
+    </Router>
   </React.StrictMode>,
   document.getElementById('root')
 );
