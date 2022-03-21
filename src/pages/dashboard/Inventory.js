@@ -16,29 +16,27 @@ import {uploadBytes, ref,getDownloadURL} from 'firebase/storage'
 //const amountOptions = Array.from({length:10}, (v,k)=>k+1); 
 
 const columns = [
+    {field: 'image', headerName: 'Image', width: 150,
+        renderCell: (params) => {
+            return (
+                <>
+                    <Avatar src={params.value} />
+                </>
+            );
+        }
+    },
     { field: 'name', headerName: 'Item', width: 170 },
-    { field: 'prizeID', headerName: 'Item ID Number', width: 150 },
     { field: 'description', headerName: 'Description', width: 170 },
     { field: 'createdAt', headerName: 'Date added', width: 220, type: "dateTime",
     valueGetter: ({value}) => value && (new Date(value.seconds*1000)) },
-    { field: 'quantity', headerName: 'Quantity', type: 'number', editable: true, width: 90},
-    { field: 'image',
-        headerName: 'Image',
-        width: 150,
-        renderCell: (params) => {
-            return (
-              <>
-                <Avatar src={params.value.url} />
-              </>
-            );
-          }
-        }
+    { field: 'quantity', headerName: 'Quantity', type: 'number', editable: true, width: 90}
 ];
 export const Inventory = () => {
     const { user } = useAuthState();
     const [rows, setRows] = useState([]);
     const [open, setOpen] = useState(false); // snackbar state 
- 
+    const [selectedImage, setSelectedImage] = useState(null);
+
     useEffect(() => {
         getPrizesGeneratedByUser(user) 
             .then((prizeData) => {
@@ -47,20 +45,11 @@ export const Inventory = () => {
         ;
     }, [rows, user]);
 
-    const [selectedImage, setSelectedImage] = useState(null);
-    const imageUpload = (event) =>{
-
+    
+    const imageUpload = useCallback((event) => {
         const image = event.target.files[0];
-        const imageRef = ref(storage,image.name)
-        uploadBytes(imageRef, image).then((snapshot) => {
-            console.log('Uploaded file!');
-       
-          });
-          getDownloadURL(ref(storage, image.name))
-          .then((url) => {
-            return url;
-          });
-        }
+        setSelectedImage(image);
+    }, [selectedImage]);
 
 
     const handleClose = (event, reason) => { // snackbar close
@@ -72,9 +61,16 @@ export const Inventory = () => {
 
     const sendNewPrizeRequest = useCallback(async e => {
         e.preventDefault();
-
         const { name, description, quantity } = e.target.elements;
-        addNewPrize(name.value, description.value, quantity.value)
+        
+        // Upload image
+        const imageRef = ref(storage, selectedImage.name);
+        await uploadBytes(imageRef, selectedImage);
+        const url = await getDownloadURL(imageRef);
+
+        // TODO: make sure user is passing a valid integer value
+        
+        addNewPrize(name.value, description.value, quantity.value, url)
             .then((result) => {
                 const data = result.data;
                 const prizes = []
@@ -91,7 +87,7 @@ export const Inventory = () => {
                 const message = error.message;
                 alert(`${code}: ${message}`);
             });
-    }, []);
+    }, [selectedImage]);
 
 
     return (
@@ -112,11 +108,7 @@ export const Inventory = () => {
                     <input
                         type="file"
                         name="myImage"
-                        onChange={(event) => {
-                            console.log(event.target.files[0]);
-                            setRows(event.target.files[0]);
-                            imageUpload(event);
-                        }}
+                        onChange={imageUpload}
                     />
 
                 <TextField required id="name" type="name" label="Prize Name" />

@@ -213,7 +213,9 @@ export const addNewPrize = functions.https.onCall(async (data, context) => {
   // Data
   const name = data.name;
   const description = data.description;
-  const quantity = data.quantity;
+  const quantity = parseInt(data.quantity);
+  const url = data.imageUrl;
+
   // Check if user is authenticated
   if (!context.auth) {
     // Throw an error if not
@@ -222,46 +224,42 @@ export const addNewPrize = functions.https.onCall(async (data, context) => {
       "while authenticated.");
   }
   // Check the amount variable is within range
-  if (quantity < 1) {
+  if (quantity < 0 || quantity > 999) {
     throw new functions.https.HttpsError("out-of-range",
-        "A minimum of 1 prize can be added " +
-      "at a time.");
+        "Prize quantity must be between 0 and 999 (inclusive)");
   }
 
   // Generate prize data
-  const prizes: any = {};
   const timestamp = await admin.firestore.FieldValue.serverTimestamp();
 
-  // Generate a unique code
-  let suffix = crypto.randomBytes(3).toString("hex").toUpperCase();
-  let code = `${suffix}`;
-  let prizePath = `/prize-info/${code}`;
-  while ((await db.doc(prizePath).get()).exists) { // avoids duplicates
-    suffix = crypto.randomBytes(3).toString("hex").toUpperCase();
-    code = `${suffix}`;
-    prizePath = `/prize-info/${code}`;
+  const prizeMetaData = {
+    createdAt: timestamp,
+    creatorUserID: context.auth.uid,
+    quantity,
+  };
 
-    // Create the JSON object
-    const prizeData = {
-      createdAt: timestamp,
-      description,
-      prizeID: code,
-      image: null,
-      name,
-      lastModified: timestamp,
-      quantity,
-    };
+  const prizeInfoData = {
+    createdAt: timestamp,
+    description,
+    image: url,
+    name,
+    lastModified: timestamp,
+  };
 
-    // Write to firestore
-    db.collection("prize-info").doc(code).set(prizeData)
-        .catch((error) => {
-          console.log(error);
-          throw new functions.https.HttpsError("unknown", error);
-        });
+  // Write both documents to firestore
+  db.collection("prizes").add(prizeMetaData)
+      .then((docRef) => {
+        db.collection("prize-info").doc(docRef.id).set(prizeInfoData)
+            .catch((error) => {
+              console.log(error);
+              throw new functions.https.HttpsError("unknown", error);
+            });
+      })
+      .catch((error) => {
+        console.log(error);
+        throw new functions.https.HttpsError("unknown", error);
+      });
 
-    // Append to list
-    prizes[code] = prizeData;
-  }
-
-  return prizes;
+  // Append to list
+  return [prizeMetaData, prizeInfoData];
 });

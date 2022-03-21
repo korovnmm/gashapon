@@ -35,10 +35,11 @@ export const generateTickets = async (email, memo, amount) => {
  * @param {number} amount
  * @returns {Promise<import('@firebase/functions').HttpsCallableResult>} generated item(s) info if successful.
  */
-export const addNewPrize = async (name, description, quantity) => {
+export const addNewPrize = async (name, description, quantity, imageUrl) => {
     return call("addNewPrize", {
         name,
         description,
-        quantity
+        quantity,
+        imageUrl
     });
 }
