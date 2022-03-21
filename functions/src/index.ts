@@ -214,7 +214,6 @@ export const addNewPrize = functions.https.onCall(async (data, context) => {
   const name = data.name;
   const description = data.description;
   const quantity = data.quantity;
-
   // Check if user is authenticated
   if (!context.auth) {
     // Throw an error if not
@@ -233,16 +232,14 @@ export const addNewPrize = functions.https.onCall(async (data, context) => {
   const prizes: any = {};
   const timestamp = await admin.firestore.FieldValue.serverTimestamp();
 
-  for (let i = 0; i < quantity; i++) {
-    // Generate a unique code
-    let suffix = crypto.randomBytes(3).toString("hex").toUpperCase();
-    let code = `${suffix}`;
-    let prizePath = `/prize-info/${code}`;
-    while ((await db.doc(prizePath).get()).exists) { // avoids duplicates
-      suffix = crypto.randomBytes(3).toString("hex").toUpperCase();
-      code = `${suffix}`;
-      prizePath = `/prize-info/${code}`;
-    }
+  // Generate a unique code
+  let suffix = crypto.randomBytes(3).toString("hex").toUpperCase();
+  let code = `${suffix}`;
+  let prizePath = `/prize-info/${code}`;
+  while ((await db.doc(prizePath).get()).exists) { // avoids duplicates
+    suffix = crypto.randomBytes(3).toString("hex").toUpperCase();
+    code = `${suffix}`;
+    prizePath = `/prize-info/${code}`;
 
     // Create the JSON object
     const prizeData = {
