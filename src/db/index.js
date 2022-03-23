@@ -165,9 +165,28 @@ export const getPrizesByID = async (prizeCode) => {
     return data;
 }
 
-export const getPrizesGeneratedByUser = async (prizes) => {
-    var prizeCode = await getPrizesByID(prizes.code);
-    return getPrizesByID(prizeCode);
+export const getPrizesGeneratedByUser = async (user) => {
+    const prizesRef = collection(db, "prizes");
+    const q = query(prizesRef,
+        where("creatorUserID", '==', user.uid));
+    const prizes = [];
+    const snap = await getDocs(q);//return promise
+    
+    snap.forEach( (doc) => {
+        var prizeMetaData = doc.data();
+        const prizeInfoData = getPrizeInfo(doc.id);
+
+        const fullPrizeData = {
+            name: prizeInfoData.name,
+            description: prizeInfoData.description,
+            image: prizeInfoData.image,
+            quantity: prizeMetaData.quantity,
+            createdAt: prizeMetaData.createdAt
+          }
+        prizes.push(fullPrizeData);
+    });
+
+    return prizes;
 }
 
 
@@ -177,7 +196,14 @@ export const getPrizesGeneratedByUser = async (prizes) => {
  * @returns a dictionary containing prize info data
  */
 export const getPrizeInfo = async (id) => {
-    return;
+    let result;
+    const prizesRef = doc(db,"prize-info", id);
+    const snap = await getDoc(prizesRef);//return promise
+
+    if(snap.exists()){
+        result = snap.data();
+    }
+    return result;
 }
 
 /**
@@ -186,5 +212,6 @@ export const getPrizeInfo = async (id) => {
  * @returns a dictionary containing prize data
  */
 export const getPrizeMetaData = async (id) => {
+
     return;
 }

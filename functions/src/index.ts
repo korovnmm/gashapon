@@ -261,5 +261,5 @@ export const addNewPrize = functions.https.onCall(async (data, context) => {
       });
 
   // Append to list
-  return [prizeMetaData, prizeInfoData];
+  return {prizeMetaData, prizeInfoData};
 });

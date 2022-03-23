@@ -3,8 +3,12 @@ import {
     Button,
     Snackbar,
     TextField,
-    Avatar
+    Avatar,
+    createChainedFunction,
 } from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete';
+import { doc, deleteDoc } from "firebase/firestore";
+import {db } from  'firebase';
 import { useCallback, useEffect } from 'react'
 import { addNewPrize } from 'api'
 import { DataGrid } from '@mui/x-data-grid'
@@ -29,14 +33,15 @@ const columns = [
     { field: 'description', headerName: 'Description', width: 170 },
     { field: 'createdAt', headerName: 'Date added', width: 220, type: "dateTime",
     valueGetter: ({value}) => value && (new Date(value.seconds*1000)) },
-    { field: 'quantity', headerName: 'Quantity', type: 'number', editable: true, width: 90}
+    { field: 'quantity', headerName: 'Quantity', type: 'number', width: 90}
 ];
 export const Inventory = () => {
     const { user } = useAuthState();
     const [rows, setRows] = useState([]);
     const [open, setOpen] = useState(false); // snackbar state 
     const [selectedImage, setSelectedImage] = useState(null);
-
+    const [selectedRows, setSelectedRows] = useState([])
+    
     useEffect(() => {
         getPrizesGeneratedByUser(user) 
             .then((prizeData) => {
@@ -59,6 +64,8 @@ export const Inventory = () => {
         setOpen(false);
     };
 
+    
+
     const sendNewPrizeRequest = useCallback(async e => {
         e.preventDefault();
         const { name, description, quantity } = e.target.elements;
@@ -67,19 +74,24 @@ export const Inventory = () => {
         const imageRef = ref(storage, selectedImage.name);
         await uploadBytes(imageRef, selectedImage);
         const url = await getDownloadURL(imageRef);
-
+        //const delete = await deleteDoc(db,"prize",row.id)
+        
+          
         // TODO: make sure user is passing a valid integer value
         
         addNewPrize(name.value, description.value, quantity.value, url)
             .then((result) => {
-                const data = result.data;
-                const prizes = []
-                for(const [key, value] of Object.entries(data)){
-                    value.code = key;
-                    prizes.push(value);
-                }
-                setRows(savePrizesToMemory(prizes));
-         
+                result = result.data;
+                const fullPrizeData = {
+                    name: result.prizeInfoData.name,
+                    description: result.prizeInfoData.description,
+                    image: result.prizeInfoData.image,
+                    quantity: result.prizeMetaData.quantity,
+                    createdAt: result.prizeMetaData.createdAt
+                  }
+                
+                setRows(savePrizesToMemory([fullPrizeData]));
+                
                 setOpen(true);
             })
             .catch((error) => {
@@ -95,20 +107,31 @@ export const Inventory = () => {
 
             <div class="prizes-header"></div>
             <div class="prizes-body">
+            
+            
                 <DataGrid
                     autoHeight={true}
                     rows={rows}
-                    columns={columns}
                     pageSize={10}
                     rowsPerPageOptions={[10]}
+                    checkboxSelection
+                    onSelectionChange={(rows) => setSelectedRows(rows)}
+                    columns={columns}
+                    options={{
+                      selection: true
+                    }}
                 />
             </div>
+            
             <Box component="form" class="prizes-footer" onSubmit={sendNewPrizeRequest}>
-                    
+            <Button variant="contained" color="primary" startIcon={<DeleteIcon/>}>Delete</Button>
+
                     <input
+                        accept="image/*"
                         type="file"
                         name="myImage"
                         onChange={imageUpload}
+                        required
                     />
 
                 <TextField required id="name" type="name" label="Prize Name" />
