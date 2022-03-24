@@ -13,7 +13,7 @@ import {
 var cache = {
     shopTag: null,
     ticketData: [],
-    prizeData: [],
+    prizeData: null,
     uid: null
 }
 
@@ -39,6 +39,11 @@ export function saveTicketsToMemory(data) {
     return cache.ticketData;
 }
 
+/**
+ * Saves prize data to memory so that it can be accessed without reading from the database.
+ * @param {*} data prize data to cache
+ * @returns an array of currently cached prize data
+ */
 export function savePrizesToMemory(data) {
     if (cache.prizeData) {
         for (let i = 0; i < data.length; i++) {
@@ -65,7 +70,7 @@ export const getTicketByCode = async (code) => {
  * @param {string} code a ticket's play code (must exist on the database first)
  * @returns {Promise<any>} prize info in JSON/dictionary format
  */
- export const getPrizeByCode = async (code2) => {
+ export const getPrizeByCode = async (code) => {
     throw { name: "NotImplementedError", message: "function not implemented yet!" };
 }
 
@@ -141,51 +146,40 @@ export const getTicketsGeneratedByUser = async (user) => {
     return getTicketsByPrefix(prefix);
 }
 
-export const getPrizesByID = async (prizeCode) => {
 
-    
-    const prizesRef = collection(db, "prize-info");
- 
-    // Retrieve data snapshot, first from cache, then from server
-    var data = [];
-    if (cache.prizeData && cache.prizeData.length > 0) {
-        data = cache.prizeData;
-    } else {
-        const snap = await getDocs(prizesRef);
-
-        snap.forEach( (doc) => {
-            var d = doc.data();
-            d.id = data.length+1;
-            d.code2 = doc.id;
-            data.push(d);
-        });
-
-        cache.prizeData = data;
-    }
-    return data;
-}
-
+/**
+ * @param {*} user 
+ * @returns a list of prizes (info and metadata together) created by the given user
+ */
 export const getPrizesGeneratedByUser = async (user) => {
     const prizesRef = collection(db, "prizes");
     const q = query(prizesRef,
         where("creatorUserID", '==', user.uid));
-    const prizes = [];
-    const snap = await getDocs(q);//return promise
     
-    snap.forEach( (doc) => {
-        var prizeMetaData = doc.data();
-        const prizeInfoData = getPrizeInfo(doc.id);
+    const snap = await getDocs(q); // returns a promise
+    const prizes = [];
+    
+    if (cache.prizeData)
+        return cache.prizeData;
 
+    for (let i = 0; i < snap.size; i++) {
+        const doc = snap.docs[i];
+        const prizeMetaData = doc.data();
+        const prizeInfoData = await getPrizeInfo(doc.id);
+        
+        // Combine the data together
         const fullPrizeData = {
+            id: i,
             name: prizeInfoData.name,
             description: prizeInfoData.description,
             image: prizeInfoData.image,
             quantity: prizeMetaData.quantity,
             createdAt: prizeMetaData.createdAt
-          }
-        prizes.push(fullPrizeData);
-    });
+        }
 
+        prizes.push(fullPrizeData);
+    }
+    cache.prizeData = prizes;
     return prizes;
 }
 
@@ -198,11 +192,12 @@ export const getPrizesGeneratedByUser = async (user) => {
 export const getPrizeInfo = async (id) => {
     let result;
     const prizesRef = doc(db,"prize-info", id);
-    const snap = await getDoc(prizesRef);//return promise
+    const snap = await getDoc(prizesRef); // waits for the returned promise to resolve
 
     if(snap.exists()){
         result = snap.data();
     }
+
     return result;
 }
 
@@ -212,6 +207,13 @@ export const getPrizeInfo = async (id) => {
  * @returns a dictionary containing prize data
  */
 export const getPrizeMetaData = async (id) => {
+    let result;
+    const prizesRef = doc(db, "prizes", id);
+    const snap = await getDoc(prizesRef); // waits for the returned promise to resolve
 
-    return;
+    if (snap.exists()) {
+        result = snap.data();
+    }
+
+    return result;
 }
