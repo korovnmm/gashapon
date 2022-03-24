@@ -6,9 +6,7 @@ import {
     Avatar,
     createChainedFunction,
 } from '@mui/material'
-import DeleteIcon from '@mui/icons-material/Delete';
-import { doc, deleteDoc } from "firebase/firestore";
-import {db } from  'firebase';
+import { DeleteIcon } from '@mui/icons-material/Delete';
 import { useCallback, useEffect } from 'react'
 import { addNewPrize } from 'api'
 import { DataGrid } from '@mui/x-data-grid'
@@ -46,15 +44,14 @@ export const Inventory = () => {
         getPrizesGeneratedByUser(user) 
             .then((prizeData) => {
                 setRows(prizeData) 
-            })
-        ;
+            });
     }, [rows, user]);
 
     
     const imageUpload = useCallback((event) => {
         const image = event.target.files[0];
         setSelectedImage(image);
-    }, [selectedImage]);
+    }, []);
 
 
     const handleClose = (event, reason) => { // snackbar close
@@ -75,7 +72,6 @@ export const Inventory = () => {
         await uploadBytes(imageRef, selectedImage);
         const url = await getDownloadURL(imageRef);
         //const delete = await deleteDoc(db,"prize",row.id)
-        
           
         // TODO: make sure user is passing a valid integer value
         
@@ -124,7 +120,7 @@ export const Inventory = () => {
             </div>
             
             <Box component="form" class="prizes-footer" onSubmit={sendNewPrizeRequest}>
-            <Button variant="contained" color="primary" startIcon={<DeleteIcon/>}>Delete</Button>
+            <Button variant="contained" color="primary" startIcon={<div/>}>Delete</Button>
 
                     <input
                         accept="image/*"
