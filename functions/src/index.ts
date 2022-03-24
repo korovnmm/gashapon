@@ -214,7 +214,7 @@ export const addNewPrize = functions.https.onCall(async (data, context) => {
   const name = data.name;
   const description = data.description;
   const quantity = parseInt(data.quantity);
-  const url = data.imageUrl;
+  const url = data.image;
 
   // Check if user is authenticated
   if (!context.auth) {
@@ -239,7 +239,6 @@ export const addNewPrize = functions.https.onCall(async (data, context) => {
   };
 
   const prizeInfoData = {
-    createdAt: timestamp,
     description,
     image: url,
     name,
@@ -247,9 +246,11 @@ export const addNewPrize = functions.https.onCall(async (data, context) => {
   };
 
   // Write both documents to firestore
-  db.collection("prizes").add(prizeMetaData)
+  let id;
+  await db.collection("prizes").add(prizeMetaData)
       .then((docRef) => {
-        db.collection("prize-info").doc(docRef.id).set(prizeInfoData)
+        id = docRef.id;
+        db.collection("prize-info").doc(id).set(prizeInfoData)
             .catch((error) => {
               console.log(error);
               throw new functions.https.HttpsError("unknown", error);
@@ -261,5 +262,5 @@ export const addNewPrize = functions.https.onCall(async (data, context) => {
       });
 
   // Append to list
-  return {prizeMetaData, prizeInfoData};
+  return {id, prizeMetaData, prizeInfoData};
 });
