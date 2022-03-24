@@ -45,7 +45,7 @@ test("getPrizeInfo", async () => {
 
     let prizeID = await call("addNewPrize", prizeData)
         .then((result) => {
-            return result.data[Object.keys(result.data)[0]];
+            return result.id;
         });
 
     let infoData = await getPrizeInfo(prizeID);
@@ -68,7 +68,7 @@ test("getPrizeMetaData", async () => {
 
     let prizeID = await call("addNewPrize", prizeData)
         .then((result) => {
-            return result.data[Object.keys(result.data)[0]];
+            return result.id;
         });
 
     let prizeMetaData = await getPrizeMetaData(prizeID);

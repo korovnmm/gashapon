@@ -4,7 +4,6 @@ import {
     getAuth, 
     signOut
 } from 'auth'
-import { getPrizeInfo } from 'db'
 
 // Setup
 let auth = getAuth();
@@ -94,15 +93,18 @@ describe('Shopkeeper', () => {
         };
 
         return call("addNewPrize", prizeData)
-            .then((result) => {
-                let keys = Object.keys(result.data); 
-                expect(keys.length).toBe(1); // should have only returned 1 prize object
+            .then((result) => { 
+                expect(result.data).toMatchObject({
+                    id: expect.any(String), 
+                    prizeMetaData: expect.any(Object),
+                    prizeInfoData: expect.any(Object)
+                });
                 
                 // Should have these keys: createdAt, creatorUserID, quantity
-                let prizeID = keys[0];
-                let prize = result.data[prizeID];
+                let prizeID = result.data.id;
+                let prize = result.data.prizeMetaData;
                 expect(prize).toMatchObject({
-                    createdAt: expect.any(String),
+                    createdAt: expect.any(Object),
                     creatorUserID: auth.currentUser.uid,
                     quantity: prizeData.quantity
                 });
@@ -110,12 +112,12 @@ describe('Shopkeeper', () => {
                 
                 // Verify that the corresponding prize-info document has been created
                 // Should have these keys: description, image, name, lastModified
-                let infoData = getPrizeInfo(prizeID);
+                let infoData = result.data.prizeInfoData;
                 expect(infoData).toMatchObject({
                     name: prizeData.name,
                     description: prizeData.description,
                     image: prizeData.image,
-                    lastModified: expect.any(String)
+                    lastModified: expect.any(Object)
                 });
                 expect(Object.keys(infoData).length).toBe(4);
             });
