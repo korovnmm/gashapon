@@ -40,6 +40,6 @@ export const addNewPrize = async (name, description, quantity, imageUrl) => {
         name,
         description,
         quantity,
-        imageUrl
+        image: imageUrl
     });
 }
