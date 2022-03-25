@@ -6,12 +6,11 @@ import {
     Avatar,
     createChainedFunction,
 } from '@mui/material'
-import { DeleteIcon } from '@mui/icons-material/Delete';
 import { useCallback, useEffect } from 'react'
 import { addNewPrize } from 'api'
 import { DataGrid } from '@mui/x-data-grid'
 import { useAuthState } from 'auth'
-import { getPrizesGeneratedByUser, savePrizesToMemory } from 'db';
+import { getPrizesGeneratedByUser, savePrizesToMemory,deletePrize } from 'db';
 import { useState } from 'react'
 import {storage} from 'storage'
 import {uploadBytes, ref,getDownloadURL} from 'firebase/storage'
@@ -60,7 +59,6 @@ export const Inventory = () => {
         }
         setOpen(false);
     };
-
     
 
     const sendNewPrizeRequest = useCallback(async e => {
@@ -97,6 +95,15 @@ export const Inventory = () => {
             });
     }, [selectedImage]);
 
+    const onDeleteClick = useCallback((e) =>{
+        for(let i = 0; i < selectedRows.length; i++){
+            const id = rows[i].docId;
+            console.log(rows);
+            deletePrize(id);
+        }
+        
+   
+    },[rows,selectedRows]);
 
     return (
         <>
@@ -108,19 +115,19 @@ export const Inventory = () => {
                 <DataGrid
                     autoHeight={true}
                     rows={rows}
+                    columns={columns}
                     pageSize={10}
                     rowsPerPageOptions={[10]}
                     checkboxSelection
-                    onSelectionChange={(rows) => setSelectedRows(rows)}
-                    columns={columns}
-                    options={{
-                      selection: true
+                    onSelectionModelChange={(ids) => {
+                        setSelectedRows(ids)
                     }}
+
                 />
             </div>
             
             <Box component="form" class="prizes-footer" onSubmit={sendNewPrizeRequest}>
-            <Button variant="contained" color="primary" startIcon={<div/>}>Delete</Button>
+            <Button variant="contained" color="primary" onClick={onDeleteClick} startIcon={<div/>}>Delete</Button>
 
                     <input
                         accept="image/*"

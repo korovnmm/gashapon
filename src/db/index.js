@@ -5,8 +5,10 @@ import {
     getDoc,
     getDocs,
     query,
-    where 
+    where,
+    deleteDoc
 } from 'firebase/firestore'
+
 //import { useCollectionData } from 'react-firebase-hooks/firestore'
 
 /** A dictionary that stores certain details from the user session to minimize database reads. */
@@ -226,16 +228,14 @@ export const getPrizeMetaData = async (id) => {
  */
 export const deletePrize = async (id) => {
     let itemDeleted = false;
-    
+    console.log(id);
     // TODO: Delete document from Firestore
-
+    await deleteDoc(doc(db, "prizes", id));
+    await deleteDoc(doc(db, "prize-info", id));
+    
     // Delete from cache
-    if (cache.prizeData) {
-        for (let i = 0; i < cache.prizeData.length; i++) {
-            let prize = cache.prizeData[i];
-            if (prize.docId === id)
-                cache.prizeData.splice(i, 1);
-        }
+    if (cache.prizeData) {  
+        cache.prizeData = null;
     }
 
     return itemDeleted;
