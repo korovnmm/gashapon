@@ -10,7 +10,7 @@ import { useCallback, useEffect } from 'react'
 import { addNewPrize } from 'api'
 import { DataGrid } from '@mui/x-data-grid'
 import { useAuthState } from 'auth'
-import { getPrizesGeneratedByUser, savePrizesToMemory,deletePrize } from 'db';
+import { getPrizesGeneratedByUser, savePrizesToMemory, deletePrize } from 'db';
 import { useState } from 'react'
 import {storage} from 'storage'
 import {uploadBytes, ref,getDownloadURL} from 'firebase/storage'
@@ -38,7 +38,7 @@ export const Inventory = () => {
     const [open, setOpen] = useState(false); // snackbar state 
     const [selectedImage, setSelectedImage] = useState(null);
     const [selectedRows, setSelectedRows] = useState([])
-    
+   
     useEffect(() => {
         getPrizesGeneratedByUser(user) 
             .then((prizeData) => {
@@ -77,6 +77,7 @@ export const Inventory = () => {
             .then((result) => {
                 result = result.data;
                 const fullPrizeData = {
+                    docId: result.id,
                     name: result.prizeInfoData.name,
                     description: result.prizeInfoData.description,
                     image: result.prizeInfoData.image,
@@ -95,15 +96,19 @@ export const Inventory = () => {
             });
     }, [selectedImage]);
 
-    const onDeleteClick = useCallback((e) =>{
-        for(let i = 0; i < selectedRows.length; i++){
-            const id = rows[i].docId;
-            console.log(rows);
-            deletePrize(id);
+    const onDeleteClick = useCallback(async (e) => {
+        let numDeleted = 0;
+        for(let i = 0; i < selectedRows.length; i++) {
+            const row = selectedRows[i] - numDeleted - 1; // index 0 refers to row 1 in the DataGrid
+            const id = rows[row].docId;
+            
+            if (await deletePrize(id))
+                numDeleted++;
+            else
+                console.error("Failed to delete prize with ID: ", id);
         }
-        
-   
-    },[rows,selectedRows]);
+        setRows(rows.filter(index => !selectedRows.includes(index)));
+    }, [rows, selectedRows]);
 
     return (
         <>
@@ -119,10 +124,7 @@ export const Inventory = () => {
                     pageSize={10}
                     rowsPerPageOptions={[10]}
                     checkboxSelection
-                    onSelectionModelChange={(ids) => {
-                        setSelectedRows(ids)
-                    }}
-
+                    onSelectionModelChange={(ids) => {setSelectedRows(ids)}}
                 />
             </div>
             

@@ -171,7 +171,7 @@ export const getPrizesGeneratedByUser = async (user) => {
         
         // Combine the data together
         const fullPrizeData = {
-            id: i,
+            id: i+1,
             docId: doc.id,
             name: prizeInfoData.name,
             description: prizeInfoData.description,
@@ -228,15 +228,16 @@ export const getPrizeMetaData = async (id) => {
  */
 export const deletePrize = async (id) => {
     let itemDeleted = false;
-    console.log(id);
-    // TODO: Delete document from Firestore
-    await deleteDoc(doc(db, "prizes", id));
-    await deleteDoc(doc(db, "prize-info", id));
-    
+
+    // Delete document from Firestore
+    const result1 = await deleteDoc(doc(db, "prizes", id));
+    const result2 = await deleteDoc(doc(db, "prize-info", id));
+
     // Delete from cache
     if (cache.prizeData) {  
         cache.prizeData = null;
     }
 
+    itemDeleted = true;
     return itemDeleted;
 }
