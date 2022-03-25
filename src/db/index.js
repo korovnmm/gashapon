@@ -170,6 +170,7 @@ export const getPrizesGeneratedByUser = async (user) => {
         // Combine the data together
         const fullPrizeData = {
             id: i,
+            docId: doc.id,
             name: prizeInfoData.name,
             description: prizeInfoData.description,
             image: prizeInfoData.image,
@@ -216,4 +217,26 @@ export const getPrizeMetaData = async (id) => {
     }
 
     return result;
+}
+
+/**
+ * Deletes a prize from firestore and memory (cache).
+ * @param {*} id document id for the prize
+ * @returns true if a document was successfully deleted, otherwise false if nothing was deleted
+ */
+export const deletePrize = async (id) => {
+    let itemDeleted = false;
+    
+    // TODO: Delete document from Firestore
+
+    // Delete from cache
+    if (cache.prizeData) {
+        for (let i = 0; i < cache.prizeData.length; i++) {
+            let prize = cache.prizeData[i];
+            if (prize.docId === id)
+                cache.prizeData.splice(i, 1);
+        }
+    }
+
+    return itemDeleted;
 }
