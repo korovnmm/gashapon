@@ -72,7 +72,7 @@ export const getTicketByCode = async (code) => {
  * @param {string} code a ticket's play code (must exist on the database first)
  * @returns {Promise<any>} prize info in JSON/dictionary format
  */
- export const getPrizeByCode = async (code) => {
+export const getPrizeByCode = async (code) => {
     throw { name: "NotImplementedError", message: "function not implemented yet!" };
 }
 

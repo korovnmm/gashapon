@@ -140,6 +140,8 @@ async function initUserAccount(uid : string, email : string): Promise<boolean> {
 }
 
 
+// -- ENDPOINT FUNCTIONS BELOW -- //
+
 export const generateTickets = functions.https.onCall(async (data, context) => {
   // Data
   const email = data.email;

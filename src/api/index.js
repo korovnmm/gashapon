@@ -28,6 +28,8 @@ export const generateTickets = async (email, memo, amount) => {
         amount
     });
 }
+
+
 /**
  * Generates new listings in inventory
  * @param {string} name of product
