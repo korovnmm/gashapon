@@ -45,7 +45,7 @@ function wait(time) {
     });
 };
 
-const signOut = async () => { await page.click("#root > header:nth-child(2) > button:nth-child(2)"); };
+const signOut = async () => { await page.click(".navbar-main > a:nth-child(5)"); };
 
 // --- TESTS BELOW THIS POINT ---
 
