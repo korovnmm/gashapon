@@ -73,7 +73,7 @@ export const getTicketByCode = async (code) => {
  * @returns {Promise<any>} prize info in JSON/dictionary format
  */
 export const getPrizeByCode = async (code) => {
-    throw { name: "NotImplementedError", message: "function not implemented yet!" };
+    return { name: "NotImplementedError", message: "function not implemented yet!" };
 }
 
 /**
@@ -230,8 +230,8 @@ export const deletePrize = async (id) => {
     let itemDeleted = false;
 
     // Delete document from Firestore
-    const result1 = await deleteDoc(doc(db, "prizes", id));
-    const result2 = await deleteDoc(doc(db, "prize-info", id));
+    await deleteDoc(doc(db, "prizes", id));
+    await deleteDoc(doc(db, "prize-info", id));
 
     // Delete from cache
     if (cache.prizeData) {  

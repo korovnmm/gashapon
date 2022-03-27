@@ -1,37 +1,42 @@
+import { DataGrid } from '@mui/x-data-grid'
 import { 
     Box,
     Button,
     Snackbar,
     TextField,
-    Avatar,
-    createChainedFunction,
+    Avatar
 } from '@mui/material'
-import { useCallback, useEffect } from 'react'
+import { 
+    useCallback, 
+    useEffect,
+    useState
+} from 'react'
+
 import { addNewPrize } from 'api'
-import { DataGrid } from '@mui/x-data-grid'
 import { useAuthState } from 'auth'
-import { getPrizesGeneratedByUser, savePrizesToMemory, deletePrize } from 'db';
-import { useState } from 'react'
-import {storage} from 'storage'
-import {uploadBytes, ref,getDownloadURL} from 'firebase/storage'
-//const amountOptions = Array.from({length:10}, (v,k)=>k+1); 
+import {
+    getPrizesGeneratedByUser,
+    savePrizesToMemory,
+    deletePrize
+} from 'db'
+import { 
+    uploadImage
+} from 'storage'
+
 
 const columns = [
     {field: 'image', headerName: 'Image', width: 150,
         renderCell: (params) => {
-            return (
-                <>
-                    <Avatar src={params.value} />
-                </>
-            );
+            return (<Avatar src={params.value}/>);
         }
     },
     { field: 'name', headerName: 'Item', width: 170 },
     { field: 'description', headerName: 'Description', width: 170 },
     { field: 'createdAt', headerName: 'Date added', width: 220, type: "dateTime",
-    valueGetter: ({value}) => value && (new Date(value.seconds*1000)) },
+        valueGetter: ({value}) => value && (new Date(value.seconds*1000)) },
     { field: 'quantity', headerName: 'Quantity', type: 'number', width: 90}
 ];
+
 export const Inventory = () => {
     const { user } = useAuthState();
     const [rows, setRows] = useState([]);
@@ -49,6 +54,10 @@ export const Inventory = () => {
     
     const imageUpload = useCallback((event) => {
         const image = event.target.files[0];
+        if (image.type !== "image/png" && image.type !== "image/jpeg") {
+            alert("Invalid file type! Must be png or jpeg.")
+            return;
+        }
         setSelectedImage(image);
     }, []);
 
@@ -66,10 +75,11 @@ export const Inventory = () => {
         const { name, description, quantity } = e.target.elements;
         
         // Upload image
-        const imageRef = ref(storage, selectedImage.name);
-        await uploadBytes(imageRef, selectedImage);
-        const url = await getDownloadURL(imageRef);
-        //const delete = await deleteDoc(db,"prize",row.id)
+        const url = await uploadImage(selectedImage);
+        if (!url) { // if url is null
+            alert("Failed to upload image!");
+            return;
+        }
           
         // TODO: make sure user is passing a valid integer value
         
@@ -83,10 +93,8 @@ export const Inventory = () => {
                     image: result.prizeInfoData.image,
                     quantity: result.prizeMetaData.quantity,
                     createdAt: result.prizeMetaData.createdAt
-                  }
-                
+                }                
                 setRows(savePrizesToMemory([fullPrizeData]));
-                
                 setOpen(true);
             })
             .catch((error) => {
@@ -95,6 +103,7 @@ export const Inventory = () => {
                 alert(`${code}: ${message}`);
             });
     }, [selectedImage]);
+
 
     const onDeleteClick = useCallback(async (e) => {
         let numDeleted = 0;
@@ -110,13 +119,12 @@ export const Inventory = () => {
         setRows(rows.filter(index => !selectedRows.includes(index)));
     }, [rows, selectedRows]);
 
+
+    // HTML
     return (
         <>
-
             <div class="prizes-header"></div>
             <div class="prizes-body">
-            
-            
                 <DataGrid
                     autoHeight={true}
                     rows={rows}
@@ -129,15 +137,14 @@ export const Inventory = () => {
             </div>
             
             <Box component="form" class="prizes-footer" onSubmit={sendNewPrizeRequest}>
-            <Button variant="contained" color="primary" onClick={onDeleteClick} startIcon={<div/>}>Delete</Button>
-
-                    <input
-                        accept="image/*"
-                        type="file"
-                        name="myImage"
-                        onChange={imageUpload}
-                        required
-                    />
+                <Button variant="contained" color="primary" onClick={onDeleteClick} startIcon={<div/>}>Delete</Button>
+                <input
+                    accept="image/*"
+                    type="file"
+                    name="myImage"
+                    onChange={imageUpload}
+                    required
+                />
 
                 <TextField required id="name" type="name" label="Prize Name" />
                 <TextField id="description" type="text" label="Prize Description" />
@@ -145,7 +152,8 @@ export const Inventory = () => {
 
                 <Button  variant="contained" type="submit">Add Prize!</Button>
             </Box>
+
             <Snackbar message="Prize successfully generated" open={open} autoHideDuration={6000} onClose={handleClose}/>
         </>
     );
-    }
+}

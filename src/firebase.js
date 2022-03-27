@@ -11,7 +11,7 @@ import { firebaseConfig } from './config'
 export const firebaseApp = initializeApp(firebaseConfig);
 export const functions = getFunctions(firebaseApp);
 export const db = getFirestore(firebaseApp);
-const storage = getStorage();
+export const storage = getStorage();
 export const AuthContext = createContext();
 
 // A toggle for auth emulator warnings (they tend to bloat the unit test logs)
