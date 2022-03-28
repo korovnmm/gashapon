@@ -30,6 +30,9 @@ export function connectFirebaseEmulators() {
     connectAuthEmulator(getAuth(), "http://localhost:9099");
     setShowAuthEmulatorWarning(true);
 }
-if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+
+if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
+    const nodeEnvironment = process.env.NODE_ENV.charAt(0).toUpperCase() + process.env.NODE_ENV.slice(1);
+    console.info(`${nodeEnvironment} environment detected, this means that Firebase emulators are active.`);
     connectFirebaseEmulators();
 }
