@@ -1,16 +1,11 @@
 import {
   BrowserRouter as Router,
   Redirect,
-  Route,
-  Link,
+  Route
 } from 'react-router-dom'
 import { StyledEngineProvider } from '@mui/material'
-import { 
-  getAuth, 
-  signOut, 
-  AuthContextProvider 
-} from './auth'
-import { AuthenticatedRoute, UnauthenticatedRoute } from './components'
+import { AuthContextProvider } from './auth'
+import { AuthenticatedRoute, NavBar, UnauthenticatedRoute } from './components'
 
 import { Home } from './pages/home/Home'
 import { About } from './pages/About'
@@ -25,14 +20,7 @@ function App() {
     <AuthContextProvider>
       <Router>
         <header>
-          <div class="navbar-main">
-            <Link to="/" id="nav-item"> Home </Link> |
-            <Link to="/about" id="nav-item"> About </Link> |
-            <Link to="/login" id="nav-item"> Login </Link> |{' '}
-            <Link to="/signup" id="nav-item"> SignUp </Link> |{' '}
-            <Link to="/signup" id="nav-item" onClick={() => signOut(getAuth())}> SignOut </Link>
-          </div>
-
+          <NavBar />
         </header>
         
         <Route exact path="/" component={Home} />
