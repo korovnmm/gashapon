@@ -1,3 +1,6 @@
+/**
+ * @jest-environment node
+ */
 import { generateTickets, call } from 'api'
 import {
     createUserWithEmailAndPassword,
@@ -45,7 +48,7 @@ test("getPrizeInfo", async () => {
 
     let prizeID = await call("addNewPrize", prizeData)
         .then((result) => {
-            return result.id;
+            return result.data.id;
         });
 
     let infoData = await getPrizeInfo(prizeID);
@@ -53,7 +56,7 @@ test("getPrizeInfo", async () => {
         name: prizeData.name,
         description: prizeData.description,
         image: prizeData.image,
-        lastModified: expect.any(String)
+        lastModified: expect.any(Object)
     });
     expect(Object.keys(infoData).length).toBe(4);
 });
@@ -68,12 +71,12 @@ test("getPrizeMetaData", async () => {
 
     let prizeID = await call("addNewPrize", prizeData)
         .then((result) => {
-            return result.id;
+            return result.data.id;
         });
 
     let prizeMetaData = await getPrizeMetaData(prizeID);
     expect(prizeMetaData).toMatchObject({
-        createdAt: expect.any(String),
+        createdAt: expect.any(Object),
         creatorUserID: auth.currentUser.uid,
         quantity: prizeData.quantity
     });

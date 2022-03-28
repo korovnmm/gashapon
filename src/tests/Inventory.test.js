@@ -44,6 +44,6 @@ afterAll(() => {
 // --- Tests ---
 
 test('renders the dashboard header', () => {
-    const dashHeader = screen.getByText(/dashboard/i);
+    const dashHeader = screen.getByText("DASHBOARD");
     expect(dashHeader).toBeInTheDocument();
 });
