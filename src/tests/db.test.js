@@ -113,20 +113,43 @@ test("savePrizesToMemory", async () => {
 
 
 // Getters
-test("getTicketByCode", () => {
-    return;
+test("getTicketByCode", async () => {
+    const result = await getTicketByCode("");
+    expect(result).toMatchObject({ 
+        name: "NotImplementedError", 
+        message: "function not implemented yet!" 
+    });
 });
 
-test("getPrizesByCode", () => {
-    return;
+test("getPrizesByCode", async () => {
+    const result = await getPrizeByCode("");
+    expect(result).toMatchObject({
+        name: "NotImplementedError",
+        message: "function not implemented yet!"
+    });
 });
 
-test("getTicketsByPrefix", () => {
-    return;
+test("getTicketsByPrefix", async () => {
+    return; 
+    /* TODO: need to implement async locks for this to work
+    const noTickets = await getTicketsByPrefix("db");
+    console.info(noTickets);
+    expect(noTickets.length).toBe(0);
+
+    await generateTickets(exampleUserEmail, "memo text", 3);
+    const result = await getTicketsByPrefix("db");
+    console.info(result);
+    for (let ticket of result) {
+        expect(ticket.code.substring(0,3)).toMatch("db-");
+        expect(ticket.memo.toMatch("memo text"));
+    }
+    expect(result.length).toBe(3);
+    */
 });
 
-test("getUserShopTag", () => {
-    return;
+test("getUserShopTag", async () => {
+    const shopTag = await getUserShopTag(auth.currentUser);
+    expect(shopTag).toMatch("db");
 });
 
 test("getTicketsGeneratedByUser", () => {
@@ -145,7 +168,7 @@ test("getPrizeInfo", async () => {
         quantity: 5
     };
 
-    let prizeID = await call("addNewPrize", prizeData)
+    const prizeID = await call("addNewPrize", prizeData)
         .then((result) => {
             return result.data.id;
         });
@@ -169,7 +192,7 @@ test("getPrizeMetaData", async () => {
         quantity: 10
     };
 
-    let prizeID = await call("addNewPrize", prizeData)
+    const prizeID = await call("addNewPrize", prizeData)
         .then((result) => {
             return result.data.id;
         });
