@@ -62,129 +62,124 @@ afterAll(() => {
 
 
 // --- Tests ---
-describe("Deleting", () => {
+
+// Deleting
+test("clearCachedData", async () => {
+    saveTicketsToMemory(dummyTicketData);
+    savePrizesToMemory(dummyPrizeData);
     
-    test("clearCachedData", async () => {
-        saveTicketsToMemory(dummyTicketData);
-        savePrizesToMemory(dummyPrizeData);
-        
-        const tickets = await getTicketsGeneratedByUser(auth.currentUser);
-        const prizes = await getPrizesGeneratedByUser(auth.currentUser);
-        expect(tickets.length).toBe(1);
-        expect(prizes.length).toBe(1);
+    const tickets = await getTicketsGeneratedByUser(auth.currentUser);
+    const prizes = await getPrizesGeneratedByUser(auth.currentUser);
+    expect(tickets.length).toBe(1);
+    expect(prizes.length).toBe(1);
 
-        clearCachedData();
+    clearCachedData();
 
-        const tickets2 = await getTicketsGeneratedByUser(auth.currentUser);
-        const prizes2 = await getPrizesGeneratedByUser(auth.currentUser);
-        expect(tickets2.length).toBe(0);
-        expect(prizes2.length).toBe(0);
-    });
+    const tickets2 = await getTicketsGeneratedByUser(auth.currentUser);
+    const prizes2 = await getPrizesGeneratedByUser(auth.currentUser);
+    expect(tickets2.length).toBe(0);
+    expect(prizes2.length).toBe(0);
+});
 
-    test("deletePrize", () => {
-        return;
-    });
-
+test("deletePrize", () => {
+    return;
 });
 
 
-describe("Saving", () => {
 
-    test("saveTicketsToMemory", async () => {
-        const result = saveTicketsToMemory(dummyTicketData);
-        expect(result).toMatchObject(dummyTicketData);
-        expect(result.length).toBe(1);
+// Saving
+test("saveTicketsToMemory", async () => {
+    const result = saveTicketsToMemory(dummyTicketData);
+    expect(result).toMatchObject(dummyTicketData);
+    expect(result.length).toBe(1);
 
-        const result2 = await getTicketsGeneratedByUser(auth.currentUser);
-        expect(result2).toMatchObject(dummyTicketData);
-        expect(result2[0].id).toBeDefined();
-        expect(result2.length).toBe(1);
-    });
+    const result2 = await getTicketsGeneratedByUser(auth.currentUser);
+    expect(result2).toMatchObject(dummyTicketData);
+    expect(result2[0].id).toBeDefined();
+    expect(result2.length).toBe(1);
+});
 
-    test("savePrizesToMemory", async () => {
-        const result = savePrizesToMemory(dummyPrizeData);
-        expect(result).toMatchObject([dummyPrizeData]);
-        expect(result.length).toBe(1);
+test("savePrizesToMemory", async () => {
+    const result = savePrizesToMemory(dummyPrizeData);
+    expect(result).toMatchObject([dummyPrizeData]);
+    expect(result.length).toBe(1);
 
-        const result2 = await getPrizesGeneratedByUser(auth.currentUser);
-        expect(result2).toMatchObject([dummyPrizeData]);
-        expect(result2[0].id).toBeDefined();
-        expect(result2.length).toBe(1);
-    });
-
+    const result2 = await getPrizesGeneratedByUser(auth.currentUser);
+    expect(result2).toMatchObject([dummyPrizeData]);
+    expect(result2[0].id).toBeDefined();
+    expect(result2.length).toBe(1);
 });
 
 
-describe("Getters", () => {
 
-    test("getTicketByCode", () => {
-        return;
-    });
+// Getters
+test("getTicketByCode", () => {
+    return;
+});
 
-    test("getPrizesByCode", () => {
-        return;
-    });
+test("getPrizesByCode", () => {
+    return;
+});
 
-    test("getTicketsByPrefix", () => {
-        return;
-    });
+test("getTicketsByPrefix", () => {
+    return;
+});
 
-    test("getUserShopTag", () => {
-        return;
-    });
+test("getUserShopTag", () => {
+    return;
+});
 
-    test("getTicketsGeneratedByUser", () => {
-        return;
-    });
+test("getTicketsGeneratedByUser", () => {
+    return;
+});
 
-    test("getPrizesGeneratedByUser", () => {
-        return;
-    });
+test("getPrizesGeneratedByUser", () => {
+    return;
+});
 
-    test("getPrizeInfo", async () => {
-        const prizeData = {
-            description: "It's awesome!!!",
-            image: "assume we have uploaded an image earlier, its url goes here",
-            name: "Awesome Prize #1",
-            quantity: 5
-        };
+test("getPrizeInfo", async () => {
+    const prizeData = {
+        description: "It's awesome!!!",
+        image: "assume we have uploaded an image earlier, its url goes here",
+        name: "Awesome Prize #1",
+        quantity: 5
+    };
 
-        let prizeID = await call("addNewPrize", prizeData)
-            .then((result) => {
-                return result.data.id;
-            });
-
-        let infoData = await getPrizeInfo(prizeID);
-        expect(infoData).toMatchObject({
-            name: prizeData.name,
-            description: prizeData.description,
-            image: prizeData.image,
-            lastModified: expect.any(Object)
+    let prizeID = await call("addNewPrize", prizeData)
+        .then((result) => {
+            return result.data.id;
         });
-        expect(Object.keys(infoData).length).toBe(4);
+
+    let infoData = await getPrizeInfo(prizeID);
+    expect(infoData).toMatchObject({
+        name: prizeData.name,
+        description: prizeData.description,
+        image: prizeData.image,
+        lastModified: expect.any(Object)
     });
-
-
-    test("getPrizeMetaData", async () => {
-        const prizeData = {
-            description: "It's awesome!!!",
-            image: "assume we have uploaded an image earlier, its url goes here",
-            name: "Awesome Prize #2",
-            quantity: 10
-        };
-
-        let prizeID = await call("addNewPrize", prizeData)
-            .then((result) => {
-                return result.data.id;
-            });
-
-        let prizeMetaData = await getPrizeMetaData(prizeID);
-        expect(prizeMetaData).toMatchObject({
-            createdAt: expect.any(Object),
-            creatorUserID: auth.currentUser.uid,
-            quantity: prizeData.quantity
-        });
-        expect(Object.keys(prizeMetaData).length).toBe(3);
-    });
-
+    expect(Object.keys(infoData).length).toBe(4);
 });
+
+
+test("getPrizeMetaData", async () => {
+    const prizeData = {
+        description: "It's awesome!!!",
+        image: "assume we have uploaded an image earlier, its url goes here",
+        name: "Awesome Prize #2",
+        quantity: 10
+    };
+
+    let prizeID = await call("addNewPrize", prizeData)
+        .then((result) => {
+            return result.data.id;
+        });
+
+    let prizeMetaData = await getPrizeMetaData(prizeID);
+    expect(prizeMetaData).toMatchObject({
+        createdAt: expect.any(Object),
+        creatorUserID: auth.currentUser.uid,
+        quantity: prizeData.quantity
+    });
+    expect(Object.keys(prizeMetaData).length).toBe(3);
+});
+
