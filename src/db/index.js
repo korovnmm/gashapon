@@ -14,9 +14,37 @@ import {
 /** A dictionary that stores certain details from the user session to minimize database reads. */
 var cache = {
     shopTag: null,
-    ticketData: [],
+    ticketData: null,
     prizeData: null,
     uid: null
+}
+
+/**
+ * Stores data to memory in the form of an array.
+ * If the data is not an array, it will be converted to
+ * an array of length 1 before proceeding.
+ * @param {String} key identifier to store data under in the cache dictionary 
+ * @param {Array | any} data 
+ * @returns the array of data currently cached under the given key 
+ */
+function cacheAsArray(key, data) {
+    // Make sure data is an array and convert if not
+    if(!(data instanceof Array))
+        data = [data];
+    
+    // Case 1: there's previously cached data
+    if (cache[key]) { 
+        for (let i = 0; i < data.length; i++) {
+            data[i].id = cache[key].length+1;
+            cache[key] = Array.prototype.concat(cache[key], data[i]);
+        }
+    }
+    // Case 2: no cached data exists
+    else {
+        cache[key] = data;
+    }
+
+    return cache[key];
 }
 
 /** Clears the cache dictionary (shopTag, ticketData, and uid) */
@@ -24,21 +52,14 @@ export function clearCachedData() {
     cache = {};
 }
 
+
 /**
  * Saves ticket data to memory so that it can be accessed without reading from the database.
  * @param {*} data ticket data to cache
  * @returns an array of currently cached ticket data
  */
 export function saveTicketsToMemory(data) {
-    if (cache.ticketData) {
-        for (let i = 0; i < data.length; i++) {
-            data[i].id = cache.ticketData.length+1;
-            cache.ticketData = Array.prototype.concat(cache.ticketData,data[i]);
-        }
-    } else {
-        cache.ticketData = [data];
-    }
-    return cache.ticketData;
+    return cacheAsArray("ticketData", data);
 }
 
 /**
@@ -47,15 +68,7 @@ export function saveTicketsToMemory(data) {
  * @returns an array of currently cached prize data
  */
 export function savePrizesToMemory(data) {
-    if (cache.prizeData) {
-        for (let i = 0; i < data.length; i++) {
-            data[i].id = cache.prizeData.length+1;
-            cache.prizeData = Array.prototype.concat(cache.prizeData,data[i]);
-        }
-    } else {
-        cache.prizeData = [data];
-    }
-    return cache.prizeData;
+    return cacheAsArray("prizeData", data);
 }
 
 /**
@@ -108,7 +121,7 @@ export const getTicketsByPrefix = async (prefix) => {
             data.push(d);
         });
 
-        cache.ticketData = data;
+        saveTicketsToMemory(data);
     }
     return data;
 }
@@ -182,7 +195,7 @@ export const getPrizesGeneratedByUser = async (user) => {
 
         prizes.push(fullPrizeData);
     }
-    cache.prizeData = prizes;
+    savePrizesToMemory(prizes);
     return prizes;
 }
 
