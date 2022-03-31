@@ -12,13 +12,10 @@ import {
 } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
-import { useAuthState } from 'auth'
-import { getShopName } from 'db'
 import { AuthenticatedRoute } from 'components'
 
 import { Overview } from './Overview'
 import { Tickets } from './Tickets'
-import { useHistory } from 'react-router-dom'
 
 const pages = [
     {
@@ -73,10 +70,8 @@ function DashboardPage () {
 }
 
 export const Dashboard = () => {
-    const { user } = useAuthState();
     const [value, setValue] = useState(0);
     const { url, path } = useRouteMatch();
-    const history = useHistory();
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
