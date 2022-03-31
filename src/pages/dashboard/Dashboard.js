@@ -85,9 +85,10 @@ export const Dashboard = () => {
     // Check if the account's been set up first
     useEffect(() => {
         async function checkAccountSetup() {
-            if (await getShopName(user.uid) == null) {
-                history.push("/account/setup");
-            }
+            //if (await getShopName(user.uid) == null) {
+            //    history.push("/account/setup");
+            //}
+            return; // TODO
         }
         checkAccountSetup();
     });
