@@ -6,10 +6,10 @@ test('dummy test', () => {
 });
 
 /*
-test('renders learn react link', () => {
+test('renders welcome message', () => {
   render(<App />);
   expect(true);
-  const linkElement = screen.getByText(/learn react/i);
+  const linkElement = screen.getByText(/welcome/i);
   expect(linkElement).toBeInTheDocument();
 });
 */

@@ -55,8 +55,8 @@ export const SignUp = () => {
             <Container>
                 <Box component="form" onSubmit={handleSubmit}>
                     <Typography variant="h3" component="h3" align="center">Account Creation</Typography>
-                    <TextField fullWidth required autoFocus id="email" type="email" label="Email Address" autoComplete="email" />
-                    <TextField fullWidth required id="password" type="password" label="Password" autoComplete="current-password" />
+                    <TextField fullWidth required autoFocus id="email" type="email" label="Email Address" autoComplete="email" inputProps={{ "data-testid": "email-input" }}/>
+                    <TextField fullWidth required id="password" type="password" label="Password" autoComplete="current-password" inputProps={{ "data-testid": "password-input" }}/>
                     <Button fullWidth variant="contained" type="submit">Create Account</Button>
                 </Box>
                 <center>or</center>
