@@ -80,6 +80,9 @@ export const Dashboard = () => {
     // Check if the account's been set up first
     useEffect(() => {
         async function checkAccountSetup() {
+            // TODO: Undo commit c649c76b63808587a3877c91c72459a5bb61497f
+            // in PR #80 (story 58) to restores the variables and imports
+            // required for the below code to work:
             //if (await getShopName(user.uid) == null) {
             //    history.push("/account/setup");
             //}
