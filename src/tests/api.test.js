@@ -102,12 +102,12 @@ describe('Shopkeeper', () => {
                         redeemed: false
                     });
                 }
-
+                
                 // Check that quantity has decremented appropriately
                 return getPrizeMetaData(prizeData.id)
                     .then((newPrizeData) => {
                         expect(newPrizeData.quantity).toBe(prizeData.prizeMetaData.quantity - keys.length);
-                        prizeData = newPrizeData;
+                        prizeData.prizeMetaData = newPrizeData;
                     });
             });
     });
@@ -135,7 +135,7 @@ describe('Shopkeeper', () => {
                 return getPrizeMetaData(prizeData.id)
                     .then((newPrizeData) => {
                         expect(newPrizeData.quantity).toBe(prizeData.prizeMetaData.quantity - keys.length);
-                        prizeData = newPrizeData;
+                        prizeData.prizeMetaData = newPrizeData;
                     });
             });
     });
