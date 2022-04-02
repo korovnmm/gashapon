@@ -236,10 +236,22 @@ export const generateTickets = functions.https.onCall(async (data, context) => {
 
     // TODO: Randomly select a prize from the prizePool.prizeIDs array
     // const prize: { id: string, quantity: number } = ???
-    const prize = {id: null}; // placeholder, use the above line above instead
+
+    //select random index in the prize pool array
+    const rand = Math.floor(Math.random() * prizePool.prizes.length);
+
+    //chose random prize based on that random index
+    const chosenPrize = prizePool.prizes[rand];
+
+    const prize = {
+      id: chosenPrize.id,
+      quantity: 1
+    };
 
     // TODO: Decrement the prize quantity by 1
-    // prize.quantity -= 1;
+    prize.quantity -= 1;
+
+    //prize.quantity = chosenPrize.quantity - 1;
 
     // Create the JSON object
     const ticketData = {
