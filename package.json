@@ -5,6 +5,8 @@
   "dependencies": {
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
+    "@material-ui/icons": "^4.11.2",
+    "@mui/icons-material": "^5.5.1",
     "@mui/material": "^5.0.6",
     "@mui/x-data-grid": "^5.0.0-beta.7",
     "@testing-library/jest-dom": "^5.14.1",
@@ -22,7 +24,7 @@
     "start": "run-p --race start:sass start:react start:firebase",
     "start:react": "react-scripts start",
     "start:sass": "sass --watch src/styles/sass:src/styles/css",
-    "start:firebase": "npm run func-compile && firebase emulators:start --only functions,auth,firestore",
+    "start:firebase": "npm run func-compile && firebase emulators:start --only functions,auth,firestore,storage",
     "build": "npm run build:sass && react-scripts build",
     "build:sass": "sass src/styles/sass:src/styles/css",
     "test": "npm run build && firebase emulators:exec \"react-scripts test --runInBand --watchAll=false\"",
