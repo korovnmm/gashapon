@@ -234,24 +234,14 @@ export const generateTickets = functions.https.onCall(async (data, context) => {
       ticketPath = `/ticket-info/${code}`;
     }
 
-    // TODO: Randomly select a prize from the prizePool.prizeIDs array
-    // const prize: { id: string, quantity: number } = ???
-
-    //select random index in the prize pool array
+    // select random index in the prize pool array
     const rand = Math.floor(Math.random() * prizePool.prizes.length);
 
-    //chose random prize based on that random index
-    const chosenPrize = prizePool.prizes[rand];
+    // chose random prize based on that random index
+    const prize: { id: string, quantity: number } = prizePool.prizes[rand];
 
-    const prize = {
-      id: chosenPrize.id,
-      quantity: 1
-    };
-
-    // TODO: Decrement the prize quantity by 1
+    // Decrement the prize quantity by 1
     prize.quantity -= 1;
-
-    //prize.quantity = chosenPrize.quantity - 1;
 
     // Create the JSON object
     const ticketData = {
@@ -273,9 +263,9 @@ export const generateTickets = functions.https.onCall(async (data, context) => {
 
     // Append to list
     tickets[code] = ticketData;
-  }
+  }// for loop end
 
-  // TODO: write the new prize quantities to firestore
+  // write the new prize quantities to firestore
   // by updating the existing documents
   await prizePool.prizes.forEach((prize) => {
     return db.doc(`prizes/${prize.id}`).update({
@@ -290,8 +280,6 @@ export const generateTickets = functions.https.onCall(async (data, context) => {
   return tickets;
 });
 
-
-// add imageURL to prize-info fields
 export const addNewPrize = functions.https.onCall(async (data, context) => {
   // Data
   const name = data.name;
@@ -315,12 +303,14 @@ export const addNewPrize = functions.https.onCall(async (data, context) => {
   // Generate prize data
   const timestamp = await admin.firestore.FieldValue.serverTimestamp();
 
+  // prizes collection
   const prizeMetaData = {
     createdAt: timestamp,
     creatorUserID: context.auth.uid,
     quantity,
   };
 
+  // prizes-info collecton
   const prizeInfoData = {
     description,
     image: url,
