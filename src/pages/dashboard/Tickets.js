@@ -11,14 +11,14 @@ import { DataGrid } from '@mui/x-data-grid'
 
 import { generateTickets } from 'api'
 import { useAuthState } from 'auth'
-import { getTicketsGeneratedByUser, saveTicketsToMemory } from 'db';
+import { getTicketsGeneratedByUser, saveTicketsToMemory,getPrizeInfo } from 'db';
 import { useState } from 'react'
 
 const columns = [
     //{ field: 'orderID', headerName: 'Order #', width: 100 },
     { field: 'email', headerName: 'Email Address', width: 170 },
     { field: 'code', headerName: 'Play Code', width: 170 },
-    { field: 'prizeID', headerName: 'Prize', width: 150 },
+    { field: 'prize', headerName: 'Prize', width: 150 },
     { field: 'memo', headerName: 'Memo', width: 170 },
     { field: 'redeemed', headerName: 'Redeemed?', width: 110, type: "boolean" },
     { field: 'createdAt', headerName: 'Time Generated', width: 220, type: "dateTime",
@@ -27,7 +27,6 @@ const columns = [
 ];
 
 const amountOptions = Array.from({length:10}, (v,k)=>k+1); // a list from 1 to 10
-
 
 export const Tickets = () => {
     const { user } = useAuthState();
@@ -53,13 +52,16 @@ export const Tickets = () => {
         
         const { email, memo, amount } = e.target.elements;
         generateTickets(email.value, memo.value, amount.value)
-            .then((result) => {
+            .then(async (result) => {
                 const data = result.data;
                 const tickets = []
                 for(const [key, value] of Object.entries(data)){
                     value.code = key;
+                    const returnPrize = await getPrizeInfo(value.prizeID);
+                    value.prize = returnPrize.name;
                     tickets.push(value);
                 }
+                
                 setRows(saveTicketsToMemory(tickets));
                 setOpen(true);
             })
