@@ -26,12 +26,14 @@ function App() {
       <Router>
         <header>
           <div class="navbar-main">
-            <Link to="/" id="nav-item"> Home </Link> |
-            <Link to="/about" id="nav-item"> About </Link> |
-            <Link to="/login" id="nav-item"> Login </Link> |{' '}
-            <Link to="/signup" id="nav-item"> SignUp </Link> |{' '}
+            <Link to="/" id="nav-item"> Home </Link>
+            <Link to="/about" id="nav-item"> About </Link>
+            <Link to="/login" id="nav-item"> Login </Link>
+            <Link to="/signup" id="nav-item"> SignUp </Link>
             <Link to="/signup" id="nav-item" onClick={() => signOut(getAuth())}> SignOut </Link>
           </div>
+          <div class="kattapon">カッタ</div>
+          <div class="banner"></div>
 
         </header>
         

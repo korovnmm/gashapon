@@ -1,11 +1,99 @@
-@import "buttons";
-@import "dashboard";
-@import "fonts";
-@import "home";
-@import "textFields";
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@500&display=swap");
+.submit-button {
+  border-radius: 40px;
+}
 
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@500&display=swap');
+.submit-button:hover {
+  background-color: rgba(255, 213, 237, 0.5);
+}
 
+.dashboard-container {
+  height: 80%;
+}
+
+.dashboard {
+  background: white;
+  min-height: 100%;
+}
+
+.dashboard-header {
+  background: none;
+}
+
+/**
+ * The space under the tab navbar that
+ * contains each tab's content.
+ */
+.dash-body-wrapper {
+  background: none;
+}
+
+.dash-navbar {
+  background: none;
+}
+
+.dash-navbar .MuiTabs-indicator {
+  background-color: hotpink;
+}
+
+.dash-tab {
+  color: red;
+  background: none;
+}
+
+.dash-tab.Mui-selected {
+  color: hotpink;
+  background: none;
+}
+
+.home-wrapper {
+  height: 90%;
+  padding: 1px;
+}
+
+.form-container {
+  height: 50%;
+  width: 30%;
+  margin-top: 5%;
+  margin-bottom: 5%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.form-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 70%;
+  padding: 10%;
+  -webkit-box-shadow: 3;
+          box-shadow: 3;
+  color: black;
+}
+
+.form-content h2 {
+  color: black;
+  font-family: 'Nunito Sans', 'Josefin Sans', sans-serif;
+}
+
+.form-content div {
+  color: black;
+}
+
+.textfield-default fieldset {
+  margin: 10px 0 10px 0;
+  border-radius: 40px;
+  font-family: 'Josefin Sans', sans-serif;
+}
 
 html, body, #root, .App {
   height: 100%;
@@ -42,9 +130,7 @@ button {
 #sign-out-btn {
 }
 */
-
 .navbar-main {
-  //background-color: #E478DA;
   padding: 1%;
   margin-top: 1%;
   font-family: 'Josefin Sans','Roboto';
@@ -52,18 +138,29 @@ button {
 }
 
 #nav-item {
-  padding:1%;
+  padding: 1%;
   color: white;
   border-radius: 5px;
   background-color: #9C84FF;
   margin-right: 1%;
-  padding: inherit;
   text-decoration: none;
   font-weight: 700;
+}
 
-  &:hover {
-    background-color: #8367f1;
-  }
+a:link #nav-item {
+  color: white;
+}
+
+a:visited #nav-item {
+  color: white;
+}
+
+a:hover #nav-item {
+  color: red;
+}
+
+a:active #nav-item {
+  font-weight: 900;
 }
 
 image {
@@ -81,29 +178,25 @@ image {
 }
 
 .kattapon {
-  position: absolute;
-  color:white;
-  line-height: .5;
-  text-shadow: -10px -6px #9C84FF;
-  left: 65%;
-  font-family:'Roboto';
-  font-weight: 1000;
-  font-size: 128px;
+  position: relative;
+  line-height: 0;
+  font-family: 'Josefin Sans', Roboto;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 72px;
 }
 
 .move-right {
-  overflow: hidden;
-  width:100%;
+  position: absolute;
+  margin-right: 0px;
 }
 
 .circle1 {
-  position: absolute;
-  box-sizing: border-box;
+  position: relative;
   height: 420px;
   width: 420px;
   border-radius: 50%;
   z-index: -5;
-  left: 0em;
 }
 
 .circle1:before {
@@ -116,11 +209,11 @@ image {
   right: -599%;
   border-radius: inherit;
   -webkit-animation: spin 80s linear infinite;
-          animation: spin 80s linear infinite;
+  animation: spin 80s linear infinite;
 }
 
 .circle2 {
-  position: absolute;
+  position: relative;
   height: 480px;
   width: 480px;
   border-radius: 50%;
@@ -136,11 +229,11 @@ image {
   right: -690%;
   border-radius: inherit;
   -webkit-animation: spin2 40s linear infinite;
-          animation: spin2 40s linear infinite;
+  animation: spin2 40s linear infinite;
 }
 
 .circle3 {
-  position: absolute;
+  position: relative;
   height: 250px;
   width: 250px;
   border-radius: 50%;
@@ -156,34 +249,34 @@ image {
   right: -780%;
   border-radius: inherit;
   -webkit-animation: spin 30s linear infinite;
-          animation: spin 30s linear infinite;
+  animation: spin 30s linear infinite;
 }
 
 @-webkit-keyframes spin {
   100% {
     -webkit-transform: rotateZ(360deg);
-            transform: rotateZ(360deg);
+    transform: rotateZ(360deg);
   }
 }
 
 @keyframes spin {
   100% {
     -webkit-transform: rotateZ(360deg);
-            transform: rotateZ(360deg);
+    transform: rotateZ(360deg);
   }
 }
 
 @-webkit-keyframes spin2 {
   100% {
     -webkit-transform: rotateZ(-360deg);
-            transform: rotateZ(-360deg);
+    transform: rotateZ(-360deg);
   }
 }
 
 @keyframes spin2 {
   100% {
     -webkit-transform: rotateZ(-360deg);
-            transform: rotateZ(-360deg);
+    transform: rotateZ(-360deg);
   }
 }
-/*# sourceMappingURL=main.css.map*/
+/*# sourceMappingURL=main.css.map */
