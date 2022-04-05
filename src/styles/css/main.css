@@ -100,17 +100,13 @@ button {
   height: 40px;
   border: none; }
 
-/*
-#sign-out-btn {
-}
-*/
 .navbar-main {
   padding: 1%;
   margin-top: 1%;
   font-family: 'Josefin Sans','Roboto';
   z-index: 1; }
 
-#nav-item {
+.nav-item {
   padding: 1%;
   color: white;
   border-radius: 5px;
@@ -118,8 +114,9 @@ button {
   margin-right: 1%;
   padding: inherit;
   text-decoration: none;
+
   font-weight: 700; }
-  #nav-item:hover {
+  .nav-item:hover {
     background-color: #8367f1; }
 
 image {
