@@ -6,12 +6,16 @@
 
 // The box itself
 .form-container {
-    height: 90%;
+    height: 50%;
+    width: 30%;
     margin-top: 5%;
-    margin-left: 10vw;
-    margin-right: 10vw;
+    margin-bottom: 5%;
+    margin-left: auto;
+    margin-right: auto;
+    // margin-left: 10vw;
+    // margin-right: 10vw;
     background-color: white;
-    border-radius: 40px;
+    border-radius: 10px;
 }
 
 // A wrapper for everything inside the box
@@ -27,10 +31,13 @@
     color: black;
 
     h2 {
-        color: red;
+        color: #F194BB;
+        text-shadow: -5px 3px #FDFFB2;
+        font-family: 'Nunito Sans', 'Josefin Sans', sans-serif;
+        font-weight: bolder;
     }
 
     div {
-        color: red;
+        color: black;
     }
 }
