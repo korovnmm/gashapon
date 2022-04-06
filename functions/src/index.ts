@@ -25,7 +25,8 @@ class PrizePool {
  */
 async function getUserPrizePool(uid : string) : Promise<PrizePool> {
   const query = db.collection("prizes")
-      .where("creatorUserID", "==", uid);
+      .where("creatorUserID", "==", uid)
+      .where("quantity", ">", 0);
 
   const data = new PrizePool();
 
@@ -44,7 +45,7 @@ async function getUserPrizePool(uid : string) : Promise<PrizePool> {
         console.log(error);
         throw new functions.https.HttpsError("unknown", error);
       });
-  console.log("> prize data: ", data);
+
   return data;
 }
 
@@ -234,11 +235,18 @@ export const generateTickets = functions.https.onCall(async (data, context) => {
       ticketPath = `/ticket-info/${code}`;
     }
 
-    // select random index in the prize pool array
-    const rand = Math.floor(Math.random() * prizePool.prizes.length);
+    // Select random index in the prize pool array
+    const index = () => {
+      return Math.floor(Math.random() * prizePool.prizes.length);
+    };
 
-    // chose random prize based on that random index
-    const prize: { id: string, quantity: number } = prizePool.prizes[rand];
+    // Choose random prize based on that random index
+    let prize : { id: string, quantity: number } = prizePool.prizes[index()];
+
+    // Reroll if the prize quantity is 0
+    while (prize.quantity <= 0) {
+      prize = prizePool.prizes[index()];
+    }
 
     // Decrement the prize quantity by 1
     prize.quantity -= 1;
