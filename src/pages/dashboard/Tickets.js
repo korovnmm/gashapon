@@ -18,7 +18,7 @@ const columns = [
     //{ field: 'orderID', headerName: 'Order #', width: 100 },
     { field: 'email', headerName: 'Email Address', width: 170 },
     { field: 'code', headerName: 'Play Code', width: 170 },
-    { field: 'prize', headerName: 'Prize', width: 150 },
+    { field: 'prizeName', headerName: 'Prize', width: 150 },
     { field: 'memo', headerName: 'Memo', width: 170 },
     { field: 'redeemed', headerName: 'Redeemed?', width: 110, type: "boolean" },
     { field: 'createdAt', headerName: 'Time Generated', width: 220, type: "dateTime",
@@ -30,21 +30,41 @@ const amountOptions = Array.from({length:10}, (v,k)=>k+1); // a list from 1 to 1
 
 export const Tickets = () => {
     const { user } = useAuthState();
+    const [ticketData, setTicketData] = useState([]);
     const [rows, setRows] = useState([]);
     const [open, setOpen] = useState(false); // snackbar state 
     
     useEffect(() => {
-        getTicketsGeneratedByUser(user)
-            .then((ticketData) => {
-                setRows(ticketData)
-            });
-    }, [rows, user]);
+        async function fetchData() {
+            const tickets = await getTicketsGeneratedByUser(user);
+            await updateTicketData(tickets);
+        }
+        fetchData();
+    }, [user]);
+
+    useEffect(() => {
+        setRows(ticketData);
+    }, [ticketData]);
 
     const handleClose = (event, reason) => { // snackbar close
         if (reason === 'clickaway') {
             return;
         }
         setOpen(false);
+    };
+
+    const updateTicketData = async (tickets) => {
+        let prizeQueries = {};
+        for (let ticket of tickets) {
+            let prizeName = prizeQueries[ticket.prizeID];
+            if (prizeName == null) { // means we haven't queried this ID before
+                const result = await getPrizeInfo(ticket.prizeID);
+                prizeQueries[ticket.prizeID] = result.name;
+                prizeName = prizeQueries[ticket.prizeID];
+            }
+            ticket.prizeName = prizeName;
+        }
+        setTicketData(tickets);
     };
 
     const sendGenerateTicketsRequest = useCallback(async e => {
@@ -57,12 +77,10 @@ export const Tickets = () => {
                 const tickets = []
                 for(const [key, value] of Object.entries(data)){
                     value.code = key;
-                    const returnPrize = await getPrizeInfo(value.prizeID);
-                    value.prize = returnPrize.name;
                     tickets.push(value);
                 }
                 
-                setRows(saveTicketsToMemory(tickets));
+                await updateTicketData(saveTicketsToMemory(tickets));
                 setOpen(true);
             })
             .catch((error) => {
