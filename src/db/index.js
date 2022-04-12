@@ -104,6 +104,15 @@ export const getPrizeByCode = async (code) => {
 }
 
 /**
+ * Retrieves prize info for a corresponding ticket code
+ * @param {string} code a ticket's play code (must exist on the database first)
+ * @returns {Promise<any>} prize info in JSON/dictionary format
+ */
+export const getPrizeByCode = async (code) => {
+    return { name: "NotImplementedError", message: "function not implemented yet!" };
+}
+
+/**
  * Queries the database for all tickets containing a specific prefix.
  * @param {*} prefix the prefix to query for
  * @returns an array list of tickets with the matching prefix, array is empty if no results were found
@@ -138,6 +147,24 @@ export const getTicketsByPrefix = async (prefix) => {
         saveTicketsToMemory(data);
     }
     return data;
+}
+
+
+/**
+ * Grabs the given user's configured shop / organization display name.
+ * @param {*} uid user id
+ * @returns {string} the user's shop display name
+ */
+export const getShopName = async (uid) => {
+    let name;
+    const ref = doc(db, "users", uid);
+    const snapshot = await getDoc(ref);
+
+    if (snapshot.exists()) {
+        name = snapshot.data().shopDisplayName;
+    }
+
+    return name;
 }
 
 /**
