@@ -3,7 +3,7 @@ import {
     useParams,
     useRouteMatch
 } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { 
     AuthenticatedRoute,
@@ -14,6 +14,7 @@ import {
 
 import { Overview } from './Overview'
 import { Tickets } from './Tickets'
+import { Inventory } from './Inventory'
 
 const pages = [
     {
@@ -24,7 +25,7 @@ const pages = [
     {
         name: "Inventory",
         id: "inventory",
-        component: Overview
+        component: Inventory
     },
     {
         name: "Orders",
@@ -56,14 +57,28 @@ function DashboardPage () {
 }
 
 export const Dashboard = () => {
-    //const { user } = useAuthState();
     const [value, setValue] = useState(0);
     const { url, path } = useRouteMatch();
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+    
+    // Check if the account's been set up first
+    useEffect(() => {
+        async function checkAccountSetup() {
+            // TODO: Undo commit c649c76b63808587a3877c91c72459a5bb61497f
+            // in PR #80 (story 58) to restores the variables and imports
+            // required for the below code to work:
+            //if (await getShopName(user.uid) == null) {
+            //    history.push("/account/setup");
+            //}
+            return; // TODO
+        }
+        checkAccountSetup();
+    });
 
+    // HTML
     return (
         <DashboardContainer>
             <DashNavbar value={value} onChange={handleChange}>

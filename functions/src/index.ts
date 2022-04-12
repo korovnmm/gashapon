@@ -120,13 +120,25 @@ async function initUserAccount(uid : string, email : string): Promise<boolean> {
   // Create a default shop tag from the user's email
   const emailPrefix = email.split("@")[0];
   const numChars = emailPrefix.length >= 5 ? 5 : emailPrefix.length;
-  const defaultTag = emailPrefix.substring(0, numChars).toLowerCase();
+  let defaultTag = emailPrefix.substring(0, numChars).toLowerCase();
+
+  // Append a number if the default tag already exists
+  await db.collection("users")
+      .where("shopTag", "==", defaultTag).get()
+      .then((snapshot) => {
+        console.log(snapshot.docs);
+        if (!snapshot.empty) {
+          defaultTag = `${defaultTag}${snapshot.size+1}`;
+        }
+      });
 
   // Put the data entry together
   const timestamp = await admin.firestore.FieldValue.serverTimestamp();
   const userData = {
     createdAt: timestamp,
     shopTag: defaultTag,
+    shopDisplayName: null,
+    // TODO: prompt account setup if shop name hasn't been configured
   };
 
   // Write to firestore
@@ -139,6 +151,8 @@ async function initUserAccount(uid : string, email : string): Promise<boolean> {
   return true;
 }
 
+
+// -- ENDPOINT FUNCTIONS BELOW -- //
 
 export const generateTickets = functions.https.onCall(async (data, context) => {
   // Data
@@ -205,4 +219,62 @@ export const generateTickets = functions.https.onCall(async (data, context) => {
   }
 
   return tickets;
+});
+
+
+// add imageURL to prize-info fields
+export const addNewPrize = functions.https.onCall(async (data, context) => {
+  // Data
+  const name = data.name;
+  const description = data.description;
+  const quantity = parseInt(data.quantity);
+  const url = data.image;
+
+  // Check if user is authenticated
+  if (!context.auth) {
+    // Throw an error if not
+    throw new functions.https.HttpsError("unauthenticated",
+        "The function must be called " +
+      "while authenticated.");
+  }
+  // Check the amount variable is within range
+  if (quantity < 0 || quantity > 999) {
+    throw new functions.https.HttpsError("out-of-range",
+        "Prize quantity must be between 0 and 999 (inclusive)");
+  }
+
+  // Generate prize data
+  const timestamp = await admin.firestore.FieldValue.serverTimestamp();
+
+  const prizeMetaData = {
+    createdAt: timestamp,
+    creatorUserID: context.auth.uid,
+    quantity,
+  };
+
+  const prizeInfoData = {
+    description,
+    image: url,
+    name,
+    lastModified: timestamp,
+  };
+
+  // Write both documents to firestore
+  let id;
+  await db.collection("prizes").add(prizeMetaData)
+      .then((docRef) => {
+        id = docRef.id;
+        db.collection("prize-info").doc(id).set(prizeInfoData)
+            .catch((error) => {
+              console.log(error);
+              throw new functions.https.HttpsError("unknown", error);
+            });
+      })
+      .catch((error) => {
+        console.log(error);
+        throw new functions.https.HttpsError("unknown", error);
+      });
+
+  // Append to list
+  return {id, prizeMetaData, prizeInfoData};
 });
