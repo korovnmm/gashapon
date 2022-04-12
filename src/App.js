@@ -18,6 +18,8 @@ function App() {
     <StyledEngineProvider injectFirst>
       <header>
         <NavBar />
+        <div className="kattapon">カッタ</div>
+        <div className="banner" />
       </header>
     
       <Route exact path="/" component={Home} />

@@ -1,18 +1,16 @@
-import {
-    Box,
-    Container,
-    Tabs, 
-    Tab,
-} from '@mui/material'
 import { 
     Redirect,
-    Link,
     useParams,
     useRouteMatch
 } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
-import { AuthenticatedRoute } from 'components'
+import { 
+    AuthenticatedRoute,
+    DashboardContainer,
+    DashNavbar,
+    LinkTab
+} from 'components'
 
 import { Overview } from './Overview'
 import { Tickets } from './Tickets'
@@ -45,18 +43,6 @@ const pages = [
         component: Overview
     }
 ]
-
-/**
- * An MUI Tab component that supports <Link> functionality (i.e. a Tab that can take a 'to=' argument).
- */
-function LinkTab(props) {
-    return (
-        <Tab
-            component={Link}
-            {...props}
-        />
-    );
-}
 
 /**
  * @returns JSX element of the dashboard page corresponding to the current route path (the url).
@@ -94,30 +80,18 @@ export const Dashboard = () => {
 
     // HTML
     return (
-        <Container maxWidth="lg">
-            <Box component="center" className="dashboard-wrapper"
-                sx={{
-                    outline: '1px solid lightblue'
-                }}>
-                <h2 class="dashboard-header">DASHBOARD</h2>
-                <div class="dash-body-wrapper">
-                    
-                    <Tabs centered variant="fullWidth" class="dash-navbar"
-                        value={value} onChange={handleChange}
-                        sx={{borderBottom: 1, borderColor: 'divider'}}
-                        aria-label="dashboard page navigation bar">
-                            {pages.map(({name, id}) => (
-                                <LinkTab label={`${name}`} to={`${url}/${id}`} />
-                            ))}
-                    </Tabs>
+        <DashboardContainer>
+            <DashNavbar value={value} onChange={handleChange}>
+                {pages.map(({name, id}) => (
+                    <LinkTab label={`${name}`} to={`${url}/${id}`} />
+                ))}
+            </DashNavbar>
 
-                    <AuthenticatedRoute path={`${path}/:pageID`}>
-                        <DashboardPage />
-                    </AuthenticatedRoute>
+            <AuthenticatedRoute path={`${path}/:pageID`}>
+                <DashboardPage />
+            </AuthenticatedRoute>
 
-                    <Redirect from={`${url}`} to={`${url}/overview`} />
-                </div>
-            </Box>
-        </Container>
+            <Redirect from={`${url}`} to={`${url}/overview`} />
+        </DashboardContainer>
     );
 }
