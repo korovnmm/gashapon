@@ -163,13 +163,25 @@ async function initUserAccount(uid : string, email : string): Promise<boolean> {
   // Create a default shop tag from the user's email
   const emailPrefix = email.split("@")[0];
   const numChars = emailPrefix.length >= 5 ? 5 : emailPrefix.length;
-  const defaultTag = emailPrefix.substring(0, numChars).toLowerCase();
+  let defaultTag = emailPrefix.substring(0, numChars).toLowerCase();
+
+  // Append a number if the default tag already exists
+  await db.collection("users")
+      .where("shopTag", "==", defaultTag).get()
+      .then((snapshot) => {
+        console.log(snapshot.docs);
+        if (!snapshot.empty) {
+          defaultTag = `${defaultTag}${snapshot.size+1}`;
+        }
+      });
 
   // Put the data entry together
   const timestamp = await admin.firestore.FieldValue.serverTimestamp();
   const userData = {
     createdAt: timestamp,
     shopTag: defaultTag,
+    shopDisplayName: null,
+    // TODO: prompt account setup if shop name hasn't been configured
   };
 
   // Write to firestore
@@ -287,6 +299,7 @@ export const generateTickets = functions.https.onCall(async (data, context) => {
 
   return tickets;
 });
+
 
 export const addNewPrize = functions.https.onCall(async (data, context) => {
   // Data
