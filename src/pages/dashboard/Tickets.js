@@ -11,7 +11,7 @@ import { DataGrid } from '@mui/x-data-grid'
 
 import { generateTickets } from 'api'
 import { useAuthState } from 'auth'
-import { getTicketsGeneratedByUser, saveTicketsToMemory,getPrizeInfo } from 'db';
+import { getTicketsGeneratedByUser, saveTicketsToMemory, getPrizeInfo } from 'db';
 import { useState } from 'react'
 
 const columns = [
