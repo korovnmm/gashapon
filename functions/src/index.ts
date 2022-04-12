@@ -152,6 +152,8 @@ async function initUserAccount(uid : string, email : string): Promise<boolean> {
 }
 
 
+// -- ENDPOINT FUNCTIONS BELOW -- //
+
 export const generateTickets = functions.https.onCall(async (data, context) => {
   // Data
   const email = data.email;
@@ -217,4 +219,62 @@ export const generateTickets = functions.https.onCall(async (data, context) => {
   }
 
   return tickets;
+});
+
+
+// add imageURL to prize-info fields
+export const addNewPrize = functions.https.onCall(async (data, context) => {
+  // Data
+  const name = data.name;
+  const description = data.description;
+  const quantity = parseInt(data.quantity);
+  const url = data.image;
+
+  // Check if user is authenticated
+  if (!context.auth) {
+    // Throw an error if not
+    throw new functions.https.HttpsError("unauthenticated",
+        "The function must be called " +
+      "while authenticated.");
+  }
+  // Check the amount variable is within range
+  if (quantity < 0 || quantity > 999) {
+    throw new functions.https.HttpsError("out-of-range",
+        "Prize quantity must be between 0 and 999 (inclusive)");
+  }
+
+  // Generate prize data
+  const timestamp = await admin.firestore.FieldValue.serverTimestamp();
+
+  const prizeMetaData = {
+    createdAt: timestamp,
+    creatorUserID: context.auth.uid,
+    quantity,
+  };
+
+  const prizeInfoData = {
+    description,
+    image: url,
+    name,
+    lastModified: timestamp,
+  };
+
+  // Write both documents to firestore
+  let id;
+  await db.collection("prizes").add(prizeMetaData)
+      .then((docRef) => {
+        id = docRef.id;
+        db.collection("prize-info").doc(id).set(prizeInfoData)
+            .catch((error) => {
+              console.log(error);
+              throw new functions.https.HttpsError("unknown", error);
+            });
+      })
+      .catch((error) => {
+        console.log(error);
+        throw new functions.https.HttpsError("unknown", error);
+      });
+
+  // Append to list
+  return {id, prizeMetaData, prizeInfoData};
 });

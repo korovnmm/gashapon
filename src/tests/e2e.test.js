@@ -45,7 +45,7 @@ function wait(time) {
     });
 };
 
-const signOut = async () => { await page.click(".navbar-main > a:nth-child(5)"); };
+const signOut = async () => { await page.click("#signout"); };
 
 // --- TESTS BELOW THIS POINT ---
 
@@ -76,8 +76,8 @@ describe('Home Page', () => {
 describe('Account Creation', () => {
     beforeAll(async () => {
         await page.goto(BASE_URL);
-        await page.waitForSelector("#root > header:nth-child(2) > div:nth-child(1) > a:nth-child(4)");
-        await page.click("#root > header:nth-child(2) > div:nth-child(1) > a:nth-child(4)");
+        await page.waitForSelector("#signup-link");
+        await page.click("#signup-link");
     });
 
     it("has \"/signup\" appended to the url", async () => {
@@ -114,7 +114,7 @@ describe('Account Creation', () => {
         await signOut();
         await page.waitForSelector(".MuiTypography-root");
         const text = await getText(".MuiTypography-root");
-        expect(text).toContain("Sign in");
+        expect(text).toContain("Welcome!");
     });
 
 });
@@ -123,8 +123,11 @@ describe('Account Creation', () => {
 
 describe('Login / Dashboard', () => {
     beforeAll(async () => {
+        await page.click("#login-link");
+    });
+
+    afterAll(async () => {
         await signOut();
-        await page.click("#root > header:nth-child(2) > div:nth-child(1) > a:nth-child(3)");
     });
 
     it("has \"/login\" appended to the url", async () => {
@@ -200,14 +203,18 @@ describe('Login / Dashboard', () => {
 
 describe("Google Auth", () => {
     beforeAll(async () => {
-        await signOut();
-        await page.click("#root > header:nth-child(2) > div:nth-child(1) > a:nth-child(3)");
+        await page.waitForSelector("#login-link");
+        await page.click("#login-link");
 
         // Login checks from above
         expect(page.url()).toMatch(BASE_URL + "/login"); // should have '/login' in the url
         await page.waitForSelector(".MuiTypography-root");
         const text = await getText(".MuiTypography-root");
         expect(text).toContain("Sign in"); // sign in header is displayed
+    });
+
+    afterAll(async () => {
+        await signOut();
     });
 
     it("can log in through google", async () => {
