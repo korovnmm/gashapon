@@ -77,7 +77,15 @@ export function savePrizesToMemory(data) {
  * @returns {Promise<any>} JSON data for the ticket
  */
 export const getTicketByCode = async (code) => {
-    return { name: "NotImplementedError", message: "function not implemented yet!" };
+    let result;
+    const ticketRef = doc(db, "ticket-info", code);
+    const snap = await getDoc(ticketRef); // waits for the returned promise to resolve
+
+    if (snap.exists()) {
+        result = snap.data();
+    }
+
+    return result;
 }
 
 /**
@@ -86,7 +94,13 @@ export const getTicketByCode = async (code) => {
  * @returns {Promise<any>} prize info in JSON/dictionary format
  */
 export const getPrizeByCode = async (code) => {
-    return { name: "NotImplementedError", message: "function not implemented yet!" };
+    const ticketData = await getTicketByCode(code);
+    
+    let prizeInfo;
+    if (ticketData && ticketData.prizeID)
+        prizeInfo = await getPrizeInfo(ticketData.prizeID);
+
+    return prizeInfo;
 }
 
 /**
