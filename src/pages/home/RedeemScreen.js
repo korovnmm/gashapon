@@ -22,12 +22,12 @@ export const RedeemScreen = () => {
             setPrizeInfo(`${prize.name}: ${prize.description}`);
         }
         fetchData();
-    }, []);
+    }, [code, shopTag]);
 
     return (
         <>
             <div>Your code: {shopTag}-{code}</div>
-            <img src={prizeImage} />
+            <img src={prizeImage} alt="" />
             <h1>{prizeInfo}</h1>
             <br></br>
             <div>{ticketData}</div>
