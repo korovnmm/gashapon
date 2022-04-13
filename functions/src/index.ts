@@ -176,7 +176,6 @@ async function initUserAccount(uid : string, email : string): Promise<boolean> {
   await db.collection("users")
       .where("shopTag", "==", defaultTag).get()
       .then((snapshot) => {
-        console.log(snapshot.docs);
         if (!snapshot.empty) {
           defaultTag = `${defaultTag}${snapshot.size+1}`;
         }
