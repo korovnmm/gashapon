@@ -14,8 +14,8 @@ class PrizePool {
   totalAmount : number;
   prizes : {id : string, quantity : number}[];
 
-  /** 
-  * Initializes an empty prize pool. 
+  /**
+  * Initializes an empty prize pool.
   */
   constructor() {
     this.totalAmount = 0;
@@ -295,12 +295,12 @@ export const generateTickets = functions.https.onCall(async (data, context) => {
   // by updating the existing documents
   await prizePool.prizes.forEach((prize) => {
     return db.doc(`prizes/${prize.id}`).update({
-        quantity: prize.quantity,
-      })
-      .catch((error) => {
-        console.log(error);
-        throw new functions.https.HttpsError("unknown", error);
-      });
+      quantity: prize.quantity,
+    })
+        .catch((error) => {
+          console.log(error);
+          throw new functions.https.HttpsError("unknown", error);
+        });
   });
 
   return tickets;
