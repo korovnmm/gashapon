@@ -306,6 +306,7 @@ export const generateTickets = functions.https.onCall(async (data, context) => {
   return tickets;
 });
 
+
 export const addNewPrize = functions.https.onCall(async (data, context) => {
   // Data
   const name = data.name;
