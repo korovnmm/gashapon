@@ -5,12 +5,18 @@ import * as crypto from "crypto";
 admin.initializeApp();
 
 const db = admin.firestore();
-/** */
+/**
+ * A prizepool object containing an array of
+ * prize data and a total amount of cumulative
+ * prize quantities within that array.
+ */
 class PrizePool {
   totalAmount : number;
   prizes : {id : string, quantity : number}[];
 
-  /** */
+  /**
+  * Initializes an empty prize pool.
+  */
   constructor() {
     this.totalAmount = 0;
     this.prizes = [];
@@ -41,6 +47,7 @@ async function getUserPrizePool(uid : string) : Promise<PrizePool> {
           data.prizes.push(prizeData);
         });
       })
+
       .catch((error) => {
         console.log(error);
         throw new functions.https.HttpsError("unknown", error);
@@ -169,7 +176,6 @@ async function initUserAccount(uid : string, email : string): Promise<boolean> {
   await db.collection("users")
       .where("shopTag", "==", defaultTag).get()
       .then((snapshot) => {
-        console.log(snapshot.docs);
         if (!snapshot.empty) {
           defaultTag = `${defaultTag}${snapshot.size+1}`;
         }
@@ -283,9 +289,9 @@ export const generateTickets = functions.https.onCall(async (data, context) => {
 
     // Append to list
     tickets[code] = ticketData;
-  }// for loop end
+  } // end of for-loop
 
-  // write the new prize quantities to firestore
+  // Write the new prize quantities to firestore
   // by updating the existing documents
   await prizePool.prizes.forEach((prize) => {
     return db.doc(`prizes/${prize.id}`).update({
