@@ -346,20 +346,9 @@ export const addNewPrize = functions.https.onCall(async (data, context) => {
   };
 
   // Write both documents to firestore
-  let id;
-  await db.collection("prizes").add(prizeMetaData)
-      .then((docRef) => {
-        id = docRef.id;
-        db.collection("prize-info").doc(id).set(prizeInfoData)
-            .catch((error) => {
-              console.log(error);
-              throw new functions.https.HttpsError("unknown", error);
-            });
-      })
-      .catch((error) => {
-        console.log(error);
-        throw new functions.https.HttpsError("unknown", error);
-      });
+  const docRef = await db.collection("prizes").add(prizeMetaData);
+  const id = docRef.id;
+  await db.collection("prize-info").doc(id).set(prizeInfoData);
 
   // Append to list
   return {id, prizeMetaData, prizeInfoData};
