@@ -93,8 +93,8 @@ export const Tickets = () => {
 
     return (
         <>
-            <div class="tickets-header"></div>
-            <div class="tickets-body">
+            <div className="tickets-header"></div>
+            <div className="tickets-body">
                 <DataGrid
                     autoHeight={true}
                     rows={rows}
@@ -104,7 +104,7 @@ export const Tickets = () => {
                     checkboxSelection
                 />
             </div>
-            <Box component="form" class="tickets-footer" onSubmit={sendGenerateTicketsRequest}>
+            <Box component="form" className="tickets-footer" onSubmit={sendGenerateTicketsRequest}>
                 <TextField required id="email" type="email" label="Email Address" />
                 <TextField id="memo" type="text" label="Memo" />
                 <Autocomplete required

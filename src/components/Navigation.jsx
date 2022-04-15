@@ -11,7 +11,7 @@ import {
  */
 const NavBar = (props) => {
     return (
-        <div class="navbar-main" {...props}>
+        <div className="navbar-main" {...props}>
             <Link to="/" id="home-link" className="nav-item"> Home </Link>
             <Links />
         </div>
