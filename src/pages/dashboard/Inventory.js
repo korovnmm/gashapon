@@ -40,18 +40,24 @@ const columns = [
 export const Inventory = () => {
     const { user } = useAuthState();
     const [rows, setRows] = useState([]);
+    const [prizeData, setPrizeData] = useState([]);
     const [open, setOpen] = useState(false); // snackbar state 
     const [selectedImage, setSelectedImage] = useState(null);
     const [selectedRows, setSelectedRows] = useState([])
    
     useEffect(() => {
-        getPrizesGeneratedByUser(user) 
-            .then((prizeData) => {
-                setRows(prizeData) 
-            });
-    }, [rows, user]);
+        async function fetchData() {
+            const prizes = await getPrizesGeneratedByUser(user);
+            setPrizeData(prizes);
+        }
+        fetchData();
+    }, [user]);
 
+    useEffect(() => {
+        setRows(prizeData);
+    }, [prizeData]);
     
+
     const imageUpload = useCallback((event) => {
         const image = event.target.files[0];
         if (image.type !== "image/png" && image.type !== "image/jpeg") {
@@ -94,7 +100,7 @@ export const Inventory = () => {
                     quantity: result.prizeMetaData.quantity,
                     createdAt: result.prizeMetaData.createdAt
                 }                
-                setRows(savePrizesToMemory([fullPrizeData]));
+                setPrizeData(savePrizesToMemory([fullPrizeData]));
                 setOpen(true);
             })
             .catch((error) => {
@@ -123,8 +129,8 @@ export const Inventory = () => {
     // HTML
     return (
         <>
-            <div class="prizes-header"></div>
-            <div class="prizes-body">
+            <div className="prizes-header"></div>
+            <div className="prizes-body">
                 <DataGrid
                     autoHeight={true}
                     rows={rows}
@@ -136,7 +142,7 @@ export const Inventory = () => {
                 />
             </div>
             
-            <Box component="form" class="prizes-footer" onSubmit={sendNewPrizeRequest}>
+            <Box component="form" className="prizes-footer" onSubmit={sendNewPrizeRequest}>
                 <Button variant="contained" color="primary" onClick={onDeleteClick} startIcon={<div/>}>Delete</Button>
                 <input
                     accept="image/*"
