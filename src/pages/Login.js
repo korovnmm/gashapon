@@ -51,17 +51,22 @@ export const Login = () => {
     // HTML
     return (
         <>
+        <div class = "signup-boy">
+            <div class = "acc-creation-h3"> 
+                <Typography variant="h3" component="h3" align="center">Sign in</Typography>
+            </div>
             <Container>
                 <Box component="form" onSubmit={handleSubmit}>
-                    <Typography variant="h3" component="h3" align="center">Sign in</Typography>
+                   
                     <TextField fullWidth required autoFocus id="email" type="email" label="Email Address" autoComplete="email"/>  
                     <TextField fullWidth required id="password" type="password" label="Password" autoComplete="current-password" />
                     <Button fullWidth variant="contained" type="submit">Sign in</Button>
                 </Box>
                 <center>or</center>
                 <Button fullWidth variant="outlined" startIcon={<GoogleIcon />} onClick={signInWithGoogle}>Continue with Google</Button>
-                <div>Don't have an account? <Link to="/signup">Create one here!</Link></div>
+                <div class = "login-box">Don't have an account? <Link to="/signup">Create one here!</Link></div>
             </Container>
+            </div>
         </>
     )
 }
