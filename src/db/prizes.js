@@ -16,7 +16,8 @@ import{cache, cacheAsArray} from "db"
  * @param {*} data prize data to cache
  * @returns an array of currently cached prize data
  */
- export function savePrizesToMemory(data) {
+export function savePrizesToMemory(data) {
+    cache.prizeData = null; // clear the cache first to avoid duplicates
     return cacheAsArray("prizeData", data);
 }
 
@@ -25,33 +26,54 @@ import{cache, cacheAsArray} from "db"
  * @param {string} code a ticket's play code (must exist on the database first)
  * @returns {Promise<any>} prize info in JSON/dictionary format
  */
- export const getPrizeByCode = async (code) => {
-    return { name: "NotImplementedError", message: "function not implemented yet!" };
+export const getPrizeByCode = async (code) => {
+    const ticketData = await getTicketByCode(code);
+
+    let prizeInfo;
+    if (ticketData && ticketData.prizeID)
+        prizeInfo = await getPrizeInfo(ticketData.prizeID);
+
+    return prizeInfo;
 }
 
 /**
  * @param {*} user 
  * @returns a list of prizes (info and metadata together) created by the given user
  */
- export const getPrizesGeneratedByUser = async (user) => {
+export const getPrizesGeneratedByUser = async (user) => {
     const prizesRef = collection(db, "prizes");
     const q = query(prizesRef,
         where("creatorUserID", '==', user.uid));
-    
+
     const snap = await getDocs(q); // returns a promise
     const prizes = [];
-    
-    if (cache.prizeData)
-        return cache.prizeData;
+
+    /** Returns cached data for a given document id */
+    const getDocumentCache = (id) => {
+        if (cache.prizeData)
+            for (let i = 0; i < cache.prizeData.length; i++) {
+                if (cache.prizeData[i].docId === id)
+                    return cache.prizeData[i];
+            }
+        return null;
+    }
+
+    // TODO: Optimize this to perform less reads, might want to 
+    // invetibly store the prize info and meta together into a single document
+    // and changes that are made are sent via cloud functions instead of
+    // directly to db if we can't fine-tune who has write access.
 
     for (let i = 0; i < snap.size; i++) {
         const doc = snap.docs[i];
         const prizeMetaData = doc.data();
-        const prizeInfoData = await getPrizeInfo(doc.id);
-        
+        let prizeInfoData = getDocumentCache(doc.id);
+
+        if (prizeInfoData == null)
+            prizeInfoData = await getPrizeInfo(doc.id);
+
         // Combine the data together
         const fullPrizeData = {
-            id: i+1,
+            id: i + 1,
             docId: doc.id,
             name: prizeInfoData.name,
             description: prizeInfoData.description,
@@ -74,15 +96,16 @@ import{cache, cacheAsArray} from "db"
  */
 export const getPrizeInfo = async (id) => {
     let result;
-    const prizesRef = doc(db,"prize-info", id);
+    const prizesRef = doc(db, "prize-info", id);
     const snap = await getDoc(prizesRef); // waits for the returned promise to resolve
 
-    if(snap.exists()){
+    if (snap.exists()) {
         result = snap.data();
     }
 
     return result;
 }
+
 
 /**
  * Returns info data for a prize from the 'prize' collection.
@@ -113,9 +136,22 @@ export const deletePrize = async (id) => {
     await deleteDoc(doc(db, "prizes", id));
     await deleteDoc(doc(db, "prize-info", id));
 
+    // Delete tickets associated with that prize
+    const q = query(collection(db, "ticket-info"),
+        where("prizeID", '==', id));
+    const snap = await getDocs(q);
+    const tickets = snap.docs
+    
+    for (let document of tickets) {
+        await deleteDoc(document.ref);
+    }
+
     // Delete from cache
     if (cache.prizeData) {  
         cache.prizeData = null;
+    }
+    if (cache.ticketData) {
+        cache.ticketData = null;
     }
 
     itemDeleted = true;

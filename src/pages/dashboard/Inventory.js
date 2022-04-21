@@ -16,7 +16,6 @@ import { addNewPrize } from 'api'
 import { useAuthState } from 'auth'
 import {
     getPrizesGeneratedByUser,
-    savePrizesToMemory,
     deletePrize
 } from 'db'
 import { 
@@ -89,26 +88,16 @@ export const Inventory = () => {
           
         // TODO: make sure user is passing a valid integer value
         
-        addNewPrize(name.value, description.value, quantity.value, url)
-            .then((result) => {
-                result = result.data;
-                const fullPrizeData = {
-                    docId: result.id,
-                    name: result.prizeInfoData.name,
-                    description: result.prizeInfoData.description,
-                    image: result.prizeInfoData.image,
-                    quantity: result.prizeMetaData.quantity,
-                    createdAt: result.prizeMetaData.createdAt
-                }                
-                setPrizeData(savePrizesToMemory([fullPrizeData]));
-                setOpen(true);
-            })
+        await addNewPrize(name.value, description.value, quantity.value, url)
             .catch((error) => {
                 const code = error.code;
                 const message = error.message;
                 alert(`${code}: ${message}`);
             });
-    }, [selectedImage]);
+        
+        setPrizeData(await getPrizesGeneratedByUser(user));
+        setOpen(true);
+    }, [selectedImage, user]);
 
 
     const onDeleteClick = useCallback(async (e) => {
@@ -122,8 +111,8 @@ export const Inventory = () => {
             else
                 console.error("Failed to delete prize with ID: ", id);
         }
-        setRows(rows.filter(index => !selectedRows.includes(index)));
-    }, [rows, selectedRows]);
+        setPrizeData(await getPrizesGeneratedByUser(user));
+    }, [rows, selectedRows, user]);
 
 
     // HTML

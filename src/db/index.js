@@ -1,16 +1,10 @@
 import { db } from '../firebase'
 import {
-    collection, 
     doc, 
-    getDoc,
-    getDocs,
-    query,
-    where,
-    deleteDoc
+    getDoc
 } from 'firebase/firestore'
 export {savePrizesToMemory, getPrizeByCode, getPrizeInfo,getPrizeMetaData,getPrizesGeneratedByUser,deletePrize} from './prizes';
 export {saveTicketsToMemory,getTicketByCode,getTicketsByPrefix,getTicketsGeneratedByUser} from './tickets'
-//import { useCollectionData } from 'react-firebase-hooks/firestore'
 
 /** A dictionary that stores certain details from the user session to minimize database reads. */
 export var cache = {
@@ -33,16 +27,15 @@ export function cacheAsArray(key, data) {
     if(!(data instanceof Array))
         data = [data];
     
-    // Case 1: there's previously cached data
-    if (cache[key]) { 
-        for (let i = 0; i < data.length; i++) {
-            data[i].id = cache[key].length+1;
-            cache[key] = Array.prototype.concat(cache[key], data[i]);
-        }
+    // Initialize array if no cache data exists
+    if (!cache[key]) { 
+        cache[key] = []
     }
-    // Case 2: no cached data exists
-    else {
-        cache[key] = data;
+
+    // Append to the list with ids
+    for (let i = 0; i < data.length; i++) {
+        data[i].id = cache[key].length + 1;
+        cache[key] = Array.prototype.concat(cache[key], data[i]);
     }
 
     return cache[key];
@@ -52,6 +45,7 @@ export function cacheAsArray(key, data) {
 export function clearCachedData() {
     cache = {};
 }
+
 
 /**
  * Grabs the given user's configured shop / organization display name.
@@ -69,6 +63,7 @@ export const getShopName = async (uid) => {
 
     return name;
 }
+
 
 /**
  * Grabs a user's current shop tag from the database.
@@ -94,5 +89,4 @@ export const getUserShopTag = async (uid) => {
 
     return tag;
 }
-
 
