@@ -11,7 +11,21 @@ export {
 } from './Dashboard';
 
 export { default as GoogleIcon } from './GoogleGLogo';
+
+export { 
+    MachineBox 
+} from './MachineBox';
+
 export { default as NavBar } from './Navigation';
+
+export { 
+    PrizeHistoryCarousel 
+} from './PrizeHistory';
+
+export { 
+    PrizePopupBox 
+} from './PrizePopup';
+
 export { default as ResponsiveAppBar } from './ResponsiveAppBar';
 
 export {
