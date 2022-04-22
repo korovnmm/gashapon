@@ -9,7 +9,7 @@ import {
     deleteDoc
 } from 'firebase/firestore'
 
-import{cache, cacheAsArray} from "db"
+import {cache, cacheAsArray, getTicketByCode} from "db"
 
 /**
  * Saves prize data to memory so that it can be accessed without reading from the database.

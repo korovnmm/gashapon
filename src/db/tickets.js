@@ -1,12 +1,14 @@
 import { db } from '../firebase'
 import {
-    collection, 
+    collection,
+    doc,
+    getDoc, 
     getDocs,
     query,
     where,
 } from 'firebase/firestore'
 
-import{cache, cacheAsArray,getUserShopTag} from "db"
+import{cache, cacheAsArray, getUserShopTag} from "db"
 
 /**
  * Saves ticket data to memory so that it can be accessed without reading from the database.

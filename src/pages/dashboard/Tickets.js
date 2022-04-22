@@ -1,19 +1,21 @@
 // DataGrid Documentation: https://mui.com/api/data-grid/data-grid/#component-name
-import { useCallback, useEffect } from 'react'
-import { 
+import {
     Autocomplete,
     Box,
     Button,
     Snackbar,
     TextField,
-} from '@mui/material'
-import { DataGrid } from '@mui/x-data-grid'
+} from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
+import { 
+    useCallback, 
+    useEffect, 
+    useState 
+} from 'react';
 
-import { generateTickets } from 'api'
-import { useAuthState } from 'auth'
+import { generateTickets } from 'api';
+import { useAuthState } from 'auth';
 import { getTicketsGeneratedByUser, saveTicketsToMemory, getPrizeInfo } from 'db';
-import {getPrizeInfo } from 'db/prizes'
-import { useState } from 'react'
 
 const columns = [
     //{ field: 'orderID', headerName: 'Order #', width: 100 },
