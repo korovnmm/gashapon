@@ -1,4 +1,5 @@
 import {
+    Button,
     Container
 } from '@mui/material';
 import { 
@@ -26,6 +27,7 @@ export const RedeemScreen = () => {
     const [ticketData, setTicket] = useState("");
     const [prizeImage, setPrizeImage] = useState("https://source.unsplash.com/random/?product");
     const [prizeInfo, setPrizeInfo] = useState({ name: "Prize Name", description: "lorem ipsum dolor sit amet"});
+    const [popup, showPopup] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
@@ -41,6 +43,13 @@ export const RedeemScreen = () => {
         fetchData();
     }, [code, shopTag]);
 
+    const handleCrank = () => {
+        showPopup(true);
+    };
+    const handleClose = () => {
+        showPopup(false);
+    };
+
     
     return (
         <>
@@ -52,9 +61,10 @@ export const RedeemScreen = () => {
                         description: prizeInfo.description
                     }}>
                 <Container maxWidth="lg" className="redeem-wrapper">
-                    <MachineBox />
+                    <MachineBox onCranked={handleCrank}/>
                     <PrizeHistoryCarousel />
-                    <PrizePopupBox />
+                    <Button fullWidth variant="contained" onClick={handleCrank}>Show Prize PopUp</Button>
+                    <PrizePopupBox show={popup} onClick={handleClose} />
                 </Container>
             </PrizeContext.Provider>
         </>
