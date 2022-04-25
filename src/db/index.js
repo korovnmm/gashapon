@@ -1,10 +1,8 @@
 import { db } from '../firebase'
-import {
-    doc, 
-    getDoc
-} from 'firebase/firestore'
-export {savePrizesToMemory, getPrizeByCode, getPrizeInfo,getPrizeMetaData,getPrizesGeneratedByUser,deletePrize} from './prizes';
-export {saveTicketsToMemory,getTicketByCode,getTicketsByPrefix,getTicketsGeneratedByUser} from './tickets'
+import { doc, getDoc } from 'firebase/firestore'
+
+export * from './prizes';
+export * from './tickets'
 
 /** A dictionary that stores certain details from the user session to minimize database reads. */
 export var cache = {
