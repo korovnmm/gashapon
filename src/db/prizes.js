@@ -21,6 +21,7 @@ export function savePrizesToMemory(data) {
     return cacheAsArray("prizeData", data);
 }
 
+
 /**
  * Retrieves prize info for a corresponding ticket code
  * @param {string} code a ticket's play code (must exist on the database first)
@@ -35,6 +36,7 @@ export const getPrizeByCode = async (code) => {
 
     return prizeInfo;
 }
+
 
 /**
  * @param {*} user 
@@ -123,6 +125,7 @@ export const getPrizeMetaData = async (id) => {
 
     return result;
 }
+
 
 /**
  * Deletes a prize from firestore and memory (cache).
