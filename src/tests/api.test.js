@@ -13,8 +13,8 @@ import { getPrizeMetaData } from 'db';
 let auth = getAuth();
 let exampleUserEmail = "itsjoe@example.com";
 let examplePassword = "superSecretPassword123";
-afterAll(() => {
-    return auth.currentUser.delete();
+afterAll(async () => {
+    await auth.currentUser.delete();
 });
 
 describe('Server', () => {

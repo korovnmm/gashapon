@@ -55,8 +55,8 @@ beforeAll(() => {
                 });
         });
 });
-afterAll(() => {
-    return auth.currentUser.delete();
+afterAll(async () => {
+    await auth.currentUser.delete();
 });
 
 
