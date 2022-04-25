@@ -7,6 +7,7 @@ import {
     getAuth
 } from 'auth'
 import {
+    cache,
     getTicketByCode,
     getPrizeByCode,
     getTicketsByPrefix,
@@ -68,8 +69,8 @@ test("clearCachedData", async () => {
     saveTicketsToMemory(dummyTicketData);
     savePrizesToMemory(dummyPrizeData);
     
-    const tickets = await getTicketsGeneratedByUser(auth.currentUser);
-    const prizes = await getPrizesGeneratedByUser(auth.currentUser);
+    const tickets = cache.ticketData;
+    const prizes = cache.prizeData;
     expect(tickets.length).toBe(1);
     expect(prizes.length).toBe(1);
 
@@ -104,7 +105,7 @@ test("savePrizesToMemory", async () => {
     expect(result).toMatchObject([dummyPrizeData]);
     expect(result.length).toBe(1);
 
-    const result2 = await getPrizesGeneratedByUser(auth.currentUser);
+    const result2 = cache.prizeData;
     expect(result2).toMatchObject([dummyPrizeData]);
     expect(result2[0].id).toBeDefined();
     expect(result2.length).toBe(1);
