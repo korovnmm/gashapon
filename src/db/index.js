@@ -39,6 +39,7 @@ export function cacheAsArray(key, data) {
     return cache[key];
 }
 
+
 /** Clears the cache dictionary (shopTag, ticketData, and uid) */
 export function clearCachedData() {
     cache = {};
