@@ -114,7 +114,7 @@ describe('Shopkeeper', () => {
 
     it("can generate multiple play tickets without errors", () => {
         return generateTickets("customer2@example.com", "", 5)
-            .then((result) => {
+            .then(async (result) => {
                 let keys = Object.keys(result.data);
                 expect(keys.length).toBe(5);
                 for (let i = 0; i < keys.length; i++) {
@@ -132,6 +132,7 @@ describe('Shopkeeper', () => {
                 }
 
                 // Check that quantity has decremented appropriately
+                await new Promise(resolve => setTimeout(resolve, 700)); // give db some time to update
                 return getPrizeMetaData(prizeData.id)
                     .then((newPrizeData) => {
                         expect(newPrizeData.quantity).toBe(prizeData.prizeMetaData.quantity - keys.length);
