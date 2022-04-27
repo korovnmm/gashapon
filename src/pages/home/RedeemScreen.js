@@ -26,7 +26,8 @@ export const RedeemScreen = () => {
     const { shopTag, code } = useParams();
     const [ticketData, setTicket] = useState("");
     const [prizeImage, setPrizeImage] = useState("https://source.unsplash.com/random/?product");
-    const [prizeInfo, setPrizeInfo] = useState({ name: "Prize Name", description: "lorem ipsum dolor sit amet"});
+    const [prizeInfo, setPrizeInfo] = useState({ name: "Prize Name", 
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis id volutpat arcu. Lorem ipsum dolor sit amet, consectetur adipiscing elit."});
     const [popup, showPopup] = useState(false);
 
     useEffect(() => {
