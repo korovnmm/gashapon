@@ -32,7 +32,9 @@ export function PrizePopupBox(props) {
                     onAnimationEnd={() => setAnim("")}
                 >
                     <div id="content-wrapper">
-                        <h1>You Got a {prize.name}!</h1>
+                        <h1>
+                            You Got a <span id="prize-name">{prize.name}</span>
+                        </h1>
                         <img alt={prize.description} src={prize.image} />
                         <p>{prize.description}</p>
                         <SubmitButton onClick={handleClick}>Close</SubmitButton>
