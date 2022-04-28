@@ -6,9 +6,9 @@ export const About = () => {
     return (
         
         <>
-            <div class = "banner"><h1 class = "kattapon">KATTAPON!</h1></div>
-            <div class = "move-right">
-                <div class="circle1"><div class="circle2"><div class="circle3"></div></div></div>
+            <div className = "banner"><h1 class = "kattapon">KATTAPON!</h1></div>
+            <div className = "move-right">
+                <div className="circle1"><div className="circle2"><div className="circle3"></div></div></div>
                 
                 <h1>Welcome to Project Gashapon!</h1>
                 <h2>What is Gashapon?</h2>
@@ -20,7 +20,7 @@ export const About = () => {
                 </h4>
                 
                 <img
-                class="image"
+                className="image"
                 src={logo}
                 alt=""
                 />

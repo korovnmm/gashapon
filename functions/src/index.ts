@@ -89,6 +89,53 @@ async function accountExists(uid : string) : Promise<boolean> {
 }
 
 
+export const deleteUserData = functions.auth.user()
+    .onDelete(async (user) => {
+      const uid = user.uid;
+      const shopTag = await db.doc(`/users/${uid}`).get()
+          .then((snapshot) => {
+            const data = snapshot.data() as FirebaseFirestore.DocumentData;
+            return data.shopTag as string;
+          })
+          .catch((error) => {
+            console.log(error);
+            throw new functions.https.HttpsError("unknown", error);
+          });
+      const batch = db.batch();
+
+      // Delete prizes
+      const prizeSnap = await db.collection("prizes")
+          .where("creatorUserID", "==", uid)
+          .get();
+
+      for (const doc of prizeSnap.docs) {
+        const prizeInfo = await db.collection("prize-info").doc(doc.ref.id);
+        batch.delete(prizeInfo);
+        batch.delete(doc.ref);
+      }
+
+      // Delete tickets
+      const len = shopTag.length;
+      const head = shopTag.slice(0, len - 1);
+      const tail = shopTag.slice(len - 1, len);
+      const start = shopTag;
+      const stop = head + String.fromCharCode(tail.charCodeAt(0) + 1);
+
+      const ticketSnap = await db.collection("ticket-info")
+          .where("__name__", ">=", start)
+          .where("__name__", "<", stop)
+          .get();
+
+      for (const doc of ticketSnap.docs) {
+        batch.delete(doc.ref);
+      }
+
+      // Delete user data
+      await batch.commit();
+      await db.collection("users").doc(uid).delete();
+    });
+
+
 // Endpoint Functions
 /**
  * Example function for development reference.
@@ -346,20 +393,9 @@ export const addNewPrize = functions.https.onCall(async (data, context) => {
   };
 
   // Write both documents to firestore
-  let id;
-  await db.collection("prizes").add(prizeMetaData)
-      .then((docRef) => {
-        id = docRef.id;
-        db.collection("prize-info").doc(id).set(prizeInfoData)
-            .catch((error) => {
-              console.log(error);
-              throw new functions.https.HttpsError("unknown", error);
-            });
-      })
-      .catch((error) => {
-        console.log(error);
-        throw new functions.https.HttpsError("unknown", error);
-      });
+  const docRef = await db.collection("prizes").add(prizeMetaData);
+  const id = docRef.id;
+  await db.collection("prize-info").doc(id).set(prizeInfoData);
 
   // Append to list
   return {id, prizeMetaData, prizeInfoData};
