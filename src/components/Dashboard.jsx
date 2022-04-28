@@ -15,8 +15,8 @@ export function DashboardContainer(props) {
                 sx={{
                     outline: '1px solid lightblue'
                 }}>
-                <h2 class="dashboard-header">DASHBOARD</h2>
-                <div class="dash-body-wrapper"
+                <h2 className="dashboard-header">DASHBOARD</h2>
+                <div className="dash-body-wrapper"
                     {...props}
                 /> 
             </Box>
@@ -32,7 +32,7 @@ export function DashboardContainer(props) {
 export function DashNavbar(props) {
     return (
         <Tabs
-            centered variant="fullWidth" class="dash-navbar"
+            centered variant="fullWidth" className="dash-navbar"
             sx={{ 
                 borderBottom: 1, 
                 borderColor: 'divider' 
