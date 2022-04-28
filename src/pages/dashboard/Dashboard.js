@@ -83,13 +83,11 @@ export const Dashboard = () => {
         <DashboardContainer>
             <DashNavbar value={value} onChange={handleChange}>
                 {pages.map(({name, id}) => (
-                    <LinkTab label={`${name}`} to={`${url}/${id}`} />
+                    <LinkTab key={`${id}`} label={`${name}`} to={`${url}/${id}`} />
                 ))}
             </DashNavbar>
 
-            <AuthenticatedRoute path={`${path}/:pageID`}>
-                <DashboardPage />
-            </AuthenticatedRoute>
+            <AuthenticatedRoute path={`${path}/:pageID`} component={DashboardPage} />
 
             <Redirect from={`${url}`} to={`${url}/overview`} />
         </DashboardContainer>
