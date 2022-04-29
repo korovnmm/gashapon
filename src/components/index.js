@@ -14,6 +14,7 @@ export { default as Footnote } from './Footnote';
 export { default as GoogleIcon } from './GoogleGLogo';
 export { default as NavBar } from './Navigation';
 export { default as ResponsiveAppBar } from './ResponsiveAppBar';
+export { default as SiteHeader } from './SiteHeader';
 
 export {
     TextField
