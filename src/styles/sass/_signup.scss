@@ -1,32 +1,33 @@
-.acc-creation-h3{
-    margin-bottom: 10%;
-    color: #F194BB;
-   
-}
-.acc-creation-h3 h3{
-    text-shadow: -5px 3px #FDFFB2;
-    font-family: 'Nunito Sans', 'Josefin Sans', sans-serif;
-
-    font-weight: bolder;
-
-}
-
-.login-box {
-    background-color: #fdbe6c;
-    text-align:center ;
-    color: black;
-    width: 60%;
-    padding: 2%;
-    margin: auto;
-    border-radius: 10px;
-    margin-top: 22%;
-}   
-
-.signup-boy{
+.signup-box {
     background-color: white;
-    width: 20%;
-    padding: 2%;
-    margin: auto;
+    width: fit-content;
+    min-width: 23%;
+    padding: 3%;
+    margin: 2.9% auto auto auto;
     border-radius: 10px;
-    margin-top: 2.9%;
+    
+    h3 {
+        color: #F194BB;
+        text-shadow: -5px 3px #FDFFB2;
+        font-family: 'Nunito Sans', 'Josefin Sans', sans-serif;
+        font-weight: bolder;
+        margin-bottom: calc(10% - 4vh);
+    }
+}
+
+.footnote-box {
+    background-color: #fdbe6c;
+    text-align: center;
+    color: black;
+    min-width: 60%;
+    padding: 2%;
+    margin: 15px 20% 15px 20%;
+    border-radius: 10px;
+}
+
+@media only screen and (max-width: 1380px) {
+    .footnote-box {
+        margin-left: 0px;
+        margin-right: 0px;
+    }
 }
