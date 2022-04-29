@@ -67,11 +67,11 @@ image {
 }
 
 .banner {
-  padding: 2%;
-  height: 4%;
+  height: 12%;
   margin-top: 1%;
   position: absolute;
-  width: 100%;
+  width: 100vw;
+  max-width: 100%;
   background-color: #FF95BB;
   z-index: -2;
 }
