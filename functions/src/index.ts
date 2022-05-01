@@ -400,3 +400,13 @@ export const addNewPrize = functions.https.onCall(async (data, context) => {
   // Append to list
   return {id, prizeMetaData, prizeInfoData};
 });
+
+
+export const redeemTicket = functions.https.onCall(async (data) => {
+  const code = data.code;
+
+  await db.collection("ticket-info").doc(code).update({redeemed: true})
+      .catch((error) => {
+        console.log(`Error updating redeem status of ticket: ${code},`, error);
+      });
+});

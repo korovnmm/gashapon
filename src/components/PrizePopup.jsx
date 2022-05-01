@@ -3,21 +3,29 @@ import {
     Box
 } from "@mui/material";
 import { SubmitButton } from "components";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { PrizeContext } from "pages/home/RedeemScreen";
+import { markTicketAsRedeemed } from "api";
+
 
 export function PrizePopupBox(props) {
     const prize = useContext(PrizeContext);
     const [open, setOpen] = useState(false);
     const [anim, setAnim] = useState("");
+    
+    const verifyRedemptionStatus = useCallback(async () => {
+        if (!prize.ticket.redeemed)
+            await markTicketAsRedeemed(`${prize.shopTag}-${prize.code}`);
+    }, [prize.shopTag, prize.code, prize.ticket.redeemed]);
 
     useEffect(() => {
         setOpen(props.show);
-        if (props.show)
+        if (props.show) {
             setAnim("popup-open-anim");
-        else
+            verifyRedemptionStatus();
+        } else
             setAnim("popup-close-anim");
-    }, [props.show]);
+    }, [props.show, verifyRedemptionStatus]);
 
     const handleClick = () => {
         if (props.onClick)
@@ -35,6 +43,7 @@ export function PrizePopupBox(props) {
                         <h1>
                             You Got a <span id="prize-name">{prize.name}</span>
                         </h1>
+                        <div hidden={!prize.ticket.redeemed}>This Prize Has Already Been Redeemed</div>
                         <img alt={prize.description} src={prize.image} />
                         <p>{prize.description}</p>
                         <SubmitButton onClick={handleClick}>Close</SubmitButton>
