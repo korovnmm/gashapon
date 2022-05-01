@@ -35,7 +35,7 @@ export const RedeemScreen = () => {
             const ticket = await getTicketByCode(`${shopTag}-${code}`);
             const prize = await getPrizeByCode(`${shopTag}-${code}`)
             if (ticket)
-                setTicket(JSON.stringify(ticket));
+                setTicket(ticket);
             if (prize) {
                 setPrizeImage(prize.image);
                 setPrizeInfo({name: prize.name, description: prize.description});
