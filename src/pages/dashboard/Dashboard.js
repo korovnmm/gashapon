@@ -27,21 +27,21 @@ const pages = [
         id: "inventory",
         component: Inventory
     },
-    {
+    /*{
         name: "Orders",
         id: "orders",
         component: Overview
-    },
+    },*/
     {
         name: "Tickets",
         id: "tickets",
         component: Tickets
     },
-    {
+    /*{
         name: "Listings",
         id: "listings",
         component: Overview
-    }
+    }*/
 ]
 
 /**
@@ -83,7 +83,7 @@ export const Dashboard = () => {
         <DashboardContainer>
             <DashNavbar value={value} onChange={handleChange}>
                 {pages.map(({name, id}) => (
-                    <LinkTab label={`${name}`} to={`${url}/${id}`} />
+                    <LinkTab disableRipple label={`${name}`} to={`${url}/${id}`} />
                 ))}
             </DashNavbar>
 
