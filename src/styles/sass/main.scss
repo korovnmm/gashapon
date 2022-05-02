@@ -2,6 +2,7 @@
 @import "dashboard";
 @import "fonts";
 @import "home";
+@import "signup";
 @import "textFields";
 
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@500&display=swap');
@@ -66,11 +67,11 @@ image {
 }
 
 .banner {
-  padding: 2%;
-  height: 4%;
+  height: 12%;
   margin-top: 1%;
   position: absolute;
-  width: 100%;
+  width: 100vw;
+  max-width: 100%;
   background-color: #FF95BB;
   z-index: -2;
 }

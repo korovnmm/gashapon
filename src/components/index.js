@@ -10,6 +10,7 @@ export {
     LinkTab 
 } from './Dashboard';
 
+export { default as Footnote } from './Footnote';
 export { default as GoogleIcon } from './GoogleGLogo';
 export { default as NavBar } from './Navigation';
 export { default as ResponsiveAppBar } from './ResponsiveAppBar';

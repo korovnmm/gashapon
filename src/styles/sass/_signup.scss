@@ -1,0 +1,33 @@
+.signup-box {
+    background-color: white;
+    width: fit-content;
+    min-width: 23%;
+    padding: 3%;
+    margin: 2.9% auto auto auto;
+    border-radius: 10px;
+    
+    h3 {
+        color: #F194BB;
+        text-shadow: -5px 3px #FDFFB2;
+        font-family: 'Nunito Sans', 'Josefin Sans', sans-serif;
+        font-weight: bolder;
+        margin-bottom: calc(10% - 4vh);
+    }
+}
+
+.footnote-box {
+    background-color: #fdbe6c;
+    text-align: center;
+    color: black;
+    min-width: 60%;
+    padding: 2%;
+    margin: 15px 20% 15px 20%;
+    border-radius: 10px;
+}
+
+@media only screen and (max-width: 1380px) {
+    .footnote-box {
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+}
