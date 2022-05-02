@@ -13,7 +13,7 @@ import {
     Typography,
 } from '@mui/material'
 import { Link } from 'react-router-dom'
-import { GoogleIcon, TextField } from 'components'
+import { Footnote, GoogleIcon, TextField } from 'components'
 //import { useLocation } from 'react-router-dom'
 
 
@@ -51,17 +51,17 @@ export const Login = () => {
     // HTML
     return (
         <>
-            <Container>
+            <Container className="signup-box">
                 <Box component="form" onSubmit={handleSubmit}>
-                    <Typography variant="h3" component="h3" align="center">Sign in</Typography>
+                    <Typography component="h3" variant="h3" align="center">Shop Login</Typography>
                     <TextField fullWidth required autoFocus id="email" type="email" label="Email Address" autoComplete="email"/>  
                     <TextField fullWidth required id="password" type="password" label="Password" autoComplete="current-password" />
-                    <Button fullWidth variant="contained" type="submit">Sign in</Button>
+                    <Button fullWidth variant="contained" type="submit">Log in</Button>
                 </Box>
                 <center>or</center>
                 <Button fullWidth variant="outlined" startIcon={<GoogleIcon />} onClick={signInWithGoogle}>Continue with Google</Button>
-                <div>Don't have an account? <Link to="/signup">Create one here!</Link></div>
+                <Footnote>Don't have an account?<br/><Link to="/signup">Create one here!</Link></Footnote>
             </Container>
         </>
-    )
+    );
 }
