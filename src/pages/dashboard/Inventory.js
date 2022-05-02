@@ -16,7 +16,6 @@ import { addNewPrize } from 'api'
 import { useAuthState } from 'auth'
 import {
     getPrizesGeneratedByUser,
-    savePrizesToMemory,
     deletePrize
 } from 'db'
 import { 
@@ -40,18 +39,24 @@ const columns = [
 export const Inventory = () => {
     const { user } = useAuthState();
     const [rows, setRows] = useState([]);
+    const [prizeData, setPrizeData] = useState([]);
     const [open, setOpen] = useState(false); // snackbar state 
     const [selectedImage, setSelectedImage] = useState(null);
     const [selectedRows, setSelectedRows] = useState([])
    
     useEffect(() => {
-        getPrizesGeneratedByUser(user) 
-            .then((prizeData) => {
-                setRows(prizeData) 
-            });
-    }, [rows, user]);
+        async function fetchData() {
+            const prizes = await getPrizesGeneratedByUser(user);
+            setPrizeData(prizes);
+        }
+        fetchData();
+    }, [user]);
 
+    useEffect(() => {
+        setRows(prizeData);
+    }, [prizeData]);
     
+
     const imageUpload = useCallback((event) => {
         const image = event.target.files[0];
         if (image.type !== "image/png" && image.type !== "image/jpeg") {
@@ -83,26 +88,16 @@ export const Inventory = () => {
           
         // TODO: make sure user is passing a valid integer value
         
-        addNewPrize(name.value, description.value, quantity.value, url)
-            .then((result) => {
-                result = result.data;
-                const fullPrizeData = {
-                    docId: result.id,
-                    name: result.prizeInfoData.name,
-                    description: result.prizeInfoData.description,
-                    image: result.prizeInfoData.image,
-                    quantity: result.prizeMetaData.quantity,
-                    createdAt: result.prizeMetaData.createdAt
-                }                
-                setRows(savePrizesToMemory([fullPrizeData]));
-                setOpen(true);
-            })
+        await addNewPrize(name.value, description.value, quantity.value, url)
             .catch((error) => {
                 const code = error.code;
                 const message = error.message;
                 alert(`${code}: ${message}`);
             });
-    }, [selectedImage]);
+        
+        setPrizeData(await getPrizesGeneratedByUser(user));
+        setOpen(true);
+    }, [selectedImage, user]);
 
 
     const onDeleteClick = useCallback(async (e) => {
@@ -116,15 +111,15 @@ export const Inventory = () => {
             else
                 console.error("Failed to delete prize with ID: ", id);
         }
-        setRows(rows.filter(index => !selectedRows.includes(index)));
-    }, [rows, selectedRows]);
+        setPrizeData(await getPrizesGeneratedByUser(user));
+    }, [rows, selectedRows, user]);
 
 
     // HTML
     return (
         <>
-            <div class="prizes-header"></div>
-            <div class="prizes-body">
+            <div className="prizes-header"></div>
+            <div className="prizes-body">
                 <DataGrid
                     autoHeight={true}
                     rows={rows}
@@ -136,7 +131,7 @@ export const Inventory = () => {
                 />
             </div>
             
-            <Box component="form" class="prizes-footer" onSubmit={sendNewPrizeRequest}>
+            <Box component="form" className="prizes-footer" onSubmit={sendNewPrizeRequest}>
                 <Button variant="contained" color="primary" onClick={onDeleteClick} startIcon={<div/>}>Delete</Button>
                 <input
                     accept="image/*"

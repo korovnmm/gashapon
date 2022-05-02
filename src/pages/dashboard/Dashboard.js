@@ -87,9 +87,7 @@ export const Dashboard = () => {
                 ))}
             </DashNavbar>
 
-            <AuthenticatedRoute path={`${path}/:pageID`}>
-                <DashboardPage />
-            </AuthenticatedRoute>
+            <AuthenticatedRoute path={`${path}/:pageID`} component={DashboardPage} />
 
             <Redirect from={`${url}`} to={`${url}/overview`} />
         </DashboardContainer>

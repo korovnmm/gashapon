@@ -1,18 +1,21 @@
 // DataGrid Documentation: https://mui.com/api/data-grid/data-grid/#component-name
-import { useCallback, useEffect } from 'react'
-import { 
+import {
     Autocomplete,
     Box,
     Button,
     Snackbar,
     TextField,
-} from '@mui/material'
-import { DataGrid } from '@mui/x-data-grid'
+} from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
+import { 
+    useCallback, 
+    useEffect, 
+    useState 
+} from 'react';
 
-import { generateTickets } from 'api'
-import { useAuthState } from 'auth'
+import { generateTickets } from 'api';
+import { useAuthState } from 'auth';
 import { getTicketsGeneratedByUser, saveTicketsToMemory, getPrizeInfo } from 'db';
-import { useState } from 'react'
 
 const columns = [
     //{ field: 'orderID', headerName: 'Order #', width: 100 },
@@ -93,8 +96,8 @@ export const Tickets = () => {
 
     return (
         <>
-            <div class="tickets-header"></div>
-            <div class="tickets-body">
+            <div className="tickets-header"></div>
+            <div className="tickets-body">
                 <DataGrid
                     autoHeight={true}
                     rows={rows}
@@ -104,7 +107,7 @@ export const Tickets = () => {
                     checkboxSelection
                 />
             </div>
-            <Box component="form" class="tickets-footer" onSubmit={sendGenerateTicketsRequest}>
+            <Box component="form" className="tickets-footer" onSubmit={sendGenerateTicketsRequest}>
                 <TextField required id="email" type="email" label="Email Address" />
                 <TextField id="memo" type="text" label="Memo" />
                 <Autocomplete required
