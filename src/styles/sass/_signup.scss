@@ -1,0 +1,42 @@
+.signup-box {
+    background-color: white;
+    width: fit-content;
+    min-width: 23%;
+    padding: 3%;
+    margin: 2.9% auto auto auto;
+    border-radius: 10px;
+    
+    h3 {
+        color: #F194BB;
+        text-shadow: -5px 3px #FDFFB2;
+        font-family: 'Nunito Sans', 'Josefin Sans', sans-serif;
+        font-weight: bolder;
+        margin-bottom: calc(10% - 4vh);
+    }
+}
+
+.footnote-box {
+    background-color: #fdbe6c;
+    text-align: center;
+    color: black;
+    min-width: 60%;
+    padding: 2%;
+    margin: 15px 20% 15px 20%;
+    border-radius: 10px;
+}
+
+.login-bg {
+    background-color: #F194BB;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.05em, white), color-stop(0.05em, transparent)),
+        -webkit-gradient(linear, left top, right top, color-stop(0.05em, white), color-stop(0.05em, transparent));
+    background-image: linear-gradient(white 0.05em, transparent 0.05em),
+        linear-gradient(90deg, white 0.05em, transparent 0.05em);
+    background-size: 1em 1em;
+}
+
+@media only screen and (max-width: 1380px) {
+    .footnote-box {
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+}
