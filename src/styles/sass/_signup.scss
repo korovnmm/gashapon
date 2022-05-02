@@ -25,13 +25,6 @@
     border-radius: 10px;
 }
 
-@media only screen and (max-width: 1380px) {
-    .footnote-box {
-        margin-left: 0px;
-        margin-right: 0px;
-    }
-}
-
 .login-bg {
     background-color: #F194BB;
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.05em, white), color-stop(0.05em, transparent)),
@@ -39,4 +32,11 @@
     background-image: linear-gradient(white 0.05em, transparent 0.05em),
         linear-gradient(90deg, white 0.05em, transparent 0.05em);
     background-size: 1em 1em;
+}
+
+@media only screen and (max-width: 1380px) {
+    .footnote-box {
+        margin-left: 0px;
+        margin-right: 0px;
+    }
 }
