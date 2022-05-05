@@ -55,8 +55,9 @@ export function PrizeHistoryCarousel(props) {
             setPrizeList(prizeList);
             setTicketList(ticketList);
         }
-        fetchData();
-    }, [prize.ticket.email,prize.ticket]);//gets called everytime variable updates, else once.
+        if (prize.ticket.email)
+            fetchData();
+    }, [prize.ticket.email]); // gets called everytime variable updates, else once.
     
     return (
         <Container maxWidth="lg">
