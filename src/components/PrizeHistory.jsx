@@ -1,4 +1,4 @@
-import { Box, Container } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useContext, useEffect, useState, } from "react";
 import { PrizeContext } from "pages/home/RedeemScreen";
@@ -59,39 +59,43 @@ export function PrizeHistoryCarousel(props) {
     }, [prize.ticket.email,prize.ticket]);//gets called everytime variable updates, else once.
     
     return (
-            <Box height = "20%" width = "80%" position="absolute" bottom="100px" 
+        <Container maxWidth="lg">
+            <Box height = "10%" width = "50%" component="center" 
+            alignItems="center" justifyContent="center" display = "flex"
             sx={{ borderRadius: "2%", backgroundColor: "white"}}>
                 <Container maxWidth="sm">
                 
                 <ImageList cols={prizeList.length}>
                     {prizeList.map((prize) => (
                         
-                        <ImageListItem key={prize.img} >
-                            <Link to= "/reedem">
-                            <img
-                                width = "100"
-                                height = "100"
-                                objectFit = 'cover'
-                                src={prize.image}
-                                srcSet={prize.image}
-                                alt={prize.name}
-                                loading="lazy"
-                                style ={{borderRadius: "5%"}}
-                            />
-                            </Link>
+                            <ImageListItem key={prize.img} >
+                                <Box height = "100%" width = "100%" sx={{ borderRadius: "2%", backgroundColor: "gray"}}>
+                                <Link to= "/reedem">
+                                <img
+                                    width = "100"
+                                    height = "100"
+                                    objectFit = 'cover'
+                                    src={prize.image}
+                                    srcSet={prize.image}
+                                    alt={prize.name}
+                                    loading="lazy"
+                                    style ={{borderRadius: "5%"}}>
 
-                        <ImageListItemBar
-                                title={prize.name}
-                                subtitle={<span>{prize.description}</span>}
-                                position="below"
-                                
-                        
-                        />
-                        </ImageListItem>
+                                    </img>
+                                 </Link>
+                                </Box>
+
+                            <Box sx={{ borderRadius: "2%", backgroundColor: "black"}}>
+                                <Typography variant="caption" color="common.white" style={{ display: "inline-block", whiteSpace: "pre-line" }}>
+                                    {prize.name}
+                                </Typography>
+                            </Box>
+                            </ImageListItem>
                     ))}
-
+                
                 </ImageList>
                 </Container>
             </Box>
+            </Container>
     );
 }
