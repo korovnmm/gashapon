@@ -3,7 +3,7 @@ import {
   Route
 } from 'react-router-dom'
 import { StyledEngineProvider } from '@mui/material'
-import { AuthenticatedRoute, NavBar, UnauthenticatedRoute } from './components'
+import { AuthenticatedRoute, SiteHeader, UnauthenticatedRoute } from './components'
 
 import { Home } from './pages/home/Home'
 import { About } from './pages/About'
@@ -16,11 +16,7 @@ import { AccountSetup } from 'pages/AccountSetup'
 function App() {
   return (
     <StyledEngineProvider injectFirst>
-      <header>
-        <NavBar />
-        <div className="kattapon">カッタ</div>
-        <div className="banner" />
-      </header>
+      <SiteHeader />
     
       <Route exact path="/" component={Home} />
       <Route exact path="/about" component={About} />
