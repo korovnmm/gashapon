@@ -18,6 +18,7 @@
     "react-firebase-hooks": "^4.0.1",
     "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.3",
+    "react-slick": "^0.29.0",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
@@ -30,7 +31,6 @@
     "test": "npm run build && firebase emulators:exec \"react-scripts test --runInBand --watchAll=false\"",
     "test:ci": "firebase emulators:exec \"react-scripts test --verbose --testPathIgnorePatterns='/node_modules/' '/e2e'\"",
     "eject": "react-scripts eject",
-    
     "func-lint": "npm --prefix \"./functions\" run lint-fix",
     "func-compile": "npm run func-lint && npm --prefix \"./functions\" run build",
     "func": "npm run func-compile && firebase serve --only functions -p 5051"
