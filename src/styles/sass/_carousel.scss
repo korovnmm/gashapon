@@ -1,0 +1,38 @@
+// Arrow buttons
+.slider-arrow {
+    filter: invert(100%);
+}
+
+.slick-prev {
+    left: -1% !important;
+}
+
+.slick-next {
+    right: -1% !important;
+}
+
+
+// Carousel Container
+#prizehistory-box {
+    height: 6%;
+    width: 96%;
+    padding: 2%;
+    border-radius: 10px;
+    background-color: white;
+
+    // The slider component itself
+    //.slick-slider {        
+    //}
+}
+
+// Wrapper for all the carousel items
+.carousel-item {
+    img {
+        border-radius: 100%;
+    }
+
+    // The text underneath the image
+    p {
+        margin: 0;
+    }
+}
