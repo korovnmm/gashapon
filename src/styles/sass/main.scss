@@ -1,3 +1,4 @@
+@import "animations"; // this import must stay above all modules that use animations
 @import "buttons";
 @import "carousel";
 @import "dashboard";
@@ -7,6 +8,8 @@
 @import "slick/slick";
 @import "slick/slick-theme";
 @import "textFields";
+@import "popups";
+
 
 
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@500&display=swap');

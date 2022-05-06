@@ -1,0 +1,48 @@
+.popup-box {
+    width: 50vh;
+    background-color: white;
+    border-radius: 10px;
+
+    #content-wrapper {
+        margin-top: 2%;
+        margin-bottom: 5%;
+    }
+
+    #prize-name {
+        color: #F194BB;
+        text-shadow: -5px 3px #FDFFB2;
+    }
+    
+    h1 {
+        margin-top: 20px;
+        margin-bottom: 15px;
+        margin-left: 25px;
+        margin-right: 25px;
+        color: #9C84FF;
+    }
+
+    p {
+        margin-left: 20px;
+        margin-right: 20px;
+        color: #9C84FF;
+    }
+
+    img {
+        object-fit: cover;
+        aspect-ratio: 1/1;
+        width: 80%;
+        height: 80%;
+        border-radius: 100%;
+    }
+}
+
+.popup-open-anim {
+    animation: scale-easeOutBounce;
+    animation-duration: 0.5s;
+}
+
+.popup-close-anim {
+    animation: scale-easeOutBounce;
+    animation-duration: 0.1s;
+    animation-direction: reverse;
+}
