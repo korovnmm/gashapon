@@ -89,6 +89,27 @@ image {
   font-family:'Roboto';
   font-weight: 1000;
   font-size: 128px;
+  z-index: -1;
+}
+
+.machine-box-header {
+  color: #F194BB;
+  text-shadow: -3px 3px #FDFFB2;
+  font-family: 'Nunito Sans', 'Josefin Sans', sans-serif;
+  font-weight: bolder;
+}
+
+#machine-box-wrap {
+  background-color: white;
+  border-radius: 10px;
+  margin-top:5%;
+  padding: 5%;
+  width: 45%;
+}
+
+#machine-inbox {
+  margin-bottom: 5%;
+  width: 50%;
 }
 
 .move-right {
