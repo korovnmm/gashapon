@@ -11,6 +11,7 @@ import {
 import { getPrizeInfo } from "db";
 import Slider from "react-slick";
 import SliderArrow from "./SliderArrow";
+import { Typography } from "@mui/material";
 
 const sliderSettings = {
     dots: false,
@@ -86,13 +87,14 @@ export function PrizeHistoryCarousel(props) {
         }
         if (prize.ticket.email)
             fetchData();
-    }, [prize.ticket.email]); // gets called everytime variable updates, else once.
+    }, [prize.ticket.email]); // gets<div className="star-container"> called everytime variable updates, else once.
     
     return (
         <center id="prizehistory-box" className="carousel">
+           
+            <div className="slider-container">
                 <Slider {...sliderSettings}>
                     {prizeList.map((prize) => (
-                        
                         <div className="carousel-item" key={prize.ticketURL}>
                             <Link to={`/redeem/${prize.ticketURL}`}>
                                 <img
@@ -104,14 +106,15 @@ export function PrizeHistoryCarousel(props) {
                                     alt={prize.name}
                                     loading="lazy" />
                             </Link>
-
                             <p style={{margin: "0"}}>
                                 {prize.name}
                             </p>
+                            
                         </div>
 
                     ))}
                 </Slider>
+                </div>
         </center>
     );
 }
