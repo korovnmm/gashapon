@@ -1,35 +1,35 @@
+import { useRef, useState } from "react";
 import { 
     Box
 } from "@mui/material";
 
+import MachineVideo from "assets/kattapon_spin.mp4";
+
 export function MachineBox(props) {
+    const videoRef = useRef(null);
+    const [cranked, setCranked] = useState(false);
+
+    function playVideo() {
+        if (!cranked)
+            videoRef.current.play();
+    }
     
-    /*
-     * Once cranking has finished, you should call props.onCranked()
-     * to display the prize pop-up
-     * 
-     * 
-     * src = {}?
-     */
-    
+    function onVideoFinished() {
+        setCranked(true);
+        props.onCranked();
+    }
+
     return (
         <Box component="center">
             <div id="machine-box-wrap">
-                <h1 class="machine-box-header">Click to spin!</h1>
+                <h1 className="machine-box-header">Click to spin!</h1>
                 <div id="machine-inbox">
-                    <img id="machine-img" onclick="changeImage()" src="./assets/kattapon_spin.mp4"></img>
+                    <video ref={videoRef} onEnded={onVideoFinished} onClick={playVideo} width="100%">
+                        <source src={MachineVideo} type="video/mp4" />
+                        Sorry, your browser doesn't support video embeds :(
+                    </video>
                 </div>
             </div>
-
         </Box>
     );
-
-    function changeImage() {
-        if (document.getElementById("machine-img").src == "./assets/kattapon_spin.mp4"){
-            document.getElementById("machine-img").src = "./assets/kattapon_spin.mp4";
-        } else {
-            document.getElementById("machine-img").src = "./assets/kattapon_spin.mp4";
-        }
-        props.onCranked();
-    }
 }
