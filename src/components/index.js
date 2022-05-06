@@ -29,6 +29,7 @@ export {
 
 export { default as ResponsiveAppBar } from './ResponsiveAppBar';
 export { default as SiteHeader } from './SiteHeader';
+export { default as SliderArrow } from './SliderArrow';
 
 export {
     TextField

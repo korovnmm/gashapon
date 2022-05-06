@@ -1,0 +1,50 @@
+// Arrow buttons
+.slider-arrow {
+    background: #d49100 !important;
+    border-radius: 10px;
+}
+
+.slick-prev {
+    left: -1% !important;
+}
+
+.slick-next {
+    right: -1% !important;
+}
+
+
+// Carousel Container
+#prizehistory-box {
+    height: 10%;
+    width: 96%;
+    padding: 2%;
+    border-radius: 10px;
+    background-color: white;
+
+    // The slider component itself
+    //.slick-slider {        
+    //}
+}
+
+// Wrapper for all the carousel items
+.carousel-item {
+
+    img {
+        image-rendering: auto;
+        image-rendering: crisp-edges;
+        image-rendering: pixelated;
+
+        border-radius: 100%;
+        margin-bottom: 10px;
+        margin-top: 10px;
+        border:2px solid rgb(139, 139, 139);
+
+    }
+
+    // The text underneath the image
+    p {
+        color: #F194BB;
+        font-family: 'Nunito Sans', 'Josefin Sans', sans-serif;
+        font-weight: bolder;
+    }
+}
