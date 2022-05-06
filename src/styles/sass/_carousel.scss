@@ -1,6 +1,7 @@
 // Arrow buttons
 .slider-arrow {
-    filter: invert(100%)    
+    background: #d49100 !important;
+    border-radius: 10px;
 }
 
 .slick-prev {
@@ -10,15 +11,11 @@
 .slick-next {
     right: -1% !important;
 }
-.text{
-    color:#9C84FF;
-    font-family:'Roboto';
-    font-weight: bolder;
-}
+
 
 // Carousel Container
 #prizehistory-box {
-    height: 6%;
+    height: 10%;
     width: 96%;
     padding: 2%;
     border-radius: 10px;
@@ -36,11 +33,12 @@
         image-rendering: auto;
         image-rendering: crisp-edges;
         image-rendering: pixelated;
+
         border-radius: 100%;
         margin-bottom: 10px;
         margin-top: 10px;
-
         border:2px solid rgb(139, 139, 139);
+
     }
 
     // The text underneath the image

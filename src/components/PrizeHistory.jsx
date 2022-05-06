@@ -11,7 +11,6 @@ import {
 import { getPrizeInfo } from "db";
 import Slider from "react-slick";
 import SliderArrow from "./SliderArrow";
-import { Typography } from "@mui/material";
 
 const sliderSettings = {
     dots: false,
