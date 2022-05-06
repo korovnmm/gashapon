@@ -1,0 +1,30 @@
+#tickets-header {
+    //display: flex;
+    justify-content: left;
+}
+
+#tickets-body {
+    height: 78%;
+    //overflow-y: scroll;
+}
+
+#tickets-footer {
+    display: flex;
+    justify-content: center;
+    padding-left: 10%;
+    padding-right: 10%;
+
+    .textfield-default {
+        margin: 10px;
+    }
+
+    .MuiAutocomplete-root {
+        margin-right: 20px;
+    }
+
+    .katta-button {
+        margin-top: 1.7%;
+        margin-left: 20px;
+    }
+    
+}
