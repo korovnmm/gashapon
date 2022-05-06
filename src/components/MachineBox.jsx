@@ -24,7 +24,7 @@ export function MachineBox(props) {
             <div id="machine-box-wrap">
                 <h1 className="machine-box-header">Click to spin!</h1>
                 <div id="machine-inbox">
-                    <video ref={videoRef} onEnded={onVideoFinished} onClick={playVideo} width="100%">
+                    <video ref={videoRef} onEnded={onVideoFinished} onClick={playVideo} style={{cursor: "pointer", width:"100%" }}>
                         <source src={MachineVideo} type="video/mp4" />
                         Sorry, your browser doesn't support video embeds :(
                     </video>
