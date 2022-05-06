@@ -1,4 +1,9 @@
-import { DataGrid } from '@mui/x-data-grid'
+import { 
+    DataGrid, 
+    GridToolbarContainer, 
+    GridToolbarDensitySelector, 
+    GridToolbarFilterButton 
+} from '@mui/x-data-grid'
 import { 
     Backdrop,
     Box,
@@ -23,7 +28,7 @@ import { uploadImage } from 'storage'
 
 
 const columns = [
-    {field: 'image', headerName: 'Image', width: 150,
+    {field: 'image', headerName: 'Image', width: 150, sortable: false, filterable: false,
         renderCell: (params) => {
             return (<Avatar className="inventory-image" src={params.value}/>);
         }
@@ -39,12 +44,20 @@ const columns = [
         }
     },
     {
-        field: 'docID', headerName: '', width: 100,
+        field: 'docID', headerName: '', width: 100, sortable: false, filterable: false,
         renderCell: (params) => {
             return (<TextButton size="large">EDIT</TextButton>)
         }
     }
 ];
+
+function InventoryToolbar() {
+    return (
+        <GridToolbarContainer>
+            <GridToolbarFilterButton/>
+        </GridToolbarContainer>
+    );
+}
 
 export const Inventory = () => {
     const { user } = useAuthState();
@@ -145,15 +158,18 @@ export const Inventory = () => {
             <div id="inventory-body">
                 <DataGrid
                     className="inventory-data-table"
-                    hideFooter
-                    rowHeight={120}
+                    disableColumnMenu
+                    disableSelectionOnClick
+                    hideFooterPagination
                     autoHeight={false}
+                    rowHeight={120}
                     rows={rows}
                     columns={columns}
                     pageSize={99}
                     rowsPerPageOptions={[10]}
-                    checkboxSelection
+                    //checkboxSelection
                     onSelectionModelChange={(ids) => {setSelectedRows(ids)}}
+                    components={{Footer: InventoryToolbar}}
                 />
             </div>
             
@@ -163,6 +179,7 @@ export const Inventory = () => {
                 <Box className="prize-editor-box" component="form" onSubmit={sendNewPrizeRequest}>
                     <div className="prize-editor-content">
                         <input
+                            className="image-upload"
                             accept="image/*"
                             type="file"
                             name="myImage"
