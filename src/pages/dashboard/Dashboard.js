@@ -17,11 +17,11 @@ import { Tickets } from './Tickets'
 import { Inventory } from './Inventory'
 
 const pages = [
-    {
+    /*{
         name: "Overview",
         id: "overview",
         component: Overview
-    },
+    },*/
     {
         name: "Inventory",
         id: "inventory",
@@ -83,13 +83,13 @@ export const Dashboard = () => {
         <DashboardContainer>
             <DashNavbar value={value} onChange={handleChange}>
                 {pages.map(({name, id}) => (
-                    <LinkTab disableRipple label={`${name}`} to={`${url}/${id}`} />
+                    <LinkTab disableRipple label={`${name}`} to={`${url}/${id}`} key={id}/>
                 ))}
             </DashNavbar>
 
             <AuthenticatedRoute path={`${path}/:pageID`} component={DashboardPage} />
 
-            <Redirect from={`${url}`} to={`${url}/overview`} />
+            <Redirect from={`${url}`} to={`${url}/inventory`} />
         </DashboardContainer>
     );
 }
