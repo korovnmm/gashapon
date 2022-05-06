@@ -3,7 +3,7 @@ import {
     Box
 } from "@mui/material";
 
-import MachineVideo from "assets/kattapon_spin.mp4";
+import MachineVideo from "assets/kattapon_spin2.mp4";
 
 export function MachineBox(props) {
     const videoRef = useRef(null);
