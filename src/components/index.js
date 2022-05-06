@@ -10,6 +10,7 @@ export {
     LinkTab 
 } from './Dashboard';
 
+export { default as Footnote } from './Footnote';
 export { default as GoogleIcon } from './GoogleGLogo';
 
 export { 
@@ -27,6 +28,7 @@ export {
 } from './PrizePopup';
 
 export { default as ResponsiveAppBar } from './ResponsiveAppBar';
+export { default as SiteHeader } from './SiteHeader';
 
 export {
     TextField
