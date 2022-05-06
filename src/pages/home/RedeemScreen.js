@@ -40,6 +40,8 @@ export const RedeemScreen = () => {
                 setPrizeImage(prize.image);
                 setPrizeInfo({name: prize.name, description: prize.description});
             }
+            if (ticket && ticket.redeemed)
+                handleCrank();
         }
         fetchData();
     }, [code, shopTag]);
