@@ -100,14 +100,16 @@ image {
   text-shadow: -3px 3px #FDFFB2;
   font-family: 'Nunito Sans', 'Josefin Sans', sans-serif;
   font-weight: bolder;
+  font-size: 350%;
+  margin-bottom: 0;
 }
 
 #machine-box-wrap {
   background-color: white;
   border-radius: 10px;
   margin-top:5%;
-  padding: 5%;
-  width: 45%;
+  padding: 1%;
+  width: fit-content;
 }
 
 #machine-inbox {
