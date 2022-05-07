@@ -29,7 +29,7 @@
     "build": "npm run build:sass && react-scripts build",
     "build:sass": "sass src/styles/sass:src/styles/css",
     "test": "npm run build && firebase emulators:exec \"react-scripts test --runInBand --watchAll=false\"",
-    "test:ci": "firebase emulators:exec \"react-scripts test --forceExit --verbose --testPathIgnorePatterns='/node_modules/' '/e2e'\"",
+    "test:ci": "firebase emulators:exec \"react-scripts test --forceExit --verbose --testPathIgnorePatterns='/node_modules/' '/e2e' '.ignore.test.js'\"",
     "eject": "react-scripts eject",
     "func-lint": "npm --prefix \"./functions\" run lint-fix",
     "func-compile": "npm run func-lint && npm --prefix \"./functions\" run build",
