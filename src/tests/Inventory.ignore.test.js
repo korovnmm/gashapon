@@ -12,6 +12,8 @@ import {
 import { call } from 'api';
 import App from 'App';
 
+// TODO: fix the missing matchMedia error from Jest
+
 // Setup
 const click = fireEvent.click
 let auth = getAuth();
