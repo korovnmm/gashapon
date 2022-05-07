@@ -8,3 +8,19 @@
         background-color: rgba(255, 213, 237, 0.5);
     }
 }
+
+.text-button {
+    font-family: 'Josefin Sans', sans-serif;
+    width: fit-content;
+    color: #FF95BB;
+}
+
+.solid-button {
+    font-family: 'Josefin Sans', sans-serif;
+    width: fit-content;
+    background-color: #FF95BB;
+
+    &:hover {
+       background-color: #f393b6;
+    }
+}

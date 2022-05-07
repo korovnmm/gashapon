@@ -1,8 +1,6 @@
 export { AuthenticatedRoute, UnauthenticatedRoute } from './AuthRoutes';
 
-export {
-    SubmitButton
-} from './Buttons';
+export * from './Buttons';
 
 export { 
     DashboardContainer,

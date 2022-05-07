@@ -2,7 +2,9 @@
 @import "dashboard";
 @import "fonts";
 @import "home";
+@import "inventory";
 @import "signup";
+@import "tickets";
 @import "textFields";
 
 
@@ -10,7 +12,6 @@
 
 
 html, body, #root, .App {
-  height: 100%;
   margin: 0;
 }
 
