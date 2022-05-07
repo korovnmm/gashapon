@@ -12,7 +12,7 @@ import {
     LinkTab
 } from 'components'
 
-import { Overview } from './Overview'
+//import { Overview } from './Overview'
 import { Tickets } from './Tickets'
 import { Inventory } from './Inventory'
 

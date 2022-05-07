@@ -1,7 +1,6 @@
 import { 
     DataGrid, 
     GridToolbarContainer, 
-    GridToolbarDensitySelector, 
     GridToolbarFilterButton 
 } from '@mui/x-data-grid'
 import { 
