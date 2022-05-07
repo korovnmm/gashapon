@@ -1,9 +1,12 @@
-import { DataGrid } from '@mui/x-data-grid'
 import { 
+    DataGrid, 
+    GridToolbarContainer, 
+    GridToolbarFilterButton 
+} from '@mui/x-data-grid'
+import { 
+    Backdrop,
     Box,
-    Button,
     Snackbar,
-    TextField,
     Avatar
 } from '@mui/material'
 import { 
@@ -14,27 +17,45 @@ import {
 
 import { addNewPrize } from 'api'
 import { useAuthState } from 'auth'
+import { TextButton, TextField, SolidButton, OutlinedButton } from 'components'
 import {
     getPrizesGeneratedByUser,
     deletePrize
 } from 'db'
-import { 
-    uploadImage
-} from 'storage'
+import { uploadImage } from 'storage'
 
 
 const columns = [
-    {field: 'image', headerName: 'Image', width: 150,
+    {field: 'image', headerName: 'Image', width: 150, sortable: false, filterable: false,
         renderCell: (params) => {
-            return (<Avatar src={params.value}/>);
+            return (<Avatar className="inventory-image" src={params.value}/>);
         }
     },
-    { field: 'name', headerName: 'Item', width: 170 },
-    { field: 'description', headerName: 'Description', width: 170 },
-    { field: 'createdAt', headerName: 'Date added', width: 220, type: "dateTime",
-        valueGetter: ({value}) => value && (new Date(value.seconds*1000)) },
-    { field: 'quantity', headerName: 'Quantity', type: 'number', width: 90}
+    { field: 'name', headerName: 'Item Name', width: 700,
+        renderCell: (params) => {
+            return(<div className="item-name-cell">{params.value}</div>)
+        }
+    },
+    { field: 'quantity', headerName: 'Quantity', type: 'number', width: 150,
+        renderCell: (params) => {
+            return (<div className="item-quantity-cell">{params.value}</div>)
+        }
+    },
+    {
+        field: 'docID', headerName: '', width: 100, sortable: false, filterable: false,
+        renderCell: (params) => {
+            return (<TextButton size="large">EDIT</TextButton>)
+        }
+    }
 ];
+
+function InventoryToolbar() {
+    return (
+        <GridToolbarContainer>
+            <GridToolbarFilterButton/>
+        </GridToolbarContainer>
+    );
+}
 
 export const Inventory = () => {
     const { user } = useAuthState();
@@ -43,6 +64,7 @@ export const Inventory = () => {
     const [open, setOpen] = useState(false); // snackbar state 
     const [selectedImage, setSelectedImage] = useState(null);
     const [selectedRows, setSelectedRows] = useState([])
+    const [prizeEditor, showPrizeEditor] = useState(false);
    
     useEffect(() => {
         async function fetchData() {
@@ -97,6 +119,7 @@ export const Inventory = () => {
         
         setPrizeData(await getPrizesGeneratedByUser(user));
         setOpen(true);
+        showPrizeEditor(false);
     }, [selectedImage, user]);
 
 
@@ -114,39 +137,65 @@ export const Inventory = () => {
         setPrizeData(await getPrizesGeneratedByUser(user));
     }, [rows, selectedRows, user]);
 
+    const openPrizeEditor = useCallback((e) => {
+        showPrizeEditor(true);
+    }, []);
+
+    const closePrizeEditor = useCallback((e) => {
+        showPrizeEditor(false);
+    }, []);
 
     // HTML
     return (
         <>
-            <div className="prizes-header"></div>
-            <div className="prizes-body">
+            <div id="inventory-header">
+                <TextButton onClick={openPrizeEditor}>+ Add New Prize</TextButton>
+                {false && <SolidButton onClick={onDeleteClick}>Delete</SolidButton>}
+            </div>
+
+            <div id="inventory-body">
                 <DataGrid
-                    autoHeight={true}
+                    className="inventory-data-table"
+                    disableColumnMenu
+                    disableSelectionOnClick
+                    hideFooterPagination
+                    autoHeight={false}
+                    rowHeight={120}
                     rows={rows}
                     columns={columns}
-                    pageSize={10}
+                    pageSize={99}
                     rowsPerPageOptions={[10]}
-                    checkboxSelection
+                    //checkboxSelection
                     onSelectionModelChange={(ids) => {setSelectedRows(ids)}}
+                    components={{Footer: InventoryToolbar}}
                 />
             </div>
             
-            <Box component="form" className="prizes-footer" onSubmit={sendNewPrizeRequest}>
-                <Button variant="contained" color="primary" onClick={onDeleteClick} startIcon={<div/>}>Delete</Button>
-                <input
-                    accept="image/*"
-                    type="file"
-                    name="myImage"
-                    onChange={imageUpload}
-                    required
-                />
+            <div id="inventory-footer"></div>
+            
+            <Backdrop open={prizeEditor}>
+                <Box className="prize-editor-box" component="form" onSubmit={sendNewPrizeRequest}>
+                    <div className="prize-editor-content">
+                        <input
+                            className="image-upload"
+                            accept="image/*"
+                            type="file"
+                            name="myImage"
+                            onChange={imageUpload}
+                            required
+                        />
 
-                <TextField required id="name" type="name" label="Prize Name" />
-                <TextField id="description" type="text" label="Prize Description" />
-                <TextField required id="quantity" type="quantity" label="Quantity" />
+                        <TextField required id="name" type="name" label="Prize Name" />
+                        <TextField id="description" type="text" label="Prize Description" />
+                        <TextField required id="quantity" type="quantity" label="Initial Quantity" />
 
-                <Button  variant="contained" type="submit">Add Prize!</Button>
-            </Box>
+                        <div id="prize-editor-footer">
+                            <OutlinedButton type="reset" onClick={closePrizeEditor}>Cancel</OutlinedButton>
+                            <SolidButton type="submit">Submit</SolidButton>
+                        </div>
+                    </div>
+                </Box>
+            </Backdrop>
 
             <Snackbar message="Prize successfully generated" open={open} autoHideDuration={6000} onClose={handleClose}/>
         </>

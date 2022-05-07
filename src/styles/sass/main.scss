@@ -4,9 +4,11 @@
 @import "dashboard";
 @import "fonts";
 @import "home";
+@import "inventory";
 @import "signup";
 @import "slick/slick";
 @import "slick/slick-theme";
+@import "tickets";
 @import "textFields";
 @import "popups";
 
@@ -16,7 +18,6 @@
 
 
 html, body, #root, .App {
-  height: 100%;
   margin: 0;
 }
 

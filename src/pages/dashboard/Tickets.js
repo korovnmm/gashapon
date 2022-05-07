@@ -2,11 +2,16 @@
 import {
     Autocomplete,
     Box,
-    Button,
     Snackbar,
-    TextField,
 } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import { 
+    DataGrid, 
+    GridPagination, 
+    GridToolbarContainer, 
+    GridToolbarDensitySelector,
+    GridToolbarExport,
+    GridToolbarFilterButton
+} from '@mui/x-data-grid';
 import { 
     useCallback, 
     useEffect, 
@@ -16,8 +21,9 @@ import {
 import { generateTickets } from 'api';
 import { useAuthState } from 'auth';
 import { getTicketsGeneratedByUser, saveTicketsToMemory, getPrizeInfo } from 'db';
+import { CopyLinkButton, SolidButton, TextField } from 'components';
 
-const columns = [
+var columns = [
     //{ field: 'orderID', headerName: 'Order #', width: 100 },
     { field: 'email', headerName: 'Email Address', width: 170 },
     { field: 'code', headerName: 'Play Code', width: 170 },
@@ -25,18 +31,53 @@ const columns = [
     { field: 'memo', headerName: 'Memo', width: 170 },
     { field: 'redeemed', headerName: 'Redeemed?', width: 110, type: "boolean" },
     { field: 'createdAt', headerName: 'Time Generated', width: 220, type: "dateTime",
-        valueGetter: ({value}) => value && (new Date(value.seconds*1000)) },
-    { field: 'shipped', headerName: 'Shipped?', width: 90, type: "boolean" }
+        valueGetter: ({value}) => {
+            if (value && value.seconds)
+                return new Date(value.seconds*1000);
+            return "Just now"; 
+        }},
+    //{ field: 'shipped', headerName: 'Shipped?', width: 90, type: "boolean" },
 ];
 
 const amountOptions = Array.from({length:10}, (v,k)=>k+1); // a list from 1 to 10
+
+function TicketsToolbar() {
+    return (
+        <>
+            <GridToolbarContainer>
+                <GridToolbarFilterButton />
+                <GridToolbarDensitySelector />
+                <GridToolbarExport />
+                <GridPagination sx={{marginLeft: "auto"}}/>
+            </GridToolbarContainer>
+        </>
+    );
+}
 
 export const Tickets = () => {
     const { user } = useAuthState();
     const [ticketData, setTicketData] = useState([]);
     const [rows, setRows] = useState([]);
     const [open, setOpen] = useState(false); // snackbar state 
+    const [message, setMessage] = useState("");
+
+    const showStatusMessage = (msg) => {
+        setMessage(msg);
+        setOpen(true);
+    }
     
+    columns.push({
+        field: 'docID', headerName: '', width: 100, sortable: false, filterable: false,
+            renderCell: (params) => {
+                const baseURL = window.location.host;
+                const code = params.getValue(params.id, 'code') || '';
+                return (
+                    <CopyLinkButton onClick={()=>showStatusMessage("Link copied to clipboard")} 
+                        src={`${baseURL}/redeem/${code.replace('-', '/')}`} />
+                );
+            }
+    });
+
     useEffect(() => {
         async function fetchData() {
             const tickets = await getTicketsGeneratedByUser(user);
@@ -84,7 +125,7 @@ export const Tickets = () => {
                 }
                 
                 await updateTicketData(saveTicketsToMemory(tickets));
-                setOpen(true);
+                showStatusMessage("Ticket(s) successfully generated");
             })
             .catch((error) => {
                 const code = error.code;
@@ -96,18 +137,21 @@ export const Tickets = () => {
 
     return (
         <>
-            <div className="tickets-header"></div>
-            <div className="tickets-body">
+            <div id="tickets-header"></div>
+            <div id="tickets-body">
                 <DataGrid
-                    autoHeight={true}
+                    className="ticket-data-table"
+                    autoHeight={false}
                     rows={rows}
                     columns={columns}
                     pageSize={10}
                     rowsPerPageOptions={[10]}
                     checkboxSelection
+                    disableColumnMenu
+                    components={{Footer: TicketsToolbar}}
                 />
             </div>
-            <Box component="form" className="tickets-footer" onSubmit={sendGenerateTicketsRequest}>
+            <Box component="form" id="tickets-footer" onSubmit={sendGenerateTicketsRequest}>
                 <TextField required id="email" type="email" label="Email Address" />
                 <TextField id="memo" type="text" label="Memo" />
                 <Autocomplete required
@@ -119,9 +163,9 @@ export const Tickets = () => {
                     sx={{ width: 80, display: "inline-flex"}}
                     renderInput={(params) => <TextField {...params} label="Amount" />}
                 />
-                <Button variant="contained" type="submit">Generate New Code</Button>
+                <SolidButton type="submit">Generate Ticket(s)</SolidButton>
             </Box>
-            <Snackbar message="Ticket successfully generated" open={open} autoHideDuration={6000} onClose={handleClose}/>
+            <Snackbar message={message} open={open} autoHideDuration={6000} onClose={handleClose}/>
         </>
     );
 }

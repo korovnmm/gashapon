@@ -12,36 +12,36 @@ import {
     LinkTab
 } from 'components'
 
-import { Overview } from './Overview'
+//import { Overview } from './Overview'
 import { Tickets } from './Tickets'
 import { Inventory } from './Inventory'
 
 const pages = [
-    {
+    /*{
         name: "Overview",
         id: "overview",
         component: Overview
-    },
+    },*/
     {
         name: "Inventory",
         id: "inventory",
         component: Inventory
     },
-    {
+    /*{
         name: "Orders",
         id: "orders",
         component: Overview
-    },
+    },*/
     {
         name: "Tickets",
         id: "tickets",
         component: Tickets
     },
-    {
+    /*{
         name: "Listings",
         id: "listings",
         component: Overview
-    }
+    }*/
 ]
 
 /**
@@ -83,13 +83,13 @@ export const Dashboard = () => {
         <DashboardContainer>
             <DashNavbar value={value} onChange={handleChange}>
                 {pages.map(({name, id}) => (
-                    <LinkTab key={`${id}`} label={`${name}`} to={`${url}/${id}`} />
+                    <LinkTab disableRipple label={`${name}`} to={`${url}/${id}`} key={id}/>
                 ))}
             </DashNavbar>
 
             <AuthenticatedRoute path={`${path}/:pageID`} component={DashboardPage} />
 
-            <Redirect from={`${url}`} to={`${url}/overview`} />
+            <Redirect from={`${url}`} to={`${url}/inventory`} />
         </DashboardContainer>
     );
 }
