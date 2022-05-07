@@ -53,7 +53,8 @@ const sliderSettings = {
 const getTicketsByEmail = async (email) => {
     const ticketRef = collection(db, "ticket-info");
     const q = query(ticketRef,
-        where("email", '==', email));
+        where("email", '==', email),
+        where("redeemed", '==', true));
     
     const snap = await getDocs(q); // returns a promise
 
@@ -113,7 +114,13 @@ export function PrizeHistoryCarousel(props) {
 
                     ))}
                 </Slider>
-                </div>
+            </div>
+            
+            <p className="carousel-placeholder-text" hidden={prizeList && prizeList.length}>
+                <br/>
+                Previously redeemed prizes will show up here!
+            </p>
+
         </center>
     );
 }
