@@ -66,7 +66,6 @@ export const RedeemScreen = () => {
                 <Container maxWidth="lg" className="redeem-wrapper">
                     <MachineBox onCranked={handleCrank}/>
                     <PrizeHistoryCarousel />
-                    <Button fullWidth variant="contained" onClick={handleCrank}>Show Prize PopUp</Button>
                     <PrizePopupBox show={popup} onClick={handleClose} />
                 </Container>
             </PrizeContext.Provider>
