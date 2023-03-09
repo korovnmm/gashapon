@@ -1,10 +1,43 @@
-# Setup Instructions
+# Kattapon!
+
+*Kattapon!* is a digital capsule-prize machine concept for indie online storefronts. The website emulates the experience of using real-life gashapon machines with a stockable inventory system and random prize distribution. 
+
+**NOTE**: This repository is currently not being maintained, but remains here for access and viewing should the project ever be picked up again in the future.
+
+---
+
+<center>
+
+![Clicking the capsule machine turns the crank and displays your prize!](/.github/resources/crank.gif)
+
+</center>
+
+![Welcome Screen](/.github/resources/welcome-redeem-page.png)
+
+![Sign-Up Screen](/.github/resources/sign-up-screen.png)
+
+![Dashboard - Inventory](/.github/resources/dashboard-inventory.png)
+
+![Dashboard - Tickets](/.github/resources/dashboard-tickets.png)
+
+# Contributor Setup Instructions
+> **⚠️ WARNING**  
+> The Firestore and Storage rules for this project are not configured for safe production use. Deploy at your own risk.
+
+**Minimum Node Version**: 14.x
 
 1. Run the following commands to get the source code set up on your local machine:
 ```
 git clone https://github.com/plu-gachateam/gashapon.git
 cd gashapon
-npm install
+npm ci
+cd functions && npm ci && cd ../
+```
+These commands should download the source code and perform a clean install of the dependencies using `npm ci` without modifying `package-lock.json`.
+
+In order to run a dev environment with emulators and be able to deploy the site to Firebase, install the Firebase CLI tool:
+```
+npm install -g firebase-tools
 ```
 
 2. Make a duplicate copy of `.env.template` and rename it to `.env` (DO NOT DELETE `.env.template`).
@@ -12,6 +45,14 @@ npm install
 3. Fill in the environment variables in `.env` with the ones from the project's Firebase credentials (can be found on the Firebase console -> Project Settings -> General -> scroll down to the bottom of the page to the "Your apps" section). Don't change the variable names inside `.env`, just copy the corresponding values over.
 
 4. Test whether the website runs on your localhost by typing `npm start` into the command line while your working directory is set to the project folder.
+
+## Notable Commands
+
+| Command | Description |
+| :------ | :---------- |
+| npm run test:ci | runs a continuous integration-friendly test suite (currently, the main difference is that it skips end-to-end tests and exits upon completion). |
+| npm run func | lints, compiles, and serves firebase functions inside the `functions` folder to `localhost:5051` (this is automatically ran by `npm start`). |
+
 
 # Getting Started with Create React App
 

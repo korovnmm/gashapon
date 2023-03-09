@@ -1,0 +1,41 @@
+@keyframes scale-easeOutBounce {
+    0% {
+        transform: scale(0);
+    }
+
+    4% {
+        transform: scale(0.11);
+    }
+
+    8% {
+        transform: scale(0.44);
+    }
+
+    18% {
+        transform: scale(0.98);
+    }
+
+    26% {
+        transform: scale(0.75);
+    }
+
+    46% {
+        transform: scale(0.98);
+    }
+
+    64% {
+        transform: scale(0.94);
+    }
+
+    76% {
+        transform: scale(0.99);
+    }
+
+    //88% {
+    //    transform: scale(0.98);
+    //}
+
+    100% {
+        transform: scale(1);
+    }
+}

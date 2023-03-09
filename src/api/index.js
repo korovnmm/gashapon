@@ -45,3 +45,13 @@ export const addNewPrize = async (name, description, quantity, imageUrl) => {
         image: imageUrl
     });
 }
+
+
+/**
+ * Marks a ticket with the given code as "redeemed" by
+ * setting the document field to true.
+ * @param {string} code
+ */
+export async function markTicketAsRedeemed(code) {
+    return call("redeemTicket", {code});
+}
